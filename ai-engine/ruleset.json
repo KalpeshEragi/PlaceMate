@@ -1,0 +1,237 @@
+{
+    "ats_rules": [
+        {
+            "id": "ATS_01",
+            "description": "Must contain core sections",
+            "check": [
+                "contact",
+                "skills",
+                "experience_or_projects",
+                "education"
+            ],
+            "weight": 10,
+            "category": "structure",
+            "suggestion": "Add missing sections: Contact info, Skills, Experience/Projects, and Education are essential for ATS systems"
+        },
+        {
+            "id": "ATS_02",
+            "description": "Professional email required",
+            "regex": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+            "weight": 8,
+            "category": "contact",
+            "suggestion": "Use a professional email format (firstname.lastname@domain.com)"
+        },
+        {
+            "id": "ATS_03",
+            "description": "Contact information complete",
+            "check": [
+                "email",
+                "phone",
+                "location"
+            ],
+            "weight": 7,
+            "category": "contact",
+            "suggestion": "Include complete contact information: email, phone, and location"
+        },
+        {
+            "id": "ATS_04",
+            "description": "Resume length constraint",
+            "max_pages": {
+                "junior": 1,
+                "mid": 1,
+                "senior": 2
+            },
+            "weight": 6,
+            "category": "format",
+            "suggestion": "Keep resume concise - 1 page for junior/mid roles, up to 2 pages for senior"
+        },
+        {
+            "id": "ATS_05",
+            "description": "Skills section has relevant keywords",
+            "min_skills": 5,
+            "max_skills": 25,
+            "weight": 9,
+            "category": "keywords",
+            "suggestion": "Include 5-25 relevant technical skills that match the job description"
+        }
+    ],
+    "hr_rules": [
+        {
+            "id": "HR_01",
+            "description": "Quantified impact required",
+            "check": "metrics_ratio >= 0.3",
+            "weight": 10,
+            "category": "impact",
+            "suggestion": "Add quantified achievements (e.g., 'Improved performance by 40%', 'Managed team of 5')"
+        },
+        {
+            "id": "HR_02",
+            "description": "Action verbs density",
+            "check": "strong_verb_ratio >= 0.2",
+            "weight": 8,
+            "category": "language",
+            "suggestion": "Start bullet points with strong action verbs (Led, Architected, Optimized, Transformed)"
+        },
+        {
+            "id": "HR_03",
+            "description": "Portfolio or GitHub required for web roles",
+            "check": "has_github_or_portfolio == true",
+            "weight": 9,
+            "category": "credibility",
+            "suggestion": "Add GitHub profile or portfolio website to showcase your work"
+        },
+        {
+            "id": "HR_04",
+            "description": "Skill credibility check",
+            "check": "skills_match_experience",
+            "weight": 7,
+            "category": "credibility",
+            "suggestion": "Ensure listed skills are demonstrated in your experience/projects"
+        },
+        {
+            "id": "HR_05",
+            "description": "Recent experience relevance",
+            "check": "recent_role_matches_target",
+            "weight": 8,
+            "category": "relevance",
+            "suggestion": "Highlight experience most relevant to your target role"
+        },
+        {
+            "id": "HR_06",
+            "description": "Professional summary present",
+            "check": "has_summary",
+            "min_words": 20,
+            "max_words": 100,
+            "weight": 6,
+            "category": "structure",
+            "suggestion": "Add a professional summary (20-100 words) highlighting your key strengths"
+        }
+    ],
+    "recruiter_red_flags": [
+        {
+            "id": "RF_01",
+            "description": "Unprofessional email",
+            "patterns": [
+                "dragon",
+                "coolboy",
+                "ninja",
+                "gamer",
+                "420",
+                "69",
+                "xxx",
+                "hot"
+            ],
+            "penalty": -10,
+            "suggestion": "Use a professional email address based on your name"
+        },
+        {
+            "id": "RF_02",
+            "description": "Buzzword stuffing",
+            "check": "skill_count > 30",
+            "penalty": -6,
+            "suggestion": "Reduce skills list to most relevant 15-20 skills to avoid appearing unfocused"
+        },
+        {
+            "id": "RF_03",
+            "description": "No measurable achievements",
+            "check": "metrics_count < 2",
+            "penalty": -8,
+            "suggestion": "Add at least 2-3 achievements with measurable impact"
+        },
+        {
+            "id": "RF_04",
+            "description": "First-person pronouns overuse",
+            "patterns": [
+                "I ",
+                "my ",
+                "me "
+            ],
+            "max_occurrences": 3,
+            "penalty": -4,
+            "suggestion": "Remove first-person pronouns (I, my, me) for professional tone"
+        },
+        {
+            "id": "RF_05",
+            "description": "Generic job duties only",
+            "weak_verb_ratio": 0.5,
+            "penalty": -6,
+            "suggestion": "Replace generic duties with specific accomplishments and outcomes"
+        }
+    ],
+    "jd_matching_rules": [
+        {
+            "id": "JD_01",
+            "description": "Required skills overlap",
+            "check": "required_skill_overlap >= 0.6",
+            "weight": 10,
+            "suggestion": "Your resume is missing key required skills. Add: {missing_skills}"
+        },
+        {
+            "id": "JD_02",
+            "description": "Preferred skills boost",
+            "check": "preferred_skill_overlap >= 0.3",
+            "weight": 5,
+            "suggestion": "Consider adding preferred skills to strengthen your application: {preferred_skills}"
+        },
+        {
+            "id": "JD_03",
+            "description": "Stack cluster match",
+            "check": "stack_cluster_match == true",
+            "weight": 7,
+            "suggestion": "Highlight experience with the {stack_name} tech stack used by this role"
+        },
+        {
+            "id": "JD_04",
+            "description": "Emerging tech bonus",
+            "check": "has_emerging_ai_skills == true",
+            "weight": 4,
+            "suggestion": "AI/ML skills (LLM, LangChain, RAG) are in high demand - consider adding if applicable"
+        },
+        {
+            "id": "JD_05",
+            "description": "Role type alignment",
+            "check": "role_type_match == true",
+            "weight": 8,
+            "suggestion": "Tailor your experience descriptions to emphasize {role_type} skills"
+        }
+    ],
+    "scoring_formula": {
+        "weights": {
+            "ats": 0.4,
+            "hr": 0.3,
+            "jd": 0.3
+        },
+        "red_flag_impact": "subtract from final",
+        "verdict_thresholds": {
+            "pass": 75,
+            "borderline": 55,
+            "fail": 0
+        }
+    },
+    "role_specific_tips": {
+        "frontend": [
+            "Highlight responsive design and cross-browser compatibility experience",
+            "Showcase UI/UX improvements with metrics (load time, user engagement)",
+            "Include accessibility (a11y) experience and WCAG compliance",
+            "Mention state management libraries (Redux, MobX, Zustand)"
+        ],
+        "backend": [
+            "Emphasize API design and performance optimization",
+            "Include database expertise and query optimization experience",
+            "Highlight security implementation (authentication, authorization)",
+            "Mention experience with message queues and caching"
+        ],
+        "fullstack": [
+            "Balance frontend and backend experience equally",
+            "Show end-to-end project ownership",
+            "Include deployment and DevOps experience",
+            "Demonstrate understanding of system architecture"
+        ],
+        "devops": [
+            "Highlight CI/CD pipeline implementation",
+            "Include infrastructure as code experience",
+            "Show monitoring and observability expertise",
+            "Emphasize cloud platform certifications"
+        ]
+    }
+}

@@ -1,0 +1,87 @@
+{
+  "roles": {
+    "frontend": {
+      "keywords": ["frontend", "front-end", "ui", "ux", "web developer", "react developer", "angular developer", "vue developer"],
+      "primary_skills": ["React", "Vue", "Angular", "HTML", "CSS", "JavaScript", "TypeScript"],
+      "concepts": ["Responsive Design", "Accessibility", "Cross-Browser Compatibility", "State Management", "Component Architecture"]
+    },
+    "backend": {
+      "keywords": ["backend", "back-end", "api", "server", "backend developer", "node developer", "python developer"],
+      "primary_skills": ["Node.js", "Python", "Java", "PHP", "Go", "C#", ".NET", "Ruby"],
+      "concepts": ["REST", "GraphQL", "Authentication", "Security", "Database Design", "Microservices"]
+    },
+    "fullstack": {
+      "keywords": ["full stack", "full-stack", "fullstack", "full stack developer"],
+      "primary_skills": ["React", "Node.js", "MongoDB", "PostgreSQL", "Express", "Next.js"],
+      "concepts": ["End-to-End", "System Design", "Deployment", "CI/CD", "DevOps Basics"]
+    },
+    "devops": {
+      "keywords": ["devops", "sre", "infrastructure", "platform engineer", "cloud engineer"],
+      "primary_skills": ["Docker", "Kubernetes", "AWS", "Azure", "GCP", "Terraform", "Jenkins"],
+      "concepts": ["CI/CD", "Infrastructure as Code", "Monitoring", "Containerization", "Cloud Architecture"]
+    }
+  },
+
+  "skill_taxonomy": {
+    "core_languages": ["JavaScript", "HTML", "CSS", "Python", "Java", "C#", "SQL", "TypeScript", "Go", "Ruby", "PHP"],
+    "frontend": ["React", "Angular", "Vue", "Redux", "Tailwind", "Bootstrap", "Webpack", "Vite", "Next.js", "Svelte", "jQuery"],
+    "backend": ["Node.js", "Express", "Django", "Flask", "Spring Boot", "Laravel", "FastAPI", "NestJS", "Rails"],
+    "databases": ["MySQL", "PostgreSQL", "MongoDB", "Redis", "SQL Server", "Firebase", "Supabase", "DynamoDB"],
+    "devops": ["Git", "Docker", "Kubernetes", "Jenkins", "AWS", "Azure", "GCP", "GitHub Actions", "CircleCI", "Terraform"],
+    "emerging_ai": ["LLM", "LangChain", "RAG", "Vector Databases", "OpenAI API", "Hugging Face", "TensorFlow", "PyTorch"],
+    "security": ["OWASP", "JWT", "OAuth", "Encryption", "SSL/TLS", "CORS", "XSS Prevention", "SQL Injection Prevention"],
+    "testing": ["Jest", "Mocha", "Cypress", "Selenium", "Playwright", "Pytest", "JUnit", "React Testing Library"]
+  },
+
+  "stack_clusters": {
+    "MERN": ["MongoDB", "Express", "React", "Node.js"],
+    "MEAN": ["MongoDB", "Express", "Angular", "Node.js"],
+    "LAMP": ["Linux", "Apache", "MySQL", "PHP"],
+    "Microsoft": ["C#", ".NET", "Azure", "SQL Server"],
+    "ModernFrontend": ["React", "TypeScript", "Next.js", "Tailwind"],
+    "PythonStack": ["Python", "Django", "PostgreSQL", "Redis"],
+    "JAMStack": ["JavaScript", "API", "Markup", "Next.js", "Gatsby", "Netlify"],
+    "ServerlessAWS": ["AWS Lambda", "DynamoDB", "API Gateway", "S3"]
+  },
+
+  "seniority_signals": {
+    "junior": {
+      "verbs": ["assisted", "learned", "implemented", "fixed", "updated", "helped", "supported", "participated"],
+      "concepts": ["learning", "mentorship", "entry-level", "training", "internship", "exposure"]
+    },
+    "mid": {
+      "verbs": ["developed", "built", "designed", "improved", "maintained", "collaborated", "contributed"],
+      "concepts": ["ownership", "feature development", "bug fixing", "code review", "documentation"]
+    },
+    "senior": {
+      "verbs": ["architected", "led", "spearheaded", "optimized", "mentored", "established", "drove", "transformed"],
+      "concepts": ["scalability", "strategy", "leadership", "technical direction", "system design", "cross-functional"]
+    }
+  },
+
+  "soft_skill_proxies": {
+    "collaboration": ["collaborated", "partnered", "coordinated", "facilitated", "worked with", "cross-functional"],
+    "communication": ["presented", "documented", "explained", "communicated", "stakeholder", "demo"],
+    "problem_solving": ["debugged", "diagnosed", "resolved", "troubleshot", "investigated", "identified"],
+    "leadership": ["led", "mentored", "guided", "coached", "managed", "supervised"]
+  },
+
+  "action_verb_strength": {
+    "weak": ["worked on", "was responsible for", "helped with", "involved in", "participated in"],
+    "moderate": ["developed", "built", "created", "designed", "implemented", "maintained"],
+    "strong": ["architected", "spearheaded", "transformed", "pioneered", "revolutionized", "optimized", "accelerated"]
+  },
+
+  "metrics_patterns": [
+    "\\d+%",
+    "\\d+x",
+    "\\$\\d+",
+    "\\d+ users",
+    "\\d+ team",
+    "\\d+ projects",
+    "reduced.*\\d+",
+    "increased.*\\d+",
+    "improved.*\\d+",
+    "saved.*\\d+"
+  ]
+}
