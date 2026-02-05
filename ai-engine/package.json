@@ -1,0 +1,24 @@
+{
+    "name": "@placemate/ai-engine",
+    "version": "1.0.0",
+    "description": "AI-powered resume analysis engine",
+    "main": "lib/ai-engine/index.ts",
+    "types": "lib/ai-engine/index.ts",
+    "exports": {
+        ".": "./lib/ai-engine/index.ts",
+        "./rule-engine": "./lib/ai-engine/rule-engine.ts",
+        "./scoring-engine": "./lib/ai-engine/scoring-engine.ts",
+        "./suggestion-generator": "./lib/ai-engine/suggestion-generator.ts",
+        "./domain-manager": "./lib/ai-engine/domain-manager.ts"
+    },
+    "scripts": {
+        "build": "echo 'No build step required for TypeScript source'"
+    },
+    "keywords": [
+        "ai",
+        "resume",
+        "ats"
+    ],
+    "author": "",
+    "license": "ISC"
+}

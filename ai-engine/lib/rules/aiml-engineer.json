@@ -1,0 +1,223 @@
+{
+    "ruleEngine": {
+        "version": "1.0",
+        "lastUpdated": "2025-02-04",
+        "domains": {
+            "aiml-engineer": {
+                "domain": "AI/ML Engineer",
+                "description": "Professional building AI and machine learning systems",
+                "experienceLevels": {
+                    "midLevel": {
+                        "level": "Mid-Level",
+                        "yearsRequired": "3-6",
+                        "rules": {
+                            "requiredSkills": {
+                                "category": "Must-Have Technical Skills",
+                                "importance": 0.35,
+                                "skills": [
+                                    {
+                                        "skill": "Python",
+                                        "context": "Primary language for AI/ML",
+                                        "priority": "critical",
+                                        "weight": 0.95
+                                    },
+                                    {
+                                        "skill": "TensorFlow or PyTorch",
+                                        "context": "Deep learning frameworks",
+                                        "priority": "critical",
+                                        "weight": 0.95
+                                    },
+                                    {
+                                        "skill": "Machine Learning",
+                                        "context": "ML algorithms and models",
+                                        "priority": "critical",
+                                        "weight": 0.90
+                                    },
+                                    {
+                                        "skill": "Deep Learning",
+                                        "context": "Neural networks and architectures",
+                                        "priority": "critical",
+                                        "weight": 0.90
+                                    },
+                                    {
+                                        "skill": "NLP or Computer Vision",
+                                        "context": "Specialized AI domains",
+                                        "priority": "high",
+                                        "weight": 0.85
+                                    },
+                                    {
+                                        "skill": "MLOps",
+                                        "context": "ML deployment and operations",
+                                        "priority": "high",
+                                        "weight": 0.80
+                                    }
+                                ]
+                            },
+                            "niceToHaveSkills": {
+                                "category": "Nice-to-Have Skills",
+                                "importance": 0.15,
+                                "skills": [
+                                    {
+                                        "skill": "LLMs",
+                                        "context": "Large Language Models experience",
+                                        "priority": "high",
+                                        "weight": 0.80
+                                    },
+                                    {
+                                        "skill": "Cloud ML Services",
+                                        "context": "AWS SageMaker, GCP Vertex AI",
+                                        "priority": "medium",
+                                        "weight": 0.70
+                                    },
+                                    {
+                                        "skill": "Kubernetes",
+                                        "context": "Container orchestration for ML",
+                                        "priority": "medium",
+                                        "weight": 0.65
+                                    },
+                                    {
+                                        "skill": "CUDA/GPU Programming",
+                                        "context": "Hardware acceleration",
+                                        "priority": "medium",
+                                        "weight": 0.60
+                                    }
+                                ]
+                            },
+                            "powerWords": {
+                                "category": "Recommended Action Verbs",
+                                "importance": 0.15,
+                                "verbs": [
+                                    {
+                                        "verb": "Architected",
+                                        "context": "Designed ML systems",
+                                        "strength": "very high",
+                                        "example": "Architected scalable ML pipeline"
+                                    },
+                                    {
+                                        "verb": "Trained",
+                                        "context": "Model training",
+                                        "strength": "high",
+                                        "example": "Trained transformer model on 100M+ samples"
+                                    },
+                                    {
+                                        "verb": "Deployed",
+                                        "context": "Production deployment",
+                                        "strength": "high",
+                                        "example": "Deployed models serving 1M+ requests/day"
+                                    },
+                                    {
+                                        "verb": "Optimized",
+                                        "context": "Performance improvement",
+                                        "strength": "very high",
+                                        "example": "Optimized inference latency by 60%"
+                                    }
+                                ]
+                            },
+                            "metricsFramework": {
+                                "category": "How to Quantify Impact",
+                                "importance": 0.20,
+                                "metricTypes": [
+                                    {
+                                        "type": "Model Performance",
+                                        "examples": [
+                                            "Improved accuracy from 85% to 94%",
+                                            "Reduced inference time by 40%",
+                                            "Achieved state-of-the-art F1 score of 0.92"
+                                        ],
+                                        "priority": "high",
+                                        "applicable": true
+                                    },
+                                    {
+                                        "type": "Scale",
+                                        "examples": [
+                                            "Processed 1B+ tokens",
+                                            "Trained on 500M+ samples",
+                                            "Deployed to 10M+ users"
+                                        ],
+                                        "priority": "high",
+                                        "applicable": true
+                                    }
+                                ]
+                            },
+                            "resumeStructure": {
+                                "category": "Recommended Resume Layout",
+                                "importance": 0.10,
+                                "sections": [
+                                    {
+                                        "section": "Professional Summary",
+                                        "required": true,
+                                        "guidelines": "3-4 sentences with AI/ML focus",
+                                        "order": 1
+                                    },
+                                    {
+                                        "section": "Work Experience",
+                                        "required": true,
+                                        "guidelines": "5-7 bullets per role with model metrics",
+                                        "order": 2
+                                    },
+                                    {
+                                        "section": "Technical Skills",
+                                        "required": true,
+                                        "guidelines": "Organized by category",
+                                        "order": 3
+                                    },
+                                    {
+                                        "section": "Projects/Research",
+                                        "required": true,
+                                        "guidelines": "ML projects with GitHub links",
+                                        "order": 4
+                                    }
+                                ]
+                            },
+                            "redFlags": {
+                                "category": "Warning Signs to Avoid",
+                                "importance": 0.10,
+                                "flags": [
+                                    {
+                                        "flag": "No model metrics",
+                                        "severity": "critical",
+                                        "reason": "Must show quantified performance",
+                                        "suggestion": "Include accuracy, F1, latency metrics"
+                                    },
+                                    {
+                                        "flag": "No production experience",
+                                        "severity": "high",
+                                        "reason": "ML engineers need deployment skills",
+                                        "suggestion": "Highlight models in production"
+                                    }
+                                ]
+                            },
+                            "atsOptimization": {
+                                "category": "ATS-Friendly Formatting",
+                                "importance": 0.05,
+                                "rules": [
+                                    {
+                                        "rule": "Include framework names",
+                                        "details": "TensorFlow, PyTorch, Hugging Face",
+                                        "importance": "critical",
+                                        "impact": "Keyword matching"
+                                    }
+                                ]
+                            }
+                        },
+                        "scoringWeights": {
+                            "requiredSkills": 0.35,
+                            "powerWords": 0.12,
+                            "metricsPresent": 0.25,
+                            "resumeStructure": 0.12,
+                            "atsCompliance": 0.11,
+                            "redFlagsAbsent": 0.05
+                        }
+                    }
+                },
+                "overallScoringWeights": {
+                    "keywordMatch": 0.35,
+                    "formatCompliance": 0.12,
+                    "metricsPresent": 0.25,
+                    "powerWords": 0.12,
+                    "skillRelevance": 0.16
+                }
+            }
+        }
+    }
+}

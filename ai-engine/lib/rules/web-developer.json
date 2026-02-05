@@ -1,0 +1,609 @@
+{
+  "ruleEngine": {
+    "version": "1.0",
+    "lastUpdated": "2025-02-04",
+    "domains": {
+      "webDeveloper": {
+        "domain": "Web Developer",
+        "description": "Professional building responsive websites and web applications",
+        "experienceLevels": {
+          "entryLevel": {
+            "level": "Entry-Level",
+            "yearsRequired": "0-1",
+            "rules": {
+              "requiredSkills": {
+                "category": "Must-Have Technical Skills",
+                "importance": 0.35,
+                "skills": [
+                  {
+                    "skill": "HTML",
+                    "context": "Fundamental markup language for web",
+                    "priority": "critical",
+                    "weight": 0.95
+                  },
+                  {
+                    "skill": "CSS",
+                    "context": "Styling and responsive design",
+                    "priority": "critical",
+                    "weight": 0.95
+                  },
+                  {
+                    "skill": "JavaScript",
+                    "context": "Core language for interactivity",
+                    "priority": "critical",
+                    "weight": 0.90
+                  },
+                  {
+                    "skill": "Responsive Design",
+                    "context": "Mobile-first and cross-device compatibility",
+                    "priority": "critical",
+                    "weight": 0.85
+                  },
+                  {
+                    "skill": "Git/Version Control",
+                    "context": "Code management and collaboration",
+                    "priority": "high",
+                    "weight": 0.80
+                  }
+                ]
+              },
+              "niceToHaveSkills": {
+                "category": "Nice-to-Have Skills",
+                "importance": 0.15,
+                "skills": [
+                  {
+                    "skill": "React or Vue.js",
+                    "context": "Frontend framework experience",
+                    "priority": "medium",
+                    "weight": 0.70
+                  },
+                  {
+                    "skill": "Bootstrap",
+                    "context": "CSS framework for rapid development",
+                    "priority": "medium",
+                    "weight": 0.60
+                  },
+                  {
+                    "skill": "Node.js",
+                    "context": "Basic backend knowledge",
+                    "priority": "medium",
+                    "weight": 0.55
+                  },
+                  {
+                    "skill": "Chrome DevTools",
+                    "context": "Debugging and performance testing",
+                    "priority": "low",
+                    "weight": 0.50
+                  }
+                ]
+              },
+              "powerWords": {
+                "category": "Recommended Action Verbs",
+                "importance": 0.15,
+                "verbs": [
+                  {
+                    "verb": "Assisted",
+                    "context": "For junior work under supervision",
+                    "strength": "medium",
+                    "example": "Assisted in developing responsive websites"
+                  },
+                  {
+                    "verb": "Developed",
+                    "context": "Built or created something new",
+                    "strength": "high",
+                    "example": "Developed responsive websites for small business clients"
+                  },
+                  {
+                    "verb": "Debugged",
+                    "context": "Fixed issues and solved problems",
+                    "strength": "high",
+                    "example": "Debugged website issues using Chrome DevTools"
+                  },
+                  {
+                    "verb": "Collaborated",
+                    "context": "Worked with others",
+                    "strength": "high",
+                    "example": "Collaborated with senior developers to implement design updates"
+                  },
+                  {
+                    "verb": "Implemented",
+                    "context": "Put into action or practice",
+                    "strength": "high",
+                    "example": "Implemented responsive design across all pages"
+                  },
+                  {
+                    "verb": "Optimized",
+                    "context": "Made better or more efficient",
+                    "strength": "high",
+                    "example": "Optimized images to improve page load time"
+                  }
+                ]
+              },
+              "metricsFramework": {
+                "category": "How to Quantify Impact",
+                "importance": 0.20,
+                "metricTypes": [
+                  {
+                    "type": "User Engagement",
+                    "examples": [
+                      "Improved user experience, increasing mobile traffic by 10%",
+                      "Increased user engagement by 15%",
+                      "Reduced bounce rate by 8%"
+                    ],
+                    "priority": "high",
+                    "applicable": true
+                  },
+                  {
+                    "type": "Performance",
+                    "examples": [
+                      "Ensured compatibility across multiple browsers",
+                      "Improved website speed and responsiveness",
+                      "Enhanced site navigation"
+                    ],
+                    "priority": "high",
+                    "applicable": true
+                  },
+                  {
+                    "type": "Code Quality",
+                    "examples": [
+                      "Wrote clean, maintainable code following best practices",
+                      "Reduced bugs by implementing testing"
+                    ],
+                    "priority": "medium",
+                    "applicable": true
+                  }
+                ]
+              },
+              "resumeStructure": {
+                "category": "Recommended Resume Layout",
+                "importance": 0.10,
+                "sections": [
+                  {
+                    "section": "Contact Information",
+                    "required": true,
+                    "guidelines": "Name, email, phone, GitHub, LinkedIn",
+                    "order": 1
+                  },
+                  {
+                    "section": "Professional Summary",
+                    "required": true,
+                    "guidelines": "2-3 sentences highlighting HTML, CSS, JavaScript, eagerness to learn",
+                    "order": 2,
+                    "minLength": 2,
+                    "maxLength": 3
+                  },
+                  {
+                    "section": "Experience",
+                    "required": true,
+                    "guidelines": "Internships, freelance projects, or part-time roles with 3-4 bullets each",
+                    "order": 3,
+                    "recommendedItems": "1-2"
+                  },
+                  {
+                    "section": "Skills",
+                    "required": true,
+                    "guidelines": "Organized by category: Web Technologies, Responsive Design, Version Control, etc.",
+                    "order": 4
+                  },
+                  {
+                    "section": "Education",
+                    "required": true,
+                    "guidelines": "Degree, university, graduation date",
+                    "order": 5
+                  },
+                  {
+                    "section": "Projects",
+                    "required": false,
+                    "guidelines": "2-3 personal projects with GitHub links and descriptions",
+                    "order": 6,
+                    "recommendedItems": "2-3"
+                  }
+                ]
+              },
+              "redFlags": {
+                "category": "Warning Signs to Avoid",
+                "importance": 0.10,
+                "flags": [
+                  {
+                    "flag": "No projects showcased",
+                    "severity": "critical",
+                    "reason": "Entry-level candidates MUST show practical work",
+                    "suggestion": "Include GitHub projects or portfolio link"
+                  },
+                  {
+                    "flag": "Generic technical skills listing",
+                    "severity": "high",
+                    "reason": "Skills without context don't demonstrate competency",
+                    "suggestion": "Show skills through projects and achievements"
+                  },
+                  {
+                    "flag": "No metrics or impact statements",
+                    "severity": "high",
+                    "reason": "Can't assess real contribution",
+                    "suggestion": "Quantify improvements: 'increased traffic by X%'"
+                  },
+                  {
+                    "flag": "Missing GitHub or portfolio link",
+                    "severity": "critical",
+                    "reason": "Employers need to see actual code",
+                    "suggestion": "Add GitHub profile and personal portfolio website"
+                  },
+                  {
+                    "flag": "Vague achievement descriptions",
+                    "severity": "high",
+                    "reason": "Unclear impact reduces competitiveness",
+                    "suggestion": "Use specific verbs and measurable outcomes"
+                  }
+                ]
+              },
+              "atsOptimization": {
+                "category": "ATS-Friendly Formatting",
+                "importance": 0.05,
+                "rules": [
+                  {
+                    "rule": "Use simple, standard fonts",
+                    "details": "Arial, Calibri, Times New Roman only",
+                    "importance": "critical",
+                    "impact": "ATS readability"
+                  },
+                  {
+                    "rule": "Single column layout",
+                    "details": "No multi-column designs or tables",
+                    "importance": "critical",
+                    "impact": "ATS parsing"
+                  },
+                  {
+                    "rule": "No graphics, icons, or colors",
+                    "details": "Black text on white background only",
+                    "importance": "critical",
+                    "impact": "ATS compatibility"
+                  },
+                  {
+                    "rule": "Clear section headings",
+                    "details": "Standard headers: Experience, Skills, Education",
+                    "importance": "high",
+                    "impact": "ATS recognition"
+                  },
+                  {
+                    "rule": "Avoid special characters",
+                    "details": "Use bullets (-) not symbols",
+                    "importance": "high",
+                    "impact": "Character encoding"
+                  },
+                  {
+                    "rule": "Spell out acronyms",
+                    "details": "React (JavaScript library), not just React",
+                    "importance": "medium",
+                    "impact": "Keyword matching"
+                  }
+                ]
+              }
+            },
+            "scoringWeights": {
+              "requiredSkills": 0.30,
+              "powerWords": 0.15,
+              "metricsPresent": 0.20,
+              "resumeStructure": 0.15,
+              "atsCompliance": 0.15,
+              "redFlagsAbsent": 0.05
+            }
+          },
+          "midLevel": {
+            "level": "Mid-Level",
+            "yearsRequired": "3-6",
+            "rules": {
+              "requiredSkills": {
+                "category": "Must-Have Technical Skills",
+                "importance": 0.35,
+                "skills": [
+                  {
+                    "skill": "HTML5 & CSS3",
+                    "context": "Modern markup and styling standards",
+                    "priority": "critical",
+                    "weight": 0.95
+                  },
+                  {
+                    "skill": "JavaScript (ES6+)",
+                    "context": "Modern JavaScript with advanced concepts",
+                    "priority": "critical",
+                    "weight": 0.95
+                  },
+                  {
+                    "skill": "React or Vue.js",
+                    "context": "Primary frontend framework expertise",
+                    "priority": "critical",
+                    "weight": 0.90
+                  },
+                  {
+                    "skill": "Responsive/Adaptive Design",
+                    "context": "Mobile-first, cross-device optimization",
+                    "priority": "critical",
+                    "weight": 0.85
+                  },
+                  {
+                    "skill": "API Integration",
+                    "context": "REST API consumption and integration",
+                    "priority": "high",
+                    "weight": 0.85
+                  },
+                  {
+                    "skill": "Git/GitHub",
+                    "context": "Advanced version control and collaboration",
+                    "priority": "high",
+                    "weight": 0.80
+                  }
+                ]
+              },
+              "niceToHaveSkills": {
+                "category": "Nice-to-Have Skills",
+                "importance": 0.15,
+                "skills": [
+                  {
+                    "skill": "Node.js/Express",
+                    "context": "Backend development capabilities",
+                    "priority": "medium",
+                    "weight": 0.75
+                  },
+                  {
+                    "skill": "Database Knowledge",
+                    "context": "MySQL, MongoDB, or similar",
+                    "priority": "medium",
+                    "weight": 0.70
+                  },
+                  {
+                    "skill": "Testing Frameworks",
+                    "context": "Jest, Mocha, or similar testing tools",
+                    "priority": "medium",
+                    "weight": 0.70
+                  },
+                  {
+                    "skill": "DevOps/Deployment",
+                    "context": "Docker, CI/CD pipelines, cloud platforms",
+                    "priority": "medium",
+                    "weight": 0.65
+                  },
+                  {
+                    "skill": "UI/UX Principles",
+                    "context": "Understanding design and user-centered development",
+                    "priority": "medium",
+                    "weight": 0.60
+                  }
+                ]
+              },
+              "powerWords": {
+                "category": "Recommended Action Verbs",
+                "importance": 0.15,
+                "verbs": [
+                  {
+                    "verb": "Architected",
+                    "context": "Designed system structure",
+                    "strength": "very high",
+                    "example": "Architected scalable React component library"
+                  },
+                  {
+                    "verb": "Optimized",
+                    "context": "Improved performance or efficiency",
+                    "strength": "very high",
+                    "example": "Optimized bundle size by 40% using code splitting"
+                  },
+                  {
+                    "verb": "Scaled",
+                    "context": "Made something work at larger scale",
+                    "strength": "very high",
+                    "example": "Scaled API to handle 100k concurrent users"
+                  },
+                  {
+                    "verb": "Improved",
+                    "context": "Made measurable enhancements",
+                    "strength": "high",
+                    "example": "Improved Core Web Vitals by 35%"
+                  },
+                  {
+                    "verb": "Deployed",
+                    "context": "Released to production",
+                    "strength": "high",
+                    "example": "Deployed 50+ features to production"
+                  },
+                  {
+                    "verb": "Reduced",
+                    "context": "Decreased time, cost, or errors",
+                    "strength": "high",
+                    "example": "Reduced bundle size by 30%"
+                  },
+                  {
+                    "verb": "Mentored",
+                    "context": "Guided and developed junior team members",
+                    "strength": "high",
+                    "example": "Mentored 2 junior developers on React best practices"
+                  }
+                ]
+              },
+              "metricsFramework": {
+                "category": "How to Quantify Impact",
+                "importance": 0.20,
+                "metricTypes": [
+                  {
+                    "type": "Performance Metrics",
+                    "examples": [
+                      "Reduced page load time by 45%",
+                      "Improved Lighthouse score from 62 to 92",
+                      "Decreased First Contentful Paint by 2.3 seconds",
+                      "Optimized bundle size by 35%"
+                    ],
+                    "priority": "very high",
+                    "applicable": true
+                  },
+                  {
+                    "type": "User Impact",
+                    "examples": [
+                      "Increased user retention by 25%",
+                      "Reduced bounce rate by 30%",
+                      "Boosted conversion rate by 15%",
+                      "Improved user satisfaction NPS score by 20 points"
+                    ],
+                    "priority": "high",
+                    "applicable": true
+                  },
+                  {
+                    "type": "Business Impact",
+                    "examples": [
+                      "Generated 40% increase in mobile revenue",
+                      "Reduced customer support tickets by 50%",
+                      "Saved engineering team 20 hours/week through automation"
+                    ],
+                    "priority": "high",
+                    "applicable": true
+                  },
+                  {
+                    "type": "Scale/Scope",
+                    "examples": [
+                      "Built features serving 500k+ users",
+                      "Handled 50M+ API requests per day",
+                      "Managed codebase with 10k+ commits"
+                    ],
+                    "priority": "medium",
+                    "applicable": true
+                  }
+                ]
+              },
+              "resumeStructure": {
+                "category": "Recommended Resume Layout",
+                "importance": 0.10,
+                "sections": [
+                  {
+                    "section": "Professional Summary",
+                    "required": true,
+                    "guidelines": "3-4 sentences highlighting years of experience, key frameworks, and quantified achievements",
+                    "order": 1,
+                    "minLength": 3,
+                    "maxLength": 4
+                  },
+                  {
+                    "section": "Work Experience",
+                    "required": true,
+                    "guidelines": "5-7 bullet points per role, focus on impact and metrics",
+                    "order": 2,
+                    "recommendedItems": "3-4 roles",
+                    "bulletsPerRole": "5-7"
+                  },
+                  {
+                    "section": "Core Competencies",
+                    "required": true,
+                    "guidelines": "Organized by category: Frontend, Backend, Tools, etc.",
+                    "order": 3
+                  },
+                  {
+                    "section": "Technical Skills",
+                    "required": false,
+                    "guidelines": "More detailed than competencies if needed",
+                    "order": 4
+                  },
+                  {
+                    "section": "Education",
+                    "required": true,
+                    "guidelines": "Brief: Degree, university, graduation year",
+                    "order": 5
+                  },
+                  {
+                    "section": "Projects/Portfolio",
+                    "required": false,
+                    "guidelines": "2-3 standout projects with links and brief description",
+                    "order": 6
+                  },
+                  {
+                    "section": "Certifications",
+                    "required": false,
+                    "guidelines": "Industry-recognized certs only",
+                    "order": 7
+                  }
+                ]
+              },
+              "redFlags": {
+                "category": "Warning Signs to Avoid",
+                "importance": 0.10,
+                "flags": [
+                  {
+                    "flag": "Generic or repetitive achievement descriptions",
+                    "severity": "high",
+                    "reason": "Mid-level should show strategic thinking, not just task completion",
+                    "suggestion": "Emphasize impact, decisions made, and lessons learned"
+                  },
+                  {
+                    "flag": "No metrics on major projects",
+                    "severity": "critical",
+                    "reason": "Expected to measure and communicate impact",
+                    "suggestion": "Quantify performance improvements, user growth, etc."
+                  },
+                  {
+                    "flag": "Lack of soft skills demonstration",
+                    "severity": "high",
+                    "reason": "Mid-level often leads or mentors others",
+                    "suggestion": "Show collaboration, mentorship, cross-team work"
+                  },
+                  {
+                    "flag": "Outdated technology stack",
+                    "severity": "medium",
+                    "reason": "Should show current technologies",
+                    "suggestion": "Include modern frameworks and tools"
+                  },
+                  {
+                    "flag": "No evidence of continuous learning",
+                    "severity": "medium",
+                    "reason": "Tech industry values growth mindset",
+                    "suggestion": "Mention new skills, certifications, or side projects"
+                  }
+                ]
+              },
+              "atsOptimization": {
+                "category": "ATS-Friendly Formatting",
+                "importance": 0.05,
+                "rules": [
+                  {
+                    "rule": "Standard fonts and single column",
+                    "details": "Arial, Calibri, Times New Roman, single column only",
+                    "importance": "critical",
+                    "impact": "ATS parsing accuracy"
+                  },
+                  {
+                    "rule": "Clear section headers",
+                    "details": "Standard headers help ATS categorize content",
+                    "importance": "high",
+                    "impact": "Content organization"
+                  },
+                  {
+                    "rule": "Keywords from job description",
+                    "details": "Include exact technologies and frameworks mentioned",
+                    "importance": "critical",
+                    "impact": "Keyword matching score"
+                  },
+                  {
+                    "rule": "Dates in consistent format",
+                    "details": "MM/YYYY or Jan 2024 format",
+                    "importance": "high",
+                    "impact": "Timeline clarity"
+                  }
+                ]
+              }
+            },
+            "scoringWeights": {
+              "requiredSkills": 0.30,
+              "powerWords": 0.15,
+              "metricsPresent": 0.25,
+              "impactDemonstration": 0.10,
+              "atsCompliance": 0.15,
+              "redFlagsAbsent": 0.05
+            }
+          }
+        },
+        "overallScoringWeights": {
+          "keywordMatch": 0.30,
+          "formatCompliance": 0.15,
+          "metricsPresent": 0.20,
+          "powerWordsUsage": 0.15,
+          "skillRelevance": 0.15,
+          "redFlagsAbsent": 0.05
+        }
+      }
+    }
+  }
+}

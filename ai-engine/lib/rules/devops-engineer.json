@@ -1,0 +1,226 @@
+{
+    "ruleEngine": {
+        "version": "1.0",
+        "lastUpdated": "2025-02-04",
+        "domains": {
+            "devops-engineer": {
+                "domain": "DevOps Engineer",
+                "description": "Professional automating and managing software delivery pipelines",
+                "experienceLevels": {
+                    "midLevel": {
+                        "level": "Mid-Level",
+                        "yearsRequired": "3-6",
+                        "rules": {
+                            "requiredSkills": {
+                                "category": "Must-Have Technical Skills",
+                                "importance": 0.35,
+                                "skills": [
+                                    {
+                                        "skill": "Docker",
+                                        "context": "Container technology",
+                                        "priority": "critical",
+                                        "weight": 0.95
+                                    },
+                                    {
+                                        "skill": "Kubernetes",
+                                        "context": "Container orchestration",
+                                        "priority": "critical",
+                                        "weight": 0.95
+                                    },
+                                    {
+                                        "skill": "CI/CD",
+                                        "context": "Jenkins, GitLab CI, GitHub Actions",
+                                        "priority": "critical",
+                                        "weight": 0.90
+                                    },
+                                    {
+                                        "skill": "AWS/Azure/GCP",
+                                        "context": "Cloud platforms",
+                                        "priority": "critical",
+                                        "weight": 0.90
+                                    },
+                                    {
+                                        "skill": "Terraform or Ansible",
+                                        "context": "Infrastructure as Code",
+                                        "priority": "high",
+                                        "weight": 0.85
+                                    },
+                                    {
+                                        "skill": "Linux Administration",
+                                        "context": "Server management",
+                                        "priority": "high",
+                                        "weight": 0.80
+                                    }
+                                ]
+                            },
+                            "niceToHaveSkills": {
+                                "category": "Nice-to-Have Skills",
+                                "importance": 0.15,
+                                "skills": [
+                                    {
+                                        "skill": "Python/Go/Bash",
+                                        "context": "Scripting languages",
+                                        "priority": "high",
+                                        "weight": 0.75
+                                    },
+                                    {
+                                        "skill": "Prometheus/Grafana",
+                                        "context": "Monitoring and observability",
+                                        "priority": "medium",
+                                        "weight": 0.70
+                                    },
+                                    {
+                                        "skill": "ArgoCD/Flux",
+                                        "context": "GitOps tools",
+                                        "priority": "medium",
+                                        "weight": 0.65
+                                    }
+                                ]
+                            },
+                            "powerWords": {
+                                "category": "Recommended Action Verbs",
+                                "importance": 0.15,
+                                "verbs": [
+                                    {
+                                        "verb": "Automated",
+                                        "context": "Process automation",
+                                        "strength": "very high",
+                                        "example": "Automated deployment pipeline reducing release time by 80%"
+                                    },
+                                    {
+                                        "verb": "Orchestrated",
+                                        "context": "Container management",
+                                        "strength": "very high",
+                                        "example": "Orchestrated 500+ containers in production"
+                                    },
+                                    {
+                                        "verb": "Scaled",
+                                        "context": "Infrastructure scaling",
+                                        "strength": "high",
+                                        "example": "Scaled infrastructure to handle 10x traffic"
+                                    },
+                                    {
+                                        "verb": "Reduced",
+                                        "context": "Efficiency improvement",
+                                        "strength": "high",
+                                        "example": "Reduced deployment time from 2 hours to 10 minutes"
+                                    }
+                                ]
+                            },
+                            "metricsFramework": {
+                                "category": "How to Quantify Impact",
+                                "importance": 0.20,
+                                "metricTypes": [
+                                    {
+                                        "type": "Deployment",
+                                        "examples": [
+                                            "Reduced deployment time by 90%",
+                                            "Increased deployment frequency from weekly to daily",
+                                            "Achieved 99.99% uptime"
+                                        ],
+                                        "priority": "high",
+                                        "applicable": true
+                                    },
+                                    {
+                                        "type": "Cost",
+                                        "examples": [
+                                            "Reduced infrastructure costs by 40%",
+                                            "Optimized cloud spend saving $100k/year"
+                                        ],
+                                        "priority": "high",
+                                        "applicable": true
+                                    },
+                                    {
+                                        "type": "Scale",
+                                        "examples": [
+                                            "Managed 1000+ servers",
+                                            "Handled 1M+ requests/minute",
+                                            "Orchestrated 500+ microservices"
+                                        ],
+                                        "priority": "high",
+                                        "applicable": true
+                                    }
+                                ]
+                            },
+                            "resumeStructure": {
+                                "category": "Recommended Resume Layout",
+                                "importance": 0.10,
+                                "sections": [
+                                    {
+                                        "section": "Professional Summary",
+                                        "required": true,
+                                        "guidelines": "3-4 sentences with DevOps focus",
+                                        "order": 1
+                                    },
+                                    {
+                                        "section": "Work Experience",
+                                        "required": true,
+                                        "guidelines": "5-7 bullets per role with metrics",
+                                        "order": 2
+                                    },
+                                    {
+                                        "section": "Technical Skills",
+                                        "required": true,
+                                        "guidelines": "Tools and platforms",
+                                        "order": 3
+                                    },
+                                    {
+                                        "section": "Certifications",
+                                        "required": false,
+                                        "guidelines": "AWS, Azure, CKA certs",
+                                        "order": 4
+                                    }
+                                ]
+                            },
+                            "redFlags": {
+                                "category": "Warning Signs to Avoid",
+                                "importance": 0.10,
+                                "flags": [
+                                    {
+                                        "flag": "No automation metrics",
+                                        "severity": "critical",
+                                        "reason": "DevOps is about automation",
+                                        "suggestion": "Quantify time/cost savings from automation"
+                                    },
+                                    {
+                                        "flag": "No cloud experience",
+                                        "severity": "high",
+                                        "reason": "Cloud is essential for DevOps",
+                                        "suggestion": "Highlight cloud platform experience"
+                                    }
+                                ]
+                            },
+                            "atsOptimization": {
+                                "category": "ATS-Friendly Formatting",
+                                "importance": 0.05,
+                                "rules": [
+                                    {
+                                        "rule": "Include tool names",
+                                        "details": "Docker, Kubernetes, Terraform, Jenkins",
+                                        "importance": "critical",
+                                        "impact": "Keyword matching"
+                                    }
+                                ]
+                            }
+                        },
+                        "scoringWeights": {
+                            "requiredSkills": 0.35,
+                            "powerWords": 0.12,
+                            "metricsPresent": 0.25,
+                            "resumeStructure": 0.12,
+                            "atsCompliance": 0.11,
+                            "redFlagsAbsent": 0.05
+                        }
+                    }
+                },
+                "overallScoringWeights": {
+                    "keywordMatch": 0.35,
+                    "formatCompliance": 0.12,
+                    "metricsPresent": 0.25,
+                    "powerWords": 0.12,
+                    "skillRelevance": 0.16
+                }
+            }
+        }
+    }
+}

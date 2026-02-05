@@ -1,0 +1,112 @@
+{
+  "ruleEngine": {
+    "version": "1.0",
+    "lastUpdated": "2025-02-04",
+    "domains": {
+      "data-scientist": {
+        "domain": "Data Scientist",
+        "description": "Professional analyzing data and building ML models",
+        "experienceLevels": {
+          "midLevel": {
+            "level": "Mid-Level",
+            "yearsRequired": "3-6",
+            "rules": {
+              "requiredSkills": {
+                "category": "Must-Have Technical Skills",
+                "importance": 0.35,
+                "skills": [
+                  {"skill": "Python", "context": "Primary language for data science", "priority": "critical", "weight": 0.95},
+                  {"skill": "SQL", "context": "Database querying", "priority": "critical", "weight": 0.90},
+                  {"skill": "Machine Learning", "context": "ML algorithms and frameworks", "priority": "critical", "weight": 0.90},
+                  {"skill": "Data Analysis", "context": "Statistical analysis", "priority": "critical", "weight": 0.85},
+                  {"skill": "Pandas", "context": "Data manipulation library", "priority": "high", "weight": 0.80},
+                  {"skill": "Scikit-learn", "context": "ML library", "priority": "high", "weight": 0.80},
+                  {"skill": "TensorFlow or PyTorch", "context": "Deep learning", "priority": "high", "weight": 0.75},
+                  {"skill": "Data Visualization", "context": "Matplotlib, Seaborn, Tableau", "priority": "high", "weight": 0.75}
+                ]
+              },
+              "niceToHaveSkills": {
+                "category": "Nice-to-Have Skills",
+                "importance": 0.15,
+                "skills": [
+                  {"skill": "Big Data Tools", "context": "Spark, Hadoop", "priority": "medium", "weight": 0.70},
+                  {"skill": "Cloud Platforms", "context": "AWS, GCP, Azure", "priority": "medium", "weight": 0.70},
+                  {"skill": "A/B Testing", "context": "Experimental design", "priority": "medium", "weight": 0.65},
+                  {"skill": "Statistical Methods", "context": "Advanced statistics", "priority": "medium", "weight": 0.60}
+                ]
+              },
+              "powerWords": {
+                "category": "Recommended Action Verbs",
+                "importance": 0.15,
+                "verbs": [
+                  {"verb": "Analyzed", "context": "Data analysis", "strength": "high", "example": "Analyzed 1M+ records to identify patterns"},
+                  {"verb": "Optimized", "context": "Model improvement", "strength": "very high", "example": "Optimized ML model, improving accuracy by 25%"},
+                  {"verb": "Built", "context": "Model creation", "strength": "high", "example": "Built predictive model using TensorFlow"},
+                  {"verb": "Developed", "context": "Solution creation", "strength": "high", "example": "Developed data pipeline processing 10M records/day"},
+                  {"verb": "Implemented", "context": "Deployment", "strength": "high", "example": "Implemented recommendation system"},
+                  {"verb": "Improved", "context": "Metrics improvement", "strength": "high", "example": "Improved model precision from 82% to 94%"}
+                ]
+              },
+              "metricsFramework": {
+                "category": "How to Quantify Impact",
+                "importance": 0.20,
+                "metricTypes": [
+                  {"type": "Model Performance", "examples": ["Increased accuracy by 30%", "Improved F1 score from 0.72 to 0.89", "Reduced prediction error by 40%"], "priority": "high", "applicable": true},
+                  {"type": "Scale", "examples": ["Processed 50M+ records", "Analyzed 100k+ transactions", "Built models serving 500k+ users"], "priority": "high", "applicable": true},
+                  {"type": "Business Impact", "examples": ["Generated $2M in revenue through recommendations", "Reduced churn by 15%", "Identified cost savings of $500k"], "priority": "high", "applicable": true},
+                  {"type": "Efficiency", "examples": ["Reduced query time by 80%", "Automated reporting saving 20 hours/week", "Decreased model training time by 50%"], "priority": "medium", "applicable": true}
+                ]
+              },
+              "resumeStructure": {
+                "category": "Recommended Resume Layout",
+                "importance": 0.10,
+                "sections": [
+                  {"section": "Professional Summary", "required": true, "guidelines": "3-4 sentences with years of experience and key ML/data skills", "order": 1},
+                  {"section": "Work Experience", "required": true, "guidelines": "5-7 bullets per role, focus on models built and business impact", "order": 2, "bulletsPerRole": "5-7"},
+                  {"section": "Technical Skills", "required": true, "guidelines": "Organized by category: Languages, Libraries, Databases, Tools", "order": 3},
+                  {"section": "Projects/Research", "required": true, "guidelines": "2-3 standout ML projects with GitHub links", "order": 4},
+                  {"section": "Education", "required": true, "guidelines": "Degree, university, graduation year", "order": 5},
+                  {"section": "Certifications", "required": false, "guidelines": "ML/Data certifications (Coursera, DataCamp, etc.)", "order": 6}
+                ]
+              },
+              "redFlags": {
+                "category": "Warning Signs to Avoid",
+                "importance": 0.10,
+                "flags": [
+                  {"flag": "No model metrics or accuracy numbers", "severity": "critical", "reason": "Data scientists MUST show quantified model performance", "suggestion": "Include specific metrics: accuracy, precision, recall, AUC, RMSE"},
+                  {"flag": "No projects or Kaggle competitions", "severity": "high", "reason": "Hiring managers want to see practical ML experience", "suggestion": "Include 2-3 personal ML projects with GitHub repos"},
+                  {"flag": "Missing SQL or database experience", "severity": "high", "reason": "Most data work requires database querying", "suggestion": "Highlight SQL experience and database knowledge"},
+                  {"flag": "No business impact mentioned", "severity": "high", "reason": "Data science is about business value, not just models", "suggestion": "Quantify how your work impacted business metrics"}
+                ]
+              },
+              "atsOptimization": {
+                "category": "ATS-Friendly Formatting",
+                "importance": 0.05,
+                "rules": [
+                  {"rule": "Use standard fonts", "details": "Arial, Calibri, Times New Roman only", "importance": "critical", "impact": "ATS readability"},
+                  {"rule": "Include exact library names", "details": "TensorFlow, Scikit-learn, Pandas, PyTorch, etc.", "importance": "high", "impact": "Keyword matching"},
+                  {"rule": "List metrics clearly", "details": "Accuracy 94%, Precision 0.92, F1: 0.91", "importance": "critical", "impact": "Stands out to recruiters"}
+                ]
+              }
+            },
+            "scoringWeights": {
+              "requiredSkills": 0.35,
+              "powerWords": 0.12,
+              "metricsPresent": 0.25,
+              "resumeStructure": 0.12,
+              "atsCompliance": 0.11,
+              "redFlagsAbsent": 0.05
+            }
+          }
+        },
+        "overallScoringWeights": {
+          "keywordMatch": 0.35,
+          "formatCompliance": 0.12,
+          "metricsPresent": 0.25,
+          "powerWords": 0.12,
+          "skillRelevance": 0.16
+        }
+      }
+    }
+  }
+}

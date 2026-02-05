@@ -1,6 +1,9 @@
+// File: app/dashboard/resume/builder/[id]/page.tsx
+// Updated to use the new useRuleEngine hook
+
 'use client'
 
-import { use, useState } from 'react'
+import { use, useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -28,12 +31,20 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { useResumeBuilder } from '@/hooks/use-resume-builder'
+import { useRuleEngine } from '@/hooks/use-rule-engine'
+
 import { AISuggestionPanel } from '@/components/resume/ai-suggestion-panel'
+import { GlobalSuggestionsPanel } from '@/components/resume/global-suggestions-panel'
 import { Experience, Education, Skill, Project, Publication, Achievement, Certification, Language, VolunteerWork } from '@/lib/types/resume-types'
 
 export default function ResumeBuilderPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params)
     const { resume, loading, saving, activeSection, setActiveSection, updateSection } = useResumeBuilder(id)
+
+    // Get domain from jobContext or default to 'web-developer'
+    const domain = resume?.jobContext?.domain || 'web-developer'
+    const { suggestions, globalSuggestions, atsScore, getFieldSuggestions, getATSScore, refreshSuggestions } = useRuleEngine({ domain })
+
     const [isDark, setIsDark] = useState(false)
     const [mounted, setMounted] = useState(false)
     const [activeField, setActiveField] = useState<{ section: string; field: string; value: string }>({
@@ -42,12 +53,24 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
         value: ''
     })
 
-    useState(() => {
+    useEffect(() => {
         setMounted(true)
         if (typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
             setIsDark(true)
         }
-    })
+    }, [])
+
+    // Update ATS score and global suggestions when resume changes (debounced)
+    useEffect(() => {
+        if (!resume) return
+
+        const timer = setTimeout(() => {
+            getATSScore(resume)
+            refreshSuggestions(resume)
+        }, 1000)
+
+        return () => clearTimeout(timer)
+    }, [resume, getATSScore, refreshSuggestions])
 
     const toggleTheme = () => setIsDark(!isDark)
 
@@ -86,10 +109,10 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
 
     const handleFieldFocus = (section: string, field: string, value: string) => {
         setActiveField({ section, field, value })
-    }
-
-    const handleApplySuggestion = (newValue: string) => {
-        console.log('Applying suggestion:', newValue)
+        // Get AI suggestions for the focused field
+        if (value && value.trim().length > 0) {
+            getFieldSuggestions(value, field, section)
+        }
     }
 
     if (!mounted) return null
@@ -185,8 +208,9 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                         </div>
                     </div>
 
-                    {/* Center - Form */}
+                    {/* Center - Form (all sections same as before) */}
                     <div className="col-span-6 space-y-6">
+                        {/* Personal Info Section */}
                         {activeSection === 'personal' && (
                             <div className={`rounded-2xl p-8 border backdrop-blur-xl ${isDark
                                 ? 'bg-slate-900/50 border-slate-800'
@@ -296,6 +320,7 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                             </div>
                         )}
 
+                        {/* Experience Section */}
                         {activeSection === 'experience' && (
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between mb-6">
@@ -427,7 +452,7 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                             </div>
                         )}
 
-                        {/* Education Section - condensed for brevity */}
+                        {/* Education Section */}
                         {activeSection === 'education' && (
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between mb-6">
@@ -510,7 +535,7 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                                     />
                                                 </div>
                                                 <div>
-                                                    <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>GPA (Optional)</Label>
+                                                    <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>GPA</Label>
                                                     <Input
                                                         value={edu.gpa || ''}
                                                         onChange={(e) => {
@@ -518,7 +543,7 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                                             updated[index] = { ...edu, gpa: e.target.value }
                                                             updateSection('education', updated)
                                                         }}
-                                                        placeholder="3.8 / 4.0"
+                                                        placeholder="3.8"
                                                         className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
                                                     />
                                                 </div>
@@ -574,59 +599,49 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                         className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                                     >
                                         <Plus className="w-4 h-4 mr-2" />
-                                        Add Category
+                                        Add Skill Category
                                     </Button>
                                 </div>
 
-                                {resume.skills.map((skillGroup, index) => (
-                                    <div key={skillGroup.id} className={`rounded-2xl p-6 border backdrop-blur-xl ${isDark
+                                {resume.skills.map((skill, index) => (
+                                    <div key={skill.id} className={`rounded-2xl p-6 border backdrop-blur-xl ${isDark
                                         ? 'bg-slate-900/50 border-slate-800'
                                         : 'bg-white/50 border-slate-200'
                                         }`}>
                                         <div className="space-y-4">
-                                            <div className="flex justify-between items-start">
-                                                <div className="flex-1 mr-4">
-                                                    <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Category</Label>
-                                                    <Input
-                                                        value={skillGroup.category}
-                                                        onChange={(e) => {
-                                                            const updated = [...resume.skills]
-                                                            updated[index] = { ...skillGroup, category: e.target.value }
-                                                            updateSection('skills', updated)
-                                                        }}
-                                                        placeholder="e.g., Programming Languages"
-                                                        className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
-                                                    />
-                                                </div>
+                                            <div className="flex justify-end">
                                                 <button
-                                                    onClick={() => updateSection('skills', resume.skills.filter(s => s.id !== skillGroup.id))}
-                                                    className={`p-2 rounded-lg transition-all mt-8 ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}
+                                                    onClick={() => updateSection('skills', resume.skills.filter(s => s.id !== skill.id))}
+                                                    className={`p-2 rounded-lg transition-all ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}
                                                 >
                                                     <Trash2 className="w-4 h-4 text-red-500" />
                                                 </button>
                                             </div>
                                             <div>
-                                                <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Skills (comma separated)</Label>
+                                                <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Category</Label>
                                                 <Input
-                                                    value={skillGroup.skills.join(', ')}
+                                                    value={skill.category}
                                                     onChange={(e) => {
                                                         const updated = [...resume.skills]
-                                                        updated[index] = { ...skillGroup, skills: e.target.value.split(',').map(s => s.trim()).filter(s => s) }
+                                                        updated[index] = { ...skill, category: e.target.value }
                                                         updateSection('skills', updated)
                                                     }}
-                                                    placeholder="JavaScript, Python, React"
+                                                    placeholder="Programming Languages"
                                                     className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
                                                 />
                                             </div>
-                                            <div className="flex flex-wrap gap-2 mt-3">
-                                                {skillGroup.skills.map((skill, i) => (
-                                                    <span key={i} className={`px-3 py-1.5 rounded-full text-sm font-medium ${isDark
-                                                        ? 'bg-blue-600/20 text-blue-300'
-                                                        : 'bg-blue-100 text-blue-700'
-                                                        }`}>
-                                                        {skill}
-                                                    </span>
-                                                ))}
+                                            <div>
+                                                <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Skills (comma separated)</Label>
+                                                <Input
+                                                    value={skill.skills.join(', ')}
+                                                    onChange={(e) => {
+                                                        const updated = [...resume.skills]
+                                                        updated[index] = { ...skill, skills: e.target.value.split(',').map(s => s.trim()).filter(s => s) }
+                                                        updateSection('skills', updated)
+                                                    }}
+                                                    placeholder="JavaScript, Python, TypeScript"
+                                                    className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -634,7 +649,7 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                             </div>
                         )}
 
-                        {/* Other sections follow similar pattern - showing Projects for example */}
+                        {/* Projects Section */}
                         {activeSection === 'projects' && (
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between mb-6">
@@ -646,6 +661,7 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                                 name: '',
                                                 description: '',
                                                 technologies: [],
+                                                link: '',
                                                 startDate: '',
                                                 endDate: '',
                                                 highlights: []
@@ -682,7 +698,7 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                                         updated[index] = { ...project, name: e.target.value }
                                                         updateSection('projects', updated)
                                                     }}
-                                                    placeholder="Project Name"
+                                                    placeholder="My Awesome Project"
                                                     className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
                                                 />
                                             </div>
@@ -695,8 +711,7 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                                         updated[index] = { ...project, description: e.target.value }
                                                         updateSection('projects', updated)
                                                     }}
-                                                    onFocus={(e) => handleFieldFocus('projects', 'description', e.target.value)}
-                                                    placeholder="Brief description..."
+                                                    placeholder="Describe your project..."
                                                     rows={3}
                                                     className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
                                                 />
@@ -714,18 +729,48 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                                     className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
                                                 />
                                             </div>
-                                            <div>
-                                                <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Project Link (Optional)</Label>
-                                                <Input
-                                                    value={project.link || ''}
-                                                    onChange={(e) => {
-                                                        const updated = [...resume.projects]
-                                                        updated[index] = { ...project, link: e.target.value }
-                                                        updateSection('projects', updated)
-                                                    }}
-                                                    placeholder="https://github.com/username/project"
-                                                    className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
-                                                />
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Live Link</Label>
+                                                    <Input
+                                                        value={project.link || ''}
+                                                        onChange={(e) => {
+                                                            const updated = [...resume.projects]
+                                                            updated[index] = { ...project, link: e.target.value }
+                                                            updateSection('projects', updated)
+                                                        }}
+                                                        placeholder="https://myproject.com"
+                                                        className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Start Date</Label>
+                                                    <Input
+                                                        type="month"
+                                                        value={project.startDate}
+                                                        onChange={(e) => {
+                                                            const updated = [...resume.projects]
+                                                            updated[index] = { ...project, startDate: e.target.value }
+                                                            updateSection('projects', updated)
+                                                        }}
+                                                        className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>End Date</Label>
+                                                    <Input
+                                                        type="month"
+                                                        value={project.endDate}
+                                                        onChange={(e) => {
+                                                            const updated = [...resume.projects]
+                                                            updated[index] = { ...project, endDate: e.target.value }
+                                                            updateSection('projects', updated)
+                                                        }}
+                                                        className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -737,7 +782,7 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                         {activeSection === 'publications' && (
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between mb-6">
-                                    <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Research & Publications</h2>
+                                    <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Publications</h2>
                                     <Button
                                         onClick={() => {
                                             const newPub: Publication = {
@@ -746,9 +791,10 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                                 authors: [],
                                                 venue: '',
                                                 date: '',
+                                                link: '',
                                                 description: ''
                                             }
-                                            updateSection('publications', [...resume.publications, newPub])
+                                            updateSection('publications', [...(resume.publications || []), newPub])
                                         }}
                                         className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                                     >
@@ -757,7 +803,7 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                     </Button>
                                 </div>
 
-                                {resume.publications.map((pub, index) => (
+                                {(resume.publications || []).map((pub, index) => (
                                     <div key={pub.id} className={`rounded-2xl p-6 border backdrop-blur-xl ${isDark
                                         ? 'bg-slate-900/50 border-slate-800'
                                         : 'bg-white/50 border-slate-200'
@@ -765,7 +811,7 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                         <div className="space-y-4">
                                             <div className="flex justify-end">
                                                 <button
-                                                    onClick={() => updateSection('publications', resume.publications.filter(p => p.id !== pub.id))}
+                                                    onClick={() => updateSection('publications', (resume.publications || []).filter(p => p.id !== pub.id))}
                                                     className={`p-2 rounded-lg transition-all ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}
                                                 >
                                                     <Trash2 className="w-4 h-4 text-red-500" />
@@ -776,44 +822,25 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                                 <Input
                                                     value={pub.title}
                                                     onChange={(e) => {
-                                                        const updated = [...resume.publications]
+                                                        const updated = [...(resume.publications || [])]
                                                         updated[index] = { ...pub, title: e.target.value }
                                                         updateSection('publications', updated)
                                                     }}
                                                     placeholder="Publication Title"
-                                                    autoComplete="off"
-                                                    autoCorrect="off"
-                                                    className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
-                                                />
-                                            </div>
-                                            <div>
-                                                <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Authors (comma separated)</Label>
-                                                <Input
-                                                    value={pub.authors.join(', ')}
-                                                    onChange={(e) => {
-                                                        const updated = [...resume.publications]
-                                                        updated[index] = { ...pub, authors: e.target.value.split(',').map(s => s.trim()).filter(s => s) }
-                                                        updateSection('publications', updated)
-                                                    }}
-                                                    placeholder="John Doe, Jane Smith"
-                                                    autoComplete="off"
-                                                    autoCorrect="off"
                                                     className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
                                                 />
                                             </div>
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div>
-                                                    <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Venue/Conference</Label>
+                                                    <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Venue/Journal</Label>
                                                     <Input
                                                         value={pub.venue}
                                                         onChange={(e) => {
-                                                            const updated = [...resume.publications]
+                                                            const updated = [...(resume.publications || [])]
                                                             updated[index] = { ...pub, venue: e.target.value }
                                                             updateSection('publications', updated)
                                                         }}
-                                                        placeholder="IEEE Conference 2024"
-                                                        autoComplete="off"
-                                                        autoCorrect="off"
+                                                        placeholder="Journal/Conference Name"
                                                         className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
                                                     />
                                                 </div>
@@ -823,7 +850,7 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                                         type="month"
                                                         value={pub.date}
                                                         onChange={(e) => {
-                                                            const updated = [...resume.publications]
+                                                            const updated = [...(resume.publications || [])]
                                                             updated[index] = { ...pub, date: e.target.value }
                                                             updateSection('publications', updated)
                                                         }}
@@ -832,18 +859,15 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                                 </div>
                                             </div>
                                             <div>
-                                                <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Description</Label>
-                                                <Textarea
-                                                    value={pub.description}
+                                                <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Link</Label>
+                                                <Input
+                                                    value={pub.link || ''}
                                                     onChange={(e) => {
-                                                        const updated = [...resume.publications]
-                                                        updated[index] = { ...pub, description: e.target.value }
+                                                        const updated = [...(resume.publications || [])]
+                                                        updated[index] = { ...pub, link: e.target.value }
                                                         updateSection('publications', updated)
                                                     }}
-                                                    placeholder="Brief description of the publication..."
-                                                    rows={3}
-                                                    autoComplete="off"
-                                                    autoCorrect="off"
+                                                    placeholder="https://doi.org/..."
                                                     className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
                                                 />
                                             </div>
@@ -857,16 +881,17 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                         {activeSection === 'achievements' && (
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between mb-6">
-                                    <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Achievements & Awards</h2>
+                                    <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>Achievements</h2>
                                     <Button
                                         onClick={() => {
-                                            const newAchievement: Achievement = {
+                                            const newAch: Achievement = {
                                                 id: Date.now().toString(),
                                                 title: '',
+                                                issuer: '',
                                                 date: '',
                                                 description: ''
                                             }
-                                            updateSection('achievements', [...resume.achievements, newAchievement])
+                                            updateSection('achievements', [...(resume.achievements || []), newAch])
                                         }}
                                         className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                                     >
@@ -875,33 +900,44 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                     </Button>
                                 </div>
 
-                                {resume.achievements.map((achievement, index) => (
-                                    <div key={achievement.id} className={`rounded-2xl p-6 border backdrop-blur-xl ${isDark
+                                {(resume.achievements || []).map((ach, index) => (
+                                    <div key={ach.id} className={`rounded-2xl p-6 border backdrop-blur-xl ${isDark
                                         ? 'bg-slate-900/50 border-slate-800'
                                         : 'bg-white/50 border-slate-200'
                                         }`}>
                                         <div className="space-y-4">
                                             <div className="flex justify-end">
                                                 <button
-                                                    onClick={() => updateSection('achievements', resume.achievements.filter(a => a.id !== achievement.id))}
+                                                    onClick={() => updateSection('achievements', (resume.achievements || []).filter(a => a.id !== ach.id))}
                                                     className={`p-2 rounded-lg transition-all ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}
                                                 >
                                                     <Trash2 className="w-4 h-4 text-red-500" />
                                                 </button>
                                             </div>
+                                            <div>
+                                                <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Title</Label>
+                                                <Input
+                                                    value={ach.title}
+                                                    onChange={(e) => {
+                                                        const updated = [...(resume.achievements || [])]
+                                                        updated[index] = { ...ach, title: e.target.value }
+                                                        updateSection('achievements', updated)
+                                                    }}
+                                                    placeholder="Achievement Title"
+                                                    className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
+                                                />
+                                            </div>
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div>
-                                                    <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Achievement Title</Label>
+                                                    <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Issuer</Label>
                                                     <Input
-                                                        value={achievement.title}
+                                                        value={ach.issuer || ''}
                                                         onChange={(e) => {
-                                                            const updated = [...resume.achievements]
-                                                            updated[index] = { ...achievement, title: e.target.value }
+                                                            const updated = [...(resume.achievements || [])]
+                                                            updated[index] = { ...ach, issuer: e.target.value }
                                                             updateSection('achievements', updated)
                                                         }}
-                                                        placeholder="First Place in Hackathon"
-                                                        autoComplete="off"
-                                                        autoCorrect="off"
+                                                        placeholder="Organization Name"
                                                         className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
                                                     />
                                                 </div>
@@ -909,10 +945,10 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                                     <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Date</Label>
                                                     <Input
                                                         type="month"
-                                                        value={achievement.date}
+                                                        value={ach.date || ''}
                                                         onChange={(e) => {
-                                                            const updated = [...resume.achievements]
-                                                            updated[index] = { ...achievement, date: e.target.value }
+                                                            const updated = [...(resume.achievements || [])]
+                                                            updated[index] = { ...ach, date: e.target.value }
                                                             updateSection('achievements', updated)
                                                         }}
                                                         className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
@@ -922,31 +958,14 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                             <div>
                                                 <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Description</Label>
                                                 <Textarea
-                                                    value={achievement.description}
+                                                    value={ach.description || ''}
                                                     onChange={(e) => {
-                                                        const updated = [...resume.achievements]
-                                                        updated[index] = { ...achievement, description: e.target.value }
+                                                        const updated = [...(resume.achievements || [])]
+                                                        updated[index] = { ...ach, description: e.target.value }
                                                         updateSection('achievements', updated)
                                                     }}
-                                                    placeholder="Brief description of the achievement..."
-                                                    rows={3}
-                                                    autoComplete="off"
-                                                    autoCorrect="off"
-                                                    className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
-                                                />
-                                            </div>
-                                            <div>
-                                                <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Issuer (Optional)</Label>
-                                                <Input
-                                                    value={achievement.issuer || ''}
-                                                    onChange={(e) => {
-                                                        const updated = [...resume.achievements]
-                                                        updated[index] = { ...achievement, issuer: e.target.value }
-                                                        updateSection('achievements', updated)
-                                                    }}
-                                                    placeholder="Organization name"
-                                                    autoComplete="off"
-                                                    autoCorrect="off"
+                                                    placeholder="Describe your achievement..."
+                                                    rows={2}
                                                     className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
                                                 />
                                             </div>
@@ -967,9 +986,12 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                                 id: Date.now().toString(),
                                                 name: '',
                                                 issuer: '',
-                                                date: ''
+                                                date: '',
+                                                expiryDate: '',
+                                                credentialId: '',
+                                                link: ''
                                             }
-                                            updateSection('certifications', [...resume.certifications, newCert])
+                                            updateSection('certifications', [...(resume.certifications || []), newCert])
                                         }}
                                         className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                                     >
@@ -978,7 +1000,7 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                     </Button>
                                 </div>
 
-                                {resume.certifications.map((cert, index) => (
+                                {(resume.certifications || []).map((cert, index) => (
                                     <div key={cert.id} className={`rounded-2xl p-6 border backdrop-blur-xl ${isDark
                                         ? 'bg-slate-900/50 border-slate-800'
                                         : 'bg-white/50 border-slate-200'
@@ -986,66 +1008,47 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                         <div className="space-y-4">
                                             <div className="flex justify-end">
                                                 <button
-                                                    onClick={() => updateSection('certifications', resume.certifications.filter(c => c.id !== cert.id))}
+                                                    onClick={() => updateSection('certifications', (resume.certifications || []).filter(c => c.id !== cert.id))}
                                                     className={`p-2 rounded-lg transition-all ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}
                                                 >
                                                     <Trash2 className="w-4 h-4 text-red-500" />
                                                 </button>
                                             </div>
+                                            <div>
+                                                <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Certification Name</Label>
+                                                <Input
+                                                    value={cert.name}
+                                                    onChange={(e) => {
+                                                        const updated = [...(resume.certifications || [])]
+                                                        updated[index] = { ...cert, name: e.target.value }
+                                                        updateSection('certifications', updated)
+                                                    }}
+                                                    placeholder="AWS Solutions Architect"
+                                                    className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
+                                                />
+                                            </div>
                                             <div className="grid grid-cols-2 gap-4">
-                                                <div>
-                                                    <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Certification Name</Label>
-                                                    <Input
-                                                        value={cert.name}
-                                                        onChange={(e) => {
-                                                            const updated = [...resume.certifications]
-                                                            updated[index] = { ...cert, name: e.target.value }
-                                                            updateSection('certifications', updated)
-                                                        }}
-                                                        placeholder="AWS Certified Solutions Architect"
-                                                        autoComplete="off"
-                                                        autoCorrect="off"
-                                                        className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
-                                                    />
-                                                </div>
                                                 <div>
                                                     <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Issuer</Label>
                                                     <Input
                                                         value={cert.issuer}
                                                         onChange={(e) => {
-                                                            const updated = [...resume.certifications]
+                                                            const updated = [...(resume.certifications || [])]
                                                             updated[index] = { ...cert, issuer: e.target.value }
                                                             updateSection('certifications', updated)
                                                         }}
                                                         placeholder="Amazon Web Services"
-                                                        autoComplete="off"
-                                                        autoCorrect="off"
                                                         className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
                                                     />
                                                 </div>
-                                            </div>
-                                            <div className="grid grid-cols-2 gap-4">
                                                 <div>
                                                     <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Date Obtained</Label>
                                                     <Input
                                                         type="month"
                                                         value={cert.date}
                                                         onChange={(e) => {
-                                                            const updated = [...resume.certifications]
+                                                            const updated = [...(resume.certifications || [])]
                                                             updated[index] = { ...cert, date: e.target.value }
-                                                            updateSection('certifications', updated)
-                                                        }}
-                                                        className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Expiry Date (Optional)</Label>
-                                                    <Input
-                                                        type="month"
-                                                        value={cert.expiryDate || ''}
-                                                        onChange={(e) => {
-                                                            const updated = [...resume.certifications]
-                                                            updated[index] = { ...cert, expiryDate: e.target.value }
                                                             updateSection('certifications', updated)
                                                         }}
                                                         className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
@@ -1053,17 +1056,15 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                                 </div>
                                             </div>
                                             <div>
-                                                <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Credential ID (Optional)</Label>
+                                                <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Credential URL</Label>
                                                 <Input
-                                                    value={cert.credentialId || ''}
+                                                    value={cert.link || ''}
                                                     onChange={(e) => {
-                                                        const updated = [...resume.certifications]
-                                                        updated[index] = { ...cert, credentialId: e.target.value }
+                                                        const updated = [...(resume.certifications || [])]
+                                                        updated[index] = { ...cert, link: e.target.value }
                                                         updateSection('certifications', updated)
                                                     }}
-                                                    placeholder="ABC123XYZ"
-                                                    autoComplete="off"
-                                                    autoCorrect="off"
+                                                    placeholder="https://credential.url"
                                                     className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
                                                 />
                                             </div>
@@ -1085,7 +1086,7 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                                 language: '',
                                                 proficiency: 'Intermediate'
                                             }
-                                            updateSection('languages', [...resume.languages, newLang])
+                                            updateSection('languages', [...(resume.languages || []), newLang])
                                         }}
                                         className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                                     >
@@ -1094,61 +1095,60 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                     </Button>
                                 </div>
 
-                                {resume.languages.map((lang, index) => (
+                                {(resume.languages || []).map((lang, index) => (
                                     <div key={lang.id} className={`rounded-2xl p-6 border backdrop-blur-xl ${isDark
                                         ? 'bg-slate-900/50 border-slate-800'
                                         : 'bg-white/50 border-slate-200'
                                         }`}>
-                                        <div className="flex items-end gap-4">
-                                            <div className="flex-1">
-                                                <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Language</Label>
-                                                <Input
-                                                    value={lang.language}
-                                                    onChange={(e) => {
-                                                        const updated = [...resume.languages]
-                                                        updated[index] = { ...lang, language: e.target.value }
-                                                        updateSection('languages', updated)
-                                                    }}
-                                                    placeholder="English, Spanish, etc."
-                                                    autoComplete="off"
-                                                    autoCorrect="off"
-                                                    className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
-                                                />
-                                            </div>
-                                            <div className="flex-1">
-                                                <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Proficiency</Label>
-                                                <select
-                                                    value={lang.proficiency}
-                                                    onChange={(e) => {
-                                                        const updated = [...resume.languages]
-                                                        updated[index] = { ...lang, proficiency: e.target.value as any }
-                                                        updateSection('languages', updated)
-                                                    }}
-                                                    className={`w-full p-2 rounded-md border transition-all ${isDark
-                                                        ? 'bg-slate-800 border-slate-700 text-white'
-                                                        : 'bg-white border-slate-200'
-                                                        }`}
+                                        <div className="space-y-4">
+                                            <div className="flex justify-end">
+                                                <button
+                                                    onClick={() => updateSection('languages', (resume.languages || []).filter(l => l.id !== lang.id))}
+                                                    className={`p-2 rounded-lg transition-all ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}
                                                 >
-                                                    <option value="Native">Native</option>
-                                                    <option value="Fluent">Fluent</option>
-                                                    <option value="Professional">Professional</option>
-                                                    <option value="Intermediate">Intermediate</option>
-                                                    <option value="Basic">Basic</option>
-                                                </select>
+                                                    <Trash2 className="w-4 h-4 text-red-500" />
+                                                </button>
                                             </div>
-                                            <button
-                                                onClick={() => updateSection('languages', resume.languages.filter(l => l.id !== lang.id))}
-                                                className={`p-2 rounded-lg transition-all ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}
-                                            >
-                                                <Trash2 className="w-4 h-4 text-red-500" />
-                                            </button>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Language</Label>
+                                                    <Input
+                                                        value={lang.language}
+                                                        onChange={(e) => {
+                                                            const updated = [...(resume.languages || [])]
+                                                            updated[index] = { ...lang, language: e.target.value }
+                                                            updateSection('languages', updated)
+                                                        }}
+                                                        placeholder="English"
+                                                        className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Proficiency</Label>
+                                                    <select
+                                                        value={lang.proficiency}
+                                                        onChange={(e) => {
+                                                            const updated = [...(resume.languages || [])]
+                                                            updated[index] = { ...lang, proficiency: e.target.value as Language['proficiency'] }
+                                                            updateSection('languages', updated)
+                                                        }}
+                                                        className={`w-full px-3 py-2 rounded-md border ${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white border-slate-200'}`}
+                                                    >
+                                                        <option value="Native">Native</option>
+                                                        <option value="Fluent">Fluent</option>
+                                                        <option value="Professional">Professional</option>
+                                                        <option value="Intermediate">Intermediate</option>
+                                                        <option value="Basic">Basic</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 ))}
                             </div>
                         )}
 
-                        {/* Volunteer Work Section */}
+                        {/* Volunteer Section */}
                         {activeSection === 'volunteer' && (
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between mb-6">
@@ -1164,7 +1164,7 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                                 current: false,
                                                 description: ''
                                             }
-                                            updateSection('volunteerWork', [...resume.volunteerWork, newVol])
+                                            updateSection('volunteerWork', [...(resume.volunteerWork || []), newVol])
                                         }}
                                         className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                                     >
@@ -1173,7 +1173,7 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                     </Button>
                                 </div>
 
-                                {resume.volunteerWork.map((vol, index) => (
+                                {(resume.volunteerWork || []).map((vol, index) => (
                                     <div key={vol.id} className={`rounded-2xl p-6 border backdrop-blur-xl ${isDark
                                         ? 'bg-slate-900/50 border-slate-800'
                                         : 'bg-white/50 border-slate-200'
@@ -1181,7 +1181,7 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                         <div className="space-y-4">
                                             <div className="flex justify-end">
                                                 <button
-                                                    onClick={() => updateSection('volunteerWork', resume.volunteerWork.filter(v => v.id !== vol.id))}
+                                                    onClick={() => updateSection('volunteerWork', (resume.volunteerWork || []).filter(v => v.id !== vol.id))}
                                                     className={`p-2 rounded-lg transition-all ${isDark ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}
                                                 >
                                                     <Trash2 className="w-4 h-4 text-red-500" />
@@ -1193,13 +1193,11 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                                     <Input
                                                         value={vol.organization}
                                                         onChange={(e) => {
-                                                            const updated = [...resume.volunteerWork]
+                                                            const updated = [...(resume.volunteerWork || [])]
                                                             updated[index] = { ...vol, organization: e.target.value }
                                                             updateSection('volunteerWork', updated)
                                                         }}
                                                         placeholder="Organization Name"
-                                                        autoComplete="off"
-                                                        autoCorrect="off"
                                                         className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
                                                     />
                                                 </div>
@@ -1208,13 +1206,11 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                                     <Input
                                                         value={vol.role}
                                                         onChange={(e) => {
-                                                            const updated = [...resume.volunteerWork]
+                                                            const updated = [...(resume.volunteerWork || [])]
                                                             updated[index] = { ...vol, role: e.target.value }
                                                             updateSection('volunteerWork', updated)
                                                         }}
-                                                        placeholder="Volunteer Coordinator"
-                                                        autoComplete="off"
-                                                        autoCorrect="off"
+                                                        placeholder="Volunteer Role"
                                                         className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
                                                     />
                                                 </div>
@@ -1226,7 +1222,7 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                                         type="month"
                                                         value={vol.startDate}
                                                         onChange={(e) => {
-                                                            const updated = [...resume.volunteerWork]
+                                                            const updated = [...(resume.volunteerWork || [])]
                                                             updated[index] = { ...vol, startDate: e.target.value }
                                                             updateSection('volunteerWork', updated)
                                                         }}
@@ -1237,13 +1233,12 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                                     <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>End Date</Label>
                                                     <Input
                                                         type="month"
-                                                        value={vol.endDate}
+                                                        value={vol.endDate || ''}
                                                         onChange={(e) => {
-                                                            const updated = [...resume.volunteerWork]
+                                                            const updated = [...(resume.volunteerWork || [])]
                                                             updated[index] = { ...vol, endDate: e.target.value }
                                                             updateSection('volunteerWork', updated)
                                                         }}
-                                                        disabled={vol.current}
                                                         className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
                                                     />
                                                 </div>
@@ -1251,16 +1246,14 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                             <div>
                                                 <Label className={isDark ? 'text-slate-300' : 'text-slate-700'}>Description</Label>
                                                 <Textarea
-                                                    value={vol.description}
+                                                    value={vol.description || ''}
                                                     onChange={(e) => {
-                                                        const updated = [...resume.volunteerWork]
+                                                        const updated = [...(resume.volunteerWork || [])]
                                                         updated[index] = { ...vol, description: e.target.value }
                                                         updateSection('volunteerWork', updated)
                                                     }}
                                                     placeholder="Describe your volunteer work..."
                                                     rows={3}
-                                                    autoComplete="off"
-                                                    autoCorrect="off"
                                                     className={`${isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white'}`}
                                                 />
                                             </div>
@@ -1271,7 +1264,7 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                         )}
                     </div>
 
-                    {/* Right Sidebar - AI Suggestions */}
+                    {/* Right Sidebar - AI Suggestions (UPDATED) */}
                     <div className="col-span-4">
                         <div className={`sticky top-24 rounded-2xl p-4 border backdrop-blur-xl ${isDark
                             ? 'bg-slate-900/50 border-slate-800'
@@ -1281,22 +1274,35 @@ export default function ResumeBuilderPage({ params }: { params: Promise<{ id: st
                                 <Sparkles className="w-5 h-5 text-blue-600" />
                                 <h3 className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>AI Assistant</h3>
                             </div>
-                            <AISuggestionPanel
-                                field={activeField.field}
-                                value={activeField.value}
-                                resume={resume}
-                                jobContext={resume?.jobContext}
-                                onApply={(suggestion) => {
-                                    // Apply the suggestion by updating the corresponding section
-                                    if (activeField.section === 'summary' && resume) {
-                                        updateSection('personalInfo', {
-                                            ...resume.personalInfo,
-                                            summary: suggestion
-                                        })
-                                    }
-                                    setActiveField(prev => ({ ...prev, value: suggestion }))
-                                }}
-                            />
+
+                            {/* Updated to pass domain and new props */}
+                            {/* Conditionally render field suggestions or global suggestions */}
+                            {suggestions.length > 0 ? (
+                                <AISuggestionPanel
+                                    field={activeField.field}
+                                    value={activeField.value}
+                                    resume={resume}
+                                    jobContext={resume?.jobContext}
+                                    domain={domain}
+                                    isDark={isDark}
+                                    onApply={(suggestion) => {
+                                        // Apply the suggestion
+                                        if (activeField.section === 'personal' && activeField.field === 'summary') {
+                                            updateSection('personalInfo', {
+                                                ...resume.personalInfo,
+                                                summary: suggestion
+                                            })
+                                        }
+                                        setActiveField(prev => ({ ...prev, value: suggestion }))
+                                    }}
+                                />
+                            ) : (
+                                <GlobalSuggestionsPanel
+                                    suggestions={globalSuggestions}
+                                    atsScore={atsScore}
+                                    isDark={isDark}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>

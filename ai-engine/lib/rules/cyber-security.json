@@ -1,0 +1,210 @@
+{
+    "ruleEngine": {
+        "version": "1.0",
+        "lastUpdated": "2025-02-04",
+        "domains": {
+            "cyber-security": {
+                "domain": "Cyber Security Engineer",
+                "description": "Professional protecting systems and networks from cyber threats",
+                "experienceLevels": {
+                    "midLevel": {
+                        "level": "Mid-Level",
+                        "yearsRequired": "3-6",
+                        "rules": {
+                            "requiredSkills": {
+                                "category": "Must-Have Technical Skills",
+                                "importance": 0.35,
+                                "skills": [
+                                    {
+                                        "skill": "Network Security",
+                                        "context": "Firewalls, VPNs, IDS/IPS",
+                                        "priority": "critical",
+                                        "weight": 0.95
+                                    },
+                                    {
+                                        "skill": "SIEM Tools",
+                                        "context": "Splunk, ELK, QRadar",
+                                        "priority": "critical",
+                                        "weight": 0.90
+                                    },
+                                    {
+                                        "skill": "Penetration Testing",
+                                        "context": "Ethical hacking and vulnerability assessment",
+                                        "priority": "critical",
+                                        "weight": 0.90
+                                    },
+                                    {
+                                        "skill": "Python or Bash Scripting",
+                                        "context": "Security automation",
+                                        "priority": "high",
+                                        "weight": 0.85
+                                    },
+                                    {
+                                        "skill": "Cloud Security",
+                                        "context": "AWS, Azure, GCP security",
+                                        "priority": "high",
+                                        "weight": 0.80
+                                    },
+                                    {
+                                        "skill": "Incident Response",
+                                        "context": "Security incident handling",
+                                        "priority": "high",
+                                        "weight": 0.80
+                                    }
+                                ]
+                            },
+                            "niceToHaveSkills": {
+                                "category": "Nice-to-Have Skills",
+                                "importance": 0.15,
+                                "skills": [
+                                    {
+                                        "skill": "Malware Analysis",
+                                        "context": "Reverse engineering malware",
+                                        "priority": "medium",
+                                        "weight": 0.70
+                                    },
+                                    {
+                                        "skill": "CISSP/CEH/OSCP",
+                                        "context": "Security certifications",
+                                        "priority": "high",
+                                        "weight": 0.75
+                                    },
+                                    {
+                                        "skill": "Zero Trust Architecture",
+                                        "context": "Modern security model",
+                                        "priority": "medium",
+                                        "weight": 0.65
+                                    }
+                                ]
+                            },
+                            "powerWords": {
+                                "category": "Recommended Action Verbs",
+                                "importance": 0.15,
+                                "verbs": [
+                                    {
+                                        "verb": "Secured",
+                                        "context": "Protected systems",
+                                        "strength": "very high",
+                                        "example": "Secured network infrastructure for 10k+ users"
+                                    },
+                                    {
+                                        "verb": "Detected",
+                                        "context": "Identified threats",
+                                        "strength": "high",
+                                        "example": "Detected and mitigated 500+ security incidents"
+                                    },
+                                    {
+                                        "verb": "Implemented",
+                                        "context": "Security measures",
+                                        "strength": "high",
+                                        "example": "Implemented zero-trust security model"
+                                    }
+                                ]
+                            },
+                            "metricsFramework": {
+                                "category": "How to Quantify Impact",
+                                "importance": 0.20,
+                                "metricTypes": [
+                                    {
+                                        "type": "Threat Prevention",
+                                        "examples": [
+                                            "Reduced security incidents by 60%",
+                                            "Blocked 10k+ attacks monthly",
+                                            "Achieved 99.9% uptime"
+                                        ],
+                                        "priority": "high",
+                                        "applicable": true
+                                    },
+                                    {
+                                        "type": "Response Time",
+                                        "examples": [
+                                            "Reduced incident response time by 75%",
+                                            "Automated 80% of threat detection"
+                                        ],
+                                        "priority": "high",
+                                        "applicable": true
+                                    }
+                                ]
+                            },
+                            "resumeStructure": {
+                                "category": "Recommended Resume Layout",
+                                "importance": 0.10,
+                                "sections": [
+                                    {
+                                        "section": "Professional Summary",
+                                        "required": true,
+                                        "guidelines": "3-4 sentences with security focus",
+                                        "order": 1
+                                    },
+                                    {
+                                        "section": "Certifications",
+                                        "required": true,
+                                        "guidelines": "CISSP, CEH, OSCP, etc.",
+                                        "order": 2
+                                    },
+                                    {
+                                        "section": "Work Experience",
+                                        "required": true,
+                                        "guidelines": "5-7 bullets per role",
+                                        "order": 3
+                                    },
+                                    {
+                                        "section": "Technical Skills",
+                                        "required": true,
+                                        "guidelines": "Tools and technologies",
+                                        "order": 4
+                                    }
+                                ]
+                            },
+                            "redFlags": {
+                                "category": "Warning Signs to Avoid",
+                                "importance": 0.10,
+                                "flags": [
+                                    {
+                                        "flag": "No certifications mentioned",
+                                        "severity": "high",
+                                        "reason": "Security roles often require certifications",
+                                        "suggestion": "List relevant security certifications"
+                                    },
+                                    {
+                                        "flag": "No incident metrics",
+                                        "severity": "high",
+                                        "reason": "Must show quantified impact",
+                                        "suggestion": "Include number of incidents handled"
+                                    }
+                                ]
+                            },
+                            "atsOptimization": {
+                                "category": "ATS-Friendly Formatting",
+                                "importance": 0.05,
+                                "rules": [
+                                    {
+                                        "rule": "Include tool names",
+                                        "details": "Splunk, Nessus, Wireshark, Metasploit",
+                                        "importance": "critical",
+                                        "impact": "Keyword matching"
+                                    }
+                                ]
+                            }
+                        },
+                        "scoringWeights": {
+                            "requiredSkills": 0.35,
+                            "powerWords": 0.12,
+                            "metricsPresent": 0.25,
+                            "resumeStructure": 0.12,
+                            "atsCompliance": 0.11,
+                            "redFlagsAbsent": 0.05
+                        }
+                    }
+                },
+                "overallScoringWeights": {
+                    "keywordMatch": 0.35,
+                    "formatCompliance": 0.12,
+                    "metricsPresent": 0.25,
+                    "powerWords": 0.12,
+                    "skillRelevance": 0.16
+                }
+            }
+        }
+    }
+}

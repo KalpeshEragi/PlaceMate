@@ -1,3 +1,6 @@
+// File: app/dashboard/resume/page.tsx
+// Updated to use the new useRuleEngine hook and clean imports
+
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -33,6 +36,8 @@ import {
   Dialog,
   DialogContent,
 } from '@/components/ui/dialog'
+import { useRuleEngine } from '@/hooks/use-rule-engine'
+import { ATSScoreBadge } from '@/components/resume/ats-score-badge'
 
 export default function ResumeDashboard() {
   const [resumes, setResumes] = useState<Resume[]>([])
@@ -40,7 +45,9 @@ export default function ResumeDashboard() {
   const [showCreateDialog, setShowCreateDialog] = useState(false)
   const [isDark, setIsDark] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [resumeScores, setResumeScores] = useState<Record<string, number>>({})
   const { toast } = useToast()
+  const { getATSScore } = useRuleEngine({ domain: 'web-developer' })
 
   useEffect(() => {
     setMounted(true)
@@ -57,6 +64,16 @@ export default function ResumeDashboard() {
       setLoading(true)
       const data = await resumeApi.getAllResumes()
       setResumes(data)
+
+      // Calculate ATS scores for each resume
+      const scores: Record<string, number> = {}
+      data.forEach((resume) => {
+        const score = getATSScore(resume)
+        if (score) {
+          scores[resume.id] = score.overallScore
+        }
+      })
+      setResumeScores(scores)
     } catch (error) {
       toast({
         title: 'Error',
@@ -137,11 +154,10 @@ export default function ResumeDashboard() {
 
           <button
             onClick={toggleTheme}
-            className={`p-2.5 rounded-lg transition-all ${
-              isDark
+            className={`p-2.5 rounded-lg transition-all ${isDark
                 ? 'bg-slate-800 hover:bg-slate-700 text-amber-400'
                 : 'bg-white hover:bg-slate-100 text-slate-700'
-            } border ${isDark ? 'border-slate-700' : 'border-slate-200'}`}
+              } border ${isDark ? 'border-slate-700' : 'border-slate-200'}`}
             aria-label="Toggle theme"
           >
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
@@ -179,11 +195,10 @@ export default function ResumeDashboard() {
             {[1, 2, 3].map(i => (
               <div
                 key={i}
-                className={`rounded-2xl overflow-hidden border ${
-                  isDark
+                className={`rounded-2xl overflow-hidden border ${isDark
                     ? 'bg-slate-900/50 border-slate-800'
                     : 'bg-white/50 border-slate-200'
-                } backdrop-blur-xl animate-pulse`}
+                  } backdrop-blur-xl animate-pulse`}
               >
                 <div className={`h-48 ${isDark ? 'bg-slate-800' : 'bg-slate-200'}`} />
                 <div className="p-6">
@@ -195,11 +210,10 @@ export default function ResumeDashboard() {
           </div>
         ) : resumes.length === 0 ? (
           /* Empty State */
-          <div className={`rounded-2xl p-12 text-center border ${
-            isDark
+          <div className={`rounded-2xl p-12 text-center border ${isDark
               ? 'bg-slate-900/50 border-slate-800'
               : 'bg-white/50 border-slate-200'
-          } backdrop-blur-xl`}>
+            } backdrop-blur-xl`}>
             <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <FileText className="w-10 h-10 text-white" />
             </div>
@@ -224,11 +238,10 @@ export default function ResumeDashboard() {
             {/* Create New Card */}
             <button
               onClick={() => setShowCreateDialog(true)}
-              className={`group relative rounded-2xl p-8 transition-all duration-300 overflow-hidden border h-96 flex flex-col items-center justify-center ${
-                isDark
+              className={`group relative rounded-2xl p-8 transition-all duration-300 overflow-hidden border h-96 flex flex-col items-center justify-center ${isDark
                   ? 'bg-slate-900/50 border-dashed border-slate-700 hover:border-slate-600 hover:bg-slate-900/80'
                   : 'bg-white/50 border-dashed border-slate-300 hover:border-slate-400 hover:bg-white/70'
-              } backdrop-blur-xl`}
+                } backdrop-blur-xl`}
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${isDark ? 'from-slate-800 to-slate-900' : 'from-slate-50 to-slate-100'}`} />
               <div className="relative z-10 text-center">
@@ -248,11 +261,10 @@ export default function ResumeDashboard() {
             {resumes.map((resume, index) => (
               <div
                 key={resume.id}
-                className={`group relative rounded-2xl overflow-hidden border transition-all duration-300 ${
-                  isDark
+                className={`group relative rounded-2xl overflow-hidden border transition-all duration-300 ${isDark
                     ? 'bg-slate-900/50 border-slate-800 hover:border-slate-700 hover:shadow-lg hover:shadow-blue-900/20'
                     : 'bg-white/50 border-slate-200 hover:border-slate-300 hover:shadow-lg hover:shadow-blue-100'
-                } backdrop-blur-xl`}
+                  } backdrop-blur-xl`}
                 style={{
                   animation: `slideUp 0.5s ease-out ${index * 50}ms backwards`,
                 }}
@@ -274,10 +286,14 @@ export default function ResumeDashboard() {
                       </div>
                     </div>
                     <div className="absolute top-4 right-4">
-                      <div className="flex items-center gap-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs px-2.5 py-1.5 rounded-lg font-semibold">
-                        <Sparkles className="w-3.5 h-3.5" />
-                        AI Ready
-                      </div>
+                      {resumeScores[resume.id] ? (
+                        <ATSScoreBadge score={resumeScores[resume.id]} compact isDark={isDark} />
+                      ) : (
+                        <div className="flex items-center gap-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs px-2.5 py-1.5 rounded-lg font-semibold">
+                          <Sparkles className="w-3.5 h-3.5" />
+                          AI Ready
+                        </div>
+                      )}
                     </div>
                   </div>
                 </Link>
@@ -297,11 +313,10 @@ export default function ResumeDashboard() {
                       </div>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <button className={`p-2 rounded-lg transition-all ${
-                            isDark
+                          <button className={`p-2 rounded-lg transition-all ${isDark
                               ? 'hover:bg-slate-800 text-slate-400'
                               : 'hover:bg-slate-200 text-slate-600'
-                          }`}>
+                            }`}>
                             <MoreVertical className="w-4 h-4" />
                           </button>
                         </DropdownMenuTrigger>
@@ -335,20 +350,18 @@ export default function ResumeDashboard() {
                   {/* Action Buttons */}
                   <div className="flex gap-2">
                     <Link href={`/dashboard/resume/builder/${resume.id}`} className="flex-1">
-                      <button className={`w-full px-4 py-2 rounded-lg font-medium text-sm transition-all flex items-center justify-center gap-2 ${
-                        isDark
+                      <button className={`w-full px-4 py-2 rounded-lg font-medium text-sm transition-all flex items-center justify-center gap-2 ${isDark
                           ? 'bg-blue-600 hover:bg-blue-700 text-white'
                           : 'bg-blue-600 hover:bg-blue-700 text-white'
-                      }`}>
+                        }`}>
                         <Edit className="w-4 h-4" />
                         Edit
                       </button>
                     </Link>
-                    <button className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
-                      isDark
+                    <button className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${isDark
                         ? 'bg-slate-800 hover:bg-slate-700 text-slate-300'
                         : 'bg-slate-200 hover:bg-slate-300 text-slate-700'
-                    }`}>
+                      }`}>
                       <Download className="w-4 h-4" />
                     </button>
                   </div>
