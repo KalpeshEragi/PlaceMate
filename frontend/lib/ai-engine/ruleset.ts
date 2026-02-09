@@ -288,8 +288,7 @@ export function evaluateHRRules(resume: Resume): RuleEvaluation[] {
 function checkProfessionalismRule(resume: Resume, rule: FlatHRRule): boolean {
     if (rule.id === 'HR-PROF-001') {
         // LinkedIn profile
-        const links = resume.personalInfo.links || []
-        return links.some(link => link.toLowerCase().includes('linkedin'))
+        return !!resume.personalInfo.linkedin
     }
     if (rule.id === 'HR-PROF-002') {
         // Professional email
