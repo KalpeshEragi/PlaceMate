@@ -23,43 +23,47 @@ export class RuleLoader {
       console.log(`[RuleLoader] Loading rules for: ${domain}`)
 
       // Import the JSON file dynamically
-      // This works because Next.js treats JSON imports as modules
       const ruleFile = await import(`../rules/${domain}.json`)
-
-      // The JSON structure is: { ruleEngine: { domains: {...} } }
-      // When imported, ruleFile.default contains the whole JSON
       const jsonContent = ruleFile.default || ruleFile
 
-      // Unwrap the ruleEngine wrapper if present
-      const ruleEngine = jsonContent.ruleEngine || jsonContent
+      // Handle multiple JSON structures:
+      // 1. New structure: { webDevRules: {...} } or { atsRules: {...} }
+      // 2. Old structure: { ruleEngine: { domains: {...} } }
 
-      // Get the domains object
-      const domainsObj = ruleEngine.domains
+      let domainRules: DomainRules | null = null
 
-      if (!domainsObj) {
-        console.error(`[RuleLoader] No domains object found in rule file for: ${domain}`)
-        console.error('[RuleLoader] JSON structure:', Object.keys(jsonContent))
-        throw new Error(`Invalid rule file structure for: ${domain}`)
+      // Try new structure first (webDevRules, atsRules, etc.)
+      const directKeys = ['webDevRules', 'atsRules', 'hrRules', 'dataScienceRules', 'cyberSecurityRules', 'devopsRules', 'aimlRules']
+      for (const key of directKeys) {
+        if (jsonContent[key]) {
+          console.log(`[RuleLoader] Found direct rules key: ${key}`)
+          domainRules = this.transformNewStructure(jsonContent[key], domain)
+          break
+        }
       }
 
-      // Try to find domain rules - try both kebab-case and camelCase keys
-      // Convert web-developer to webDeveloper
-      const camelCaseKey = domain.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase())
-
-      // Try different key formats
-      let domainRules = domainsObj[domain] || domainsObj[camelCaseKey]
-
-      // If still not found, try to get the first (and likely only) domain in the object
+      // If not found, try old structure
       if (!domainRules) {
-        const keys = Object.keys(domainsObj)
-        if (keys.length > 0) {
-          console.log(`[RuleLoader] Using first domain key: ${keys[0]}`)
-          domainRules = domainsObj[keys[0]]
+        const ruleEngine = jsonContent.ruleEngine || jsonContent
+        const domainsObj = ruleEngine.domains
+
+        if (domainsObj) {
+          const camelCaseKey = domain.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase())
+          domainRules = domainsObj[domain] || domainsObj[camelCaseKey]
+
+          if (!domainRules) {
+            const keys = Object.keys(domainsObj)
+            if (keys.length > 0) {
+              domainRules = domainsObj[keys[0]]
+            }
+          }
         }
       }
 
       if (!domainRules) {
-        throw new Error(`Domain rules not found for: ${domain}`)
+        console.error(`[RuleLoader] Could not parse rules for: ${domain}`)
+        console.error('[RuleLoader] JSON keys:', Object.keys(jsonContent))
+        throw new Error(`Invalid rule file structure for: ${domain}`)
       }
 
       // Cache it for future use
@@ -85,6 +89,78 @@ export class RuleLoader {
       'aiml-engineer',
       'devops-engineer'
     ]
+  }
+
+  /**
+   * Transform new JSON structure to DomainRules format
+   */
+  private static transformNewStructure(rules: any, domain: string): DomainRules {
+    // Build experience level rules with all required fields
+    const buildExpLevel = (level: any, levelName: string): any => ({
+      level: levelName as 'Entry-Level' | 'Junior' | 'Mid-Level' | 'Senior',
+      yearsRequired: level?.yearsRequired || '0-2 years',
+      rules: {
+        requiredSkills: {
+          category: 'Required Skills',
+          importance: 1.0,
+          skills: (level?.criticalSkills || []).map((s: string) => ({
+            skill: s,
+            importance: 'high',
+            rationale: 'Core skill for this role'
+          }))
+        },
+        niceToHaveSkills: {
+          category: 'Nice to Have',
+          importance: 0.5,
+          skills: (level?.niceToHave || []).map((s: string) => ({
+            skill: s,
+            importance: 'medium',
+            rationale: 'Beneficial skill'
+          }))
+        },
+        powerWords: {
+          category: 'Action Verbs',
+          importance: 0.8,
+          verbs: []
+        },
+        metricsFramework: {
+          category: 'Metrics',
+          importance: 0.9,
+          types: []
+        },
+        redFlags: {
+          category: 'Red Flags',
+          importance: 1.0,
+          flags: []
+        }
+      },
+      scoringWeights: {
+        requiredSkills: 0.35,
+        powerWords: 0.15,
+        metricsPresent: 0.20,
+        resumeStructure: 0.10,
+        atsCompliance: 0.10,
+        redFlagsAbsent: 0.10
+      }
+    })
+
+    return {
+      domain: domain,
+      description: rules.description || `Rules for ${domain}`,
+      experienceLevels: {
+        entryLevel: buildExpLevel(rules.experienceLevelSpecifics?.entryLevel, 'Entry-Level'),
+        midLevel: buildExpLevel(rules.experienceLevelSpecifics?.midLevel, 'Mid-Level'),
+        senior: buildExpLevel(rules.experienceLevelSpecifics?.senior, 'Senior')
+      },
+      overallScoringWeights: {
+        requiredSkills: 0.35,
+        powerWords: 0.15,
+        metricsPresent: 0.20,
+        resumeStructure: 0.10,
+        atsCompliance: 0.10,
+        redFlagsAbsent: 0.10
+      }
+    }
   }
 
   /**

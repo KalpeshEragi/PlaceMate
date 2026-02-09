@@ -1,4 +1,5 @@
 // Ruleset utilities for applying ATS, HR, and JD matching rules
+// Updated to use the unified rules loader from ai-engine
 import { Resume, JobContext, RuleEvaluation } from '@/lib/types/resume-types'
 import {
     extractAllSkills,
@@ -8,243 +9,37 @@ import {
     findStackCluster
 } from './ontology'
 
-// Embedded ruleset data (from ai-engine/ruleset.json)
-const rulesetData = {
-    ats_rules: [
-        {
-            id: "ATS_01",
-            description: "Must contain core sections",
-            check: ["contact", "skills", "experience_or_projects", "education"],
-            weight: 10,
-            category: "structure",
-            suggestion: "Add missing sections: Contact info, Skills, Experience/Projects, and Education are essential for ATS systems"
-        },
-        {
-            id: "ATS_02",
-            description: "Professional email required",
-            regex: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
-            weight: 8,
-            category: "contact",
-            suggestion: "Use a professional email format (firstname.lastname@domain.com)"
-        },
-        {
-            id: "ATS_03",
-            description: "Contact information complete",
-            check: ["email", "phone", "location"],
-            weight: 7,
-            category: "contact",
-            suggestion: "Include complete contact information: email, phone, and location"
-        },
-        {
-            id: "ATS_05",
-            description: "Skills section has relevant keywords",
-            min_skills: 5,
-            max_skills: 25,
-            weight: 9,
-            category: "keywords",
-            suggestion: "Include 5-25 relevant technical skills that match the job description"
-        }
-    ],
-    hr_rules: [
-        {
-            id: "HR_01",
-            description: "Quantified impact required",
-            check: "metrics_ratio >= 0.3",
-            weight: 10,
-            category: "impact",
-            suggestion: "Add quantified achievements (e.g., 'Improved performance by 40%', 'Managed team of 5')"
-        },
-        {
-            id: "HR_02",
-            description: "Action verbs density",
-            check: "strong_verb_ratio >= 0.2",
-            weight: 8,
-            category: "language",
-            suggestion: "Start bullet points with strong action verbs (Led, Architected, Optimized, Transformed)"
-        },
-        {
-            id: "HR_03",
-            description: "Portfolio or GitHub required for web roles",
-            check: "has_github_or_portfolio == true",
-            weight: 9,
-            category: "credibility",
-            suggestion: "Add GitHub profile or portfolio website to showcase your work"
-        },
-        {
-            id: "HR_04",
-            description: "Skill credibility check",
-            check: "skills_match_experience",
-            weight: 7,
-            category: "credibility",
-            suggestion: "Ensure listed skills are demonstrated in your experience/projects"
-        },
-        {
-            id: "HR_06",
-            description: "Professional summary present",
-            check: "has_summary",
-            min_words: 20,
-            max_words: 100,
-            weight: 6,
-            category: "structure",
-            suggestion: "Add a professional summary (20-100 words) highlighting your key strengths"
-        }
-    ],
-    recruiter_red_flags: [
-        {
-            id: "RF_01",
-            description: "Unprofessional email",
-            patterns: ["dragon", "coolboy", "ninja", "gamer", "420", "69", "xxx", "hot"],
-            penalty: -10,
-            suggestion: "Use a professional email address based on your name"
-        },
-        {
-            id: "RF_02",
-            description: "Buzzword stuffing",
-            check: "skill_count > 30",
-            penalty: -6,
-            suggestion: "Reduce skills list to most relevant 15-20 skills to avoid appearing unfocused"
-        },
-        {
-            id: "RF_03",
-            description: "No measurable achievements",
-            check: "metrics_count < 2",
-            penalty: -8,
-            suggestion: "Add at least 2-3 achievements with measurable impact"
-        },
-        {
-            id: "RF_04",
-            description: "First-person pronouns overuse",
-            patterns: ["I ", "my ", "me "],
-            max_occurrences: 3,
-            penalty: -4,
-            suggestion: "Remove first-person pronouns (I, my, me) for professional tone"
-        },
-        {
-            id: "RF_05",
-            description: "Generic job duties only",
-            weak_verb_ratio: 0.5,
-            penalty: -6,
-            suggestion: "Replace generic duties with specific accomplishments and outcomes"
-        }
-    ],
-    jd_matching_rules: [
-        {
-            id: "JD_01",
-            description: "Required skills overlap",
-            check: "required_skill_overlap >= 0.6",
-            weight: 10,
-            suggestion: "Your resume is missing key required skills"
-        },
-        {
-            id: "JD_02",
-            description: "Preferred skills boost",
-            check: "preferred_skill_overlap >= 0.3",
-            weight: 5,
-            suggestion: "Consider adding preferred skills to strengthen your application"
-        },
-        {
-            id: "JD_03",
-            description: "Stack cluster match",
-            check: "stack_cluster_match == true",
-            weight: 7,
-            suggestion: "Highlight experience with a recognized tech stack"
-        },
-        {
-            id: "JD_05",
-            description: "Role type alignment",
-            check: "role_type_match == true",
-            weight: 8,
-            suggestion: "Tailor your experience descriptions to emphasize role-relevant skills"
-        }
-    ],
-    scoring_formula: {
-        weights: { ats: 0.4, hr: 0.3, jd: 0.3 },
-        verdict_thresholds: { pass: 75, borderline: 55, fail: 0 }
-    },
-    role_specific_tips: {
-        frontend: [
-            "Highlight responsive design and cross-browser compatibility experience",
-            "Showcase UI/UX improvements with metrics (load time, user engagement)",
-            "Include accessibility (a11y) experience and WCAG compliance",
-            "Mention state management libraries (Redux, MobX, Zustand)"
-        ],
-        backend: [
-            "Emphasize API design and performance optimization",
-            "Include database expertise and query optimization experience",
-            "Highlight security implementation (authentication, authorization)",
-            "Mention experience with message queues and caching"
-        ],
-        fullstack: [
-            "Balance frontend and backend experience equally",
-            "Show end-to-end project ownership",
-            "Include deployment and DevOps experience",
-            "Demonstrate understanding of system architecture"
-        ],
-        devops: [
-            "Highlight CI/CD pipeline implementation",
-            "Include infrastructure as code experience",
-            "Show monitoring and observability expertise",
-            "Emphasize cloud platform certifications"
-        ]
+// Import unified rules from ai-engine
+// Note: These are dynamically loaded from the comprehensive JSON rule files
+import {
+    getUnifiedRuleset,
+    getDomainRules,
+    getDomainRedFlags,
+    getActionVerbs,
+    getMetricExamples,
+    getTrendingSkills,
+    type UnifiedRuleset,
+    type FlatATSRule,
+    type FlatHRRule,
+    type RedFlagRule,
+    type JDMatchRule
+} from './unified-rules-bridge'
+
+// Re-export types for use by other modules
+export type { FlatATSRule as ATSRule, FlatHRRule as HRRule, RedFlagRule, JDMatchRule }
+
+// Cache for the ruleset
+let cachedRuleset: UnifiedRuleset | null = null
+
+/**
+ * Get the unified ruleset (with caching)
+ */
+function getRuleset(): UnifiedRuleset {
+    if (!cachedRuleset) {
+        cachedRuleset = getUnifiedRuleset()
     }
+    return cachedRuleset
 }
-
-interface ATSRule {
-    id: string
-    description: string
-    check?: string[]
-    regex?: string
-    max_pages?: Record<string, number>
-    min_skills?: number
-    max_skills?: number
-    weight: number
-    category: string
-    suggestion: string
-}
-
-interface HRRule {
-    id: string
-    description: string
-    check: string
-    weight: number
-    category: string
-    suggestion: string
-    min_words?: number
-    max_words?: number
-}
-
-interface RedFlagRule {
-    id: string
-    description: string
-    patterns?: string[]
-    check?: string
-    penalty: number
-    suggestion: string
-    max_occurrences?: number
-    weak_verb_ratio?: number
-}
-
-interface JDRule {
-    id: string
-    description: string
-    check: string
-    weight: number
-    suggestion: string
-}
-
-interface Ruleset {
-    ats_rules: ATSRule[]
-    hr_rules: HRRule[]
-    recruiter_red_flags: RedFlagRule[]
-    jd_matching_rules: JDRule[]
-    scoring_formula: {
-        weights: Record<string, number>
-        verdict_thresholds: Record<string, number>
-    }
-    role_specific_tips: Record<string, string[]>
-}
-
-const ruleset: Ruleset = rulesetData as Ruleset
 
 /**
  * Get all text content from resume for analysis
@@ -271,6 +66,7 @@ function getResumeText(resume: Resume): string {
 export function evaluateATSRules(resume: Resume): RuleEvaluation[] {
     const evaluations: RuleEvaluation[] = []
     const skills = extractAllSkills(resume)
+    const ruleset = getRuleset()
 
     for (const rule of ruleset.ats_rules) {
         let passed = true
@@ -310,8 +106,23 @@ export function evaluateATSRules(resume: Resume): RuleEvaluation[] {
                 }
                 break
 
+            // Handle comprehensive ATS rules from the new rule files
             default:
-                passed = true
+                if (rule.id.startsWith('ATS-KW')) {
+                    // Keyword matching rules
+                    passed = checkKeywordRule(resume, rule)
+                } else if (rule.id.startsWith('ATS-FMT')) {
+                    // Format compliance rules - generally pass if basic structure is correct
+                    passed = true
+                } else if (rule.id.startsWith('ATS-CNT')) {
+                    // Content structure rules
+                    passed = checkContentStructureRule(resume, rule)
+                } else if (rule.id.startsWith('ATS-OPT')) {
+                    // Optimization rules
+                    passed = true // These are advisory
+                } else {
+                    passed = true
+                }
         }
 
         evaluations.push({
@@ -328,6 +139,63 @@ export function evaluateATSRules(resume: Resume): RuleEvaluation[] {
 }
 
 /**
+ * Check keyword-related ATS rules
+ */
+function checkKeywordRule(resume: Resume, rule: FlatATSRule): boolean {
+    const text = getResumeText(resume).toLowerCase()
+    const skills = extractAllSkills(resume)
+
+    // Check if resume has reasonable keyword density
+    if (rule.id === 'ATS-KW-001') {
+        // Require at least some skills to match
+        return skills.length >= 5
+    }
+    if (rule.id === 'ATS-KW-002') {
+        // Check for job title in summary
+        const summary = resume.personalInfo.summary?.toLowerCase() || ''
+        const hasRoleKeywords = ['developer', 'engineer', 'designer', 'architect', 'lead', 'manager']
+            .some(kw => summary.includes(kw))
+        return hasRoleKeywords
+    }
+    if (rule.id === 'ATS-KW-003') {
+        // Check for spelled-out technical terms
+        return true // Advisory rule
+    }
+    if (rule.id === 'ATS-KW-004') {
+        // Tailoring check - assume user is tailoring
+        return skills.length > 0
+    }
+
+    return true
+}
+
+/**
+ * Check content structure ATS rules
+ */
+function checkContentStructureRule(resume: Resume, rule: FlatATSRule): boolean {
+    if (rule.id === 'ATS-CNT-001') {
+        // Dedicated skills section
+        return extractAllSkills(resume).length >= 5
+    }
+    if (rule.id === 'ATS-CNT-002') {
+        // Contact in main body
+        return !!(resume.personalInfo.email && resume.personalInfo.phone)
+    }
+    if (rule.id === 'ATS-CNT-003') {
+        // Resume length - hard to check without word count
+        return true
+    }
+    if (rule.id === 'ATS-CNT-004') {
+        // Professional summary with keywords
+        const summary = resume.personalInfo.summary || ''
+        const wordCount = summary.trim().split(/\s+/).filter(Boolean).length
+        return wordCount >= 20 && wordCount <= 100
+    }
+
+    return true
+}
+
+/**
  * Evaluate HR rules
  */
 export function evaluateHRRules(resume: Resume): RuleEvaluation[] {
@@ -335,6 +203,7 @@ export function evaluateHRRules(resume: Resume): RuleEvaluation[] {
     const text = getResumeText(resume)
     const metricsCount = countMetrics(text)
     const verbAnalysis = analyzeVerbStrength(text)
+    const ruleset = getRuleset()
 
     for (const rule of ruleset.hr_rules) {
         let passed = true
@@ -378,8 +247,26 @@ export function evaluateHRRules(resume: Resume): RuleEvaluation[] {
                 }
                 break
 
+            // Handle comprehensive HR rules from the new rule files
             default:
-                passed = true
+                if (rule.id.startsWith('HR-IMP')) {
+                    // Impact quantification rules
+                    passed = metricsCount >= 2
+                } else if (rule.id.startsWith('HR-PORT')) {
+                    // Portfolio presence rules
+                    passed = hasGitHubOrPortfolio(resume)
+                } else if (rule.id.startsWith('HR-PROF')) {
+                    // Professionalism rules
+                    passed = checkProfessionalismRule(resume, rule)
+                } else if (rule.id.startsWith('HR-EXP')) {
+                    // Experience presentation rules
+                    passed = checkExperienceRule(resume, rule)
+                } else if (rule.id.startsWith('HR-SOFT')) {
+                    // Soft skills rules
+                    passed = checkSoftSkillsRule(resume, text)
+                } else {
+                    passed = true
+                }
         }
 
         evaluations.push({
@@ -396,14 +283,69 @@ export function evaluateHRRules(resume: Resume): RuleEvaluation[] {
 }
 
 /**
+ * Check professionalism rules
+ */
+function checkProfessionalismRule(resume: Resume, rule: FlatHRRule): boolean {
+    if (rule.id === 'HR-PROF-001') {
+        // LinkedIn profile
+        const links = resume.personalInfo.links || []
+        return links.some(link => link.toLowerCase().includes('linkedin'))
+    }
+    if (rule.id === 'HR-PROF-002') {
+        // Professional email
+        const email = resume.personalInfo.email?.toLowerCase() || ''
+        const unprofessionalPatterns = ['dragon', 'coolboy', 'ninja', 'gamer', '420', '69', 'xxx']
+        return !unprofessionalPatterns.some(p => email.includes(p))
+    }
+    if (rule.id === 'HR-PROF-003') {
+        // Error-free writing - can't check automatically
+        return true
+    }
+    return true
+}
+
+/**
+ * Check experience presentation rules
+ */
+function checkExperienceRule(resume: Resume, rule: FlatHRRule): boolean {
+    if (rule.id === 'HR-EXP-001') {
+        // 3-5 bullets per role
+        return resume.experiences.length > 0
+    }
+    if (rule.id === 'HR-EXP-002') {
+        // Reverse chronological - assume correct
+        return true
+    }
+    if (rule.id === 'HR-EXP-003') {
+        // Relevant experience prioritization
+        return resume.experiences.length > 0 || resume.projects.length > 0
+    }
+    if (rule.id === 'HR-EXP-004') {
+        // Company context - advisory
+        return true
+    }
+    return true
+}
+
+/**
+ * Check soft skills rules
+ */
+function checkSoftSkillsRule(resume: Resume, text: string): boolean {
+    const textLower = text.toLowerCase()
+    const collaborationKeywords = ['collaborated', 'partnered', 'coordinated', 'team', 'cross-functional']
+    return collaborationKeywords.some(kw => textLower.includes(kw))
+}
+
+/**
  * Evaluate recruiter red flags
  */
 export function evaluateRedFlags(resume: Resume): RuleEvaluation[] {
     const evaluations: RuleEvaluation[] = []
     const text = getResumeText(resume)
-    const email = resume.personalInfo.email.toLowerCase()
+    const email = resume.personalInfo.email?.toLowerCase() || ''
     const skills = extractAllSkills(resume)
     const verbAnalysis = analyzeVerbStrength(text)
+    const ruleset = getRuleset()
 
     for (const rule of ruleset.recruiter_red_flags) {
         let passed = true // passed means NO red flag detected
@@ -440,8 +382,13 @@ export function evaluateRedFlags(resume: Resume): RuleEvaluation[] {
                 passed = verbAnalysis.weak / (verbAnalysis.weak + verbAnalysis.moderate + verbAnalysis.strong + 1) < 0.5
                 break
 
+            // Handle comprehensive red flags from HR rules
             default:
-                passed = true
+                if (rule.id.startsWith('HR-RED')) {
+                    passed = checkHRRedFlag(resume, rule, text)
+                } else {
+                    passed = true
+                }
         }
 
         evaluations.push({
@@ -458,10 +405,53 @@ export function evaluateRedFlags(resume: Resume): RuleEvaluation[] {
 }
 
 /**
+ * Check HR-specific red flags from comprehensive rules
+ */
+function checkHRRedFlag(resume: Resume, rule: RedFlagRule, text: string): boolean {
+    const textLower = text.toLowerCase()
+
+    switch (rule.id) {
+        case 'HR-RED-001': // Objective statement
+            return !textLower.includes('objective:') && !textLower.includes('career objective')
+        case 'HR-RED-002': // Buzzword heavy
+            const genericBuzzwords = ['hard worker', 'team player', 'detail-oriented', 'self-starter']
+            const buzzwordCount = genericBuzzwords.filter(b => textLower.includes(b)).length
+            return buzzwordCount < 2
+        case 'HR-RED-003': // Irrelevant personal info
+            return true // Can't check automatically
+        case 'HR-RED-004': // Duties vs achievements
+            const metricsCount = countMetrics(text)
+            return metricsCount >= 2
+        case 'HR-RED-005': // Inconsistent formatting
+            return true // Can't check automatically
+        case 'HR-RED-006': // Outdated skills
+            const outdatedSkills = ['jquery', 'angularjs', 'flash', 'silverlight', 'bower']
+            const hasOutdated = extractAllSkills(resume).some(s =>
+                outdatedSkills.includes(s.toLowerCase())
+            )
+            return !hasOutdated
+        case 'HR-RED-007': // Job hopping
+            return true // Would need dates analysis
+        case 'HR-RED-008': // Lack of progression
+            return true // Would need career history analysis
+        case 'HR-RED-009': // Pronouns
+            const pronouns = text.match(/\b(I |I'm|my |me )/gi) || []
+            return pronouns.length <= 3
+        case 'HR-RED-010': // Skills without experience
+            const skills = extractAllSkills(resume)
+            const mentionedInExp = skills.filter(s => textLower.includes(s.toLowerCase()))
+            return mentionedInExp.length >= skills.length * 0.3
+        default:
+            return true
+    }
+}
+
+/**
  * Evaluate JD matching rules
  */
 export function evaluateJDMatch(resume: Resume, jobContext?: JobContext): RuleEvaluation[] {
     const evaluations: RuleEvaluation[] = []
+    const ruleset = getRuleset()
 
     if (!jobContext) {
         // Return empty evaluations if no job context provided
@@ -542,6 +532,7 @@ export function evaluateJDMatch(resume: Resume, jobContext?: JobContext): RuleEv
  * Get role-specific tips from ruleset
  */
 export function getRoleSpecificTips(role: JobContext['domain']): string[] {
+    const ruleset = getRuleset()
     return ruleset.role_specific_tips[role] || []
 }
 
@@ -549,12 +540,64 @@ export function getRoleSpecificTips(role: JobContext['domain']): string[] {
  * Get scoring weights
  */
 export function getScoringWeights() {
-    return ruleset.scoring_formula.weights
+    return getRuleset().scoring_formula.weights
 }
 
 /**
  * Get verdict thresholds
  */
 export function getVerdictThresholds() {
-    return ruleset.scoring_formula.verdict_thresholds
+    return getRuleset().scoring_formula.verdict_thresholds
+}
+
+/**
+ * Get action verbs by category (new feature from comprehensive rules)
+ */
+export function getActionVerbsByCategory(): Record<string, string[]> {
+    return getActionVerbs()
+}
+
+/**
+ * Get metric examples by type (new feature from comprehensive rules)
+ */
+export function getMetricExamplesByType(): Array<{ type: string; examples: string[]; priority: string }> {
+    return getMetricExamples()
+}
+
+/**
+ * Get domain-specific red flags (new feature from comprehensive rules)
+ */
+export function getDomainSpecificRedFlags(domain: string): Array<{
+    flag: string
+    severity: string
+    reason: string
+    solution: string
+}> {
+    return getDomainRedFlags(domain)
+}
+
+/**
+ * Get trending and declining skills for a domain (new feature from comprehensive rules)
+ */
+export function getSkillTrends(domain: string): {
+    emerging: Array<{ skill: string; trend: string; rationale: string; implementation: string }>
+    declining: Array<{ skill: string; status: string; rationale: string; recommendation: string }>
+} {
+    return getTrendingSkills(domain)
+}
+
+/**
+ * Check if a skill is trending up or down
+ */
+export function getSkillTrendStatus(domain: string, skill: string): 'emerging' | 'declining' | 'stable' {
+    const trends = getTrendingSkills(domain)
+    const skillLower = skill.toLowerCase()
+
+    const isEmerging = trends.emerging.some(t => t.skill.toLowerCase().includes(skillLower))
+    if (isEmerging) return 'emerging'
+
+    const isDeclining = trends.declining.some(t => t.skill.toLowerCase().includes(skillLower))
+    if (isDeclining) return 'declining'
+
+    return 'stable'
 }

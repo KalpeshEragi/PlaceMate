@@ -28,6 +28,9 @@
       ],
       "@ai-engine/*": [
         "../ai-engine/lib/ai-engine/*"
+      ],
+      "@ai-rules/*": [
+        "../ai-engine/lib/rules/*"
       ]
     }
   },

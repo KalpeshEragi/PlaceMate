@@ -1,0 +1,578 @@
+{
+    "hrRules": {
+        "version": "1.0",
+        "lastUpdated": "2026-02-05",
+        "description": "Human recruiter evaluation rules - applicable after ATS screening for all technical domains",
+        "criticalRules": {
+            "impactQuantification": {
+                "category": "Measurable Results",
+                "priority": "critical",
+                "importance": 0.25,
+                "rules": [
+                    {
+                        "ruleId": "HR-IMP-001",
+                        "rule": "Quantify achievements with metrics",
+                        "rationale": "Recruiters prioritize candidates who demonstrate measurable impact. Generic statements lack credibility.",
+                        "evidenceSources": 32,
+                        "implementation": [
+                            "Include specific percentages, numbers, or time improvements",
+                            "Use metrics: performance improvements, user growth, cost savings, time reductions",
+                            "Format: '[Action Verb] [What] resulting in [Quantified Impact]'",
+                            "Examples: 'Reduced page load time by 45%', 'Increased user retention by 25%', 'Improved conversion rate by 15%'"
+                        ],
+                        "failureIndicators": [
+                            "Bullets describe tasks, not results",
+                            "No numerical data in experience section",
+                            "Generic statements like 'improved performance'"
+                        ],
+                        "metricTypes": [
+                            {
+                                "type": "Performance Metrics",
+                                "examples": [
+                                    "Reduced load time by X%",
+                                    "Improved Lighthouse score from X to Y",
+                                    "Decreased response time by X seconds",
+                                    "Optimized bundle size by X%"
+                                ],
+                                "priority": "very high"
+                            },
+                            {
+                                "type": "User Impact",
+                                "examples": [
+                                    "Increased user engagement by X%",
+                                    "Reduced bounce rate by X%",
+                                    "Boosted conversion rate by X%",
+                                    "Improved user satisfaction score by X points"
+                                ],
+                                "priority": "high"
+                            },
+                            {
+                                "type": "Business Impact",
+                                "examples": [
+                                    "Generated X% increase in revenue",
+                                    "Reduced support tickets by X%",
+                                    "Saved X hours/week through automation",
+                                    "Cut operational costs by $X"
+                                ],
+                                "priority": "high"
+                            },
+                            {
+                                "type": "Scale/Scope",
+                                "examples": [
+                                    "Built features serving X+ users",
+                                    "Handled X+ API requests per day",
+                                    "Managed codebase with X+ commits",
+                                    "Led team of X developers"
+                                ],
+                                "priority": "medium"
+                            }
+                        ],
+                        "impact": "Differentiates strong candidates from average ones",
+                        "weight": 0.95
+                    },
+                    {
+                        "ruleId": "HR-IMP-002",
+                        "rule": "Use strong action verbs",
+                        "rationale": "Action verbs demonstrate ownership and impact. Weak verbs suggest passive involvement.",
+                        "evidenceSources": 18,
+                        "implementation": [
+                            "Start bullets with powerful action verbs",
+                            "Match verb strength to seniority level",
+                            "Avoid: 'Responsible for', 'Worked on', 'Helped with'",
+                            "Use: 'Built', 'Architected', 'Optimized', 'Led', 'Designed', 'Implemented'"
+                        ],
+                        "verbsByStrength": {
+                            "leadership": [
+                                "Architected",
+                                "Led",
+                                "Mentored",
+                                "Spearheaded",
+                                "Directed",
+                                "Championed"
+                            ],
+                            "creation": [
+                                "Built",
+                                "Developed",
+                                "Designed",
+                                "Created",
+                                "Engineered",
+                                "Established"
+                            ],
+                            "improvement": [
+                                "Optimized",
+                                "Enhanced",
+                                "Improved",
+                                "Streamlined",
+                                "Refactored",
+                                "Modernized"
+                            ],
+                            "analysis": [
+                                "Analyzed",
+                                "Identified",
+                                "Diagnosed",
+                                "Evaluated",
+                                "Assessed",
+                                "Investigated"
+                            ],
+                            "collaboration": [
+                                "Collaborated",
+                                "Partnered",
+                                "Coordinated",
+                                "Facilitated",
+                                "Integrated",
+                                "Aligned"
+                            ]
+                        },
+                        "impact": "Creates impression of active contribution",
+                        "weight": 0.85
+                    },
+                    {
+                        "ruleId": "HR-IMP-003",
+                        "rule": "Demonstrate problem-solving context",
+                        "rationale": "Recruiters want to understand the 'why' behind work, not just the 'what'",
+                        "evidenceSources": 12,
+                        "implementation": [
+                            "Show problem → solution → result",
+                            "Provide context: why was this important?",
+                            "Format: 'Addressed [problem] by [solution], resulting in [impact]'",
+                            "Example: 'Addressed slow checkout process by implementing lazy loading, reducing cart abandonment by 23%'"
+                        ],
+                        "impact": "Shows strategic thinking and business understanding",
+                        "weight": 0.80
+                    }
+                ]
+            },
+            "portfolioPresence": {
+                "category": "Work Demonstration",
+                "priority": "critical",
+                "importance": 0.20,
+                "rules": [
+                    {
+                        "ruleId": "HR-PORT-001",
+                        "rule": "Include GitHub profile link",
+                        "rationale": "GitHub presence is critical for technical validation. Recruiters use it to verify coding ability.",
+                        "evidenceSources": 15,
+                        "implementation": [
+                            "Include GitHub URL in contact section",
+                            "Ensure profile has recent activity (commits within 3-6 months)",
+                            "Pin 3-5 best repositories to profile",
+                            "Include README files in projects with descriptions",
+                            "Show diversity of projects and technologies"
+                        ],
+                        "failureIndicators": [
+                            "No GitHub link provided",
+                            "Profile with no activity or empty repositories",
+                            "Private repositories only (no public code visible)"
+                        ],
+                        "impact": "Provides credibility and technical proof",
+                        "weight": 0.90
+                    },
+                    {
+                        "ruleId": "HR-PORT-002",
+                        "rule": "Portfolio projects section for junior developers",
+                        "rationale": "Portfolio projects are vital for candidates without extensive work experience",
+                        "evidenceSources": 18,
+                        "implementation": [
+                            "Include 2-4 substantial projects",
+                            "Provide live demo links and GitHub repo links",
+                            "Describe technology stack and key features",
+                            "Quantify project scope (e.g., '500+ lines of code', 'Authentication for 50+ users')"
+                        ],
+                        "projectQuality": {
+                            "fullStack": "Shows understanding of both frontend and backend",
+                            "deployment": "Demonstrates ability to ship production-ready code",
+                            "complexity": "Showcases problem-solving beyond tutorials",
+                            "documentation": "Indicates professionalism and communication skills"
+                        },
+                        "impact": "Compensates for limited work experience",
+                        "weight": 0.85
+                    },
+                    {
+                        "ruleId": "HR-PORT-003",
+                        "rule": "Open-source contributions demonstrate initiative",
+                        "rationale": "Open-source work shows passion, collaboration skills, and code quality standards",
+                        "evidenceSources": 6,
+                        "implementation": [
+                            "List significant contributions (not just typo fixes)",
+                            "Mention if contributions were merged",
+                            "Describe impact of contribution",
+                            "Can create dedicated 'Open-Source Work' section if substantial"
+                        ],
+                        "impact": "Strong differentiator for competitive roles",
+                        "weight": 0.75
+                    }
+                ]
+            },
+            "professionalism": {
+                "category": "Professional Presentation",
+                "priority": "high",
+                "importance": 0.15,
+                "rules": [
+                    {
+                        "ruleId": "HR-PROF-001",
+                        "rule": "LinkedIn profile optimization",
+                        "rationale": "LinkedIn profiles are standard contact detail. Recruiters verify candidates on LinkedIn.",
+                        "evidenceSources": 12,
+                        "implementation": [
+                            "Include LinkedIn URL in contact section",
+                            "Ensure profile is complete and updated",
+                            "Profile photo (professional, current)",
+                            "Headline matches target role",
+                            "Experience aligns with resume"
+                        ],
+                        "failureIndicators": [
+                            "No LinkedIn profile",
+                            "Outdated or incomplete profile",
+                            "Profile information conflicts with resume"
+                        ],
+                        "impact": "Professional credibility and verification",
+                        "weight": 0.75
+                    },
+                    {
+                        "ruleId": "HR-PROF-002",
+                        "rule": "Professional email address",
+                        "rationale": "Unprofessional email addresses create negative first impression",
+                        "evidenceSources": 8,
+                        "implementation": [
+                            "Format: firstname.lastname@provider.com",
+                            "Avoid: nicknames, numbers (unless necessary), unprofessional terms",
+                            "Use: Gmail, Outlook, professional domain"
+                        ],
+                        "impact": "First impression and professionalism signal",
+                        "weight": 0.70
+                    },
+                    {
+                        "ruleId": "HR-PROF-003",
+                        "rule": "Error-free writing",
+                        "rationale": "Typos and grammatical errors suggest lack of attention to detail",
+                        "evidenceSources": 10,
+                        "implementation": [
+                            "Proofread multiple times",
+                            "Use spell-check tools",
+                            "Have someone else review",
+                            "Read resume aloud to catch awkward phrasing"
+                        ],
+                        "impact": "Attention to detail signal",
+                        "weight": 0.80
+                    }
+                ]
+            },
+            "experiencePresentation": {
+                "category": "Work History Quality",
+                "priority": "high",
+                "importance": 0.20,
+                "rules": [
+                    {
+                        "ruleId": "HR-EXP-001",
+                        "rule": "3-5 bullet points per role",
+                        "rationale": "Too few bullets suggest minimal contribution; too many create fatigue and dilute impact",
+                        "evidenceSources": 14,
+                        "implementation": [
+                            "Entry-level: 3-4 bullets per role",
+                            "Mid-level: 4-5 bullets per role",
+                            "Senior: 5-7 bullets per role",
+                            "Prioritize most impactful achievements first"
+                        ],
+                        "impact": "Readability and impact balance",
+                        "weight": 0.75
+                    },
+                    {
+                        "ruleId": "HR-EXP-002",
+                        "rule": "Reverse chronological order",
+                        "rationale": "Recruiters expect most recent experience first. Non-standard order is confusing.",
+                        "evidenceSources": 20,
+                        "implementation": [
+                            "List most recent role first",
+                            "Include dates in MM/YYYY format",
+                            "If gaps exist, prepare to explain (but don't over-explain on resume)"
+                        ],
+                        "impact": "Standard expectation - deviation raises concerns",
+                        "weight": 0.85
+                    },
+                    {
+                        "ruleId": "HR-EXP-003",
+                        "rule": "Relevant experience prioritization",
+                        "rationale": "Recruiters spend 6-7 seconds on initial resume scan. Most relevant info must be prominent.",
+                        "evidenceSources": 8,
+                        "implementation": [
+                            "Place most relevant experience/projects at top",
+                            "Tailor work experience descriptions to match target role",
+                            "De-emphasize or omit irrelevant positions (if not creating gaps)"
+                        ],
+                        "impact": "Captures attention during brief scan",
+                        "weight": 0.80
+                    },
+                    {
+                        "ruleId": "HR-EXP-004",
+                        "rule": "Company context for lesser-known employers",
+                        "rationale": "Recruiters may not recognize all companies. Context helps establish credibility.",
+                        "evidenceSources": 5,
+                        "implementation": [
+                            "Format: 'Company Name (Brief description if needed)'",
+                            "Example: 'TechStart Solutions (B2B SaaS startup, 50 employees)'",
+                            "Skip for well-known companies (Google, Amazon, etc.)"
+                        ],
+                        "impact": "Establishes context and credibility",
+                        "weight": 0.65
+                    }
+                ]
+            },
+            "softSkillsIndication": {
+                "category": "Collaboration and Communication",
+                "priority": "medium",
+                "importance": 0.10,
+                "rules": [
+                    {
+                        "ruleId": "HR-SOFT-001",
+                        "rule": "Demonstrate collaboration and teamwork",
+                        "rationale": "Technical skills alone are insufficient. Recruiters seek team players.",
+                        "evidenceSources": 16,
+                        "implementation": [
+                            "Use collaborative action verbs: 'Collaborated', 'Partnered', 'Coordinated'",
+                            "Mention cross-functional work: 'with designers', 'with product team'",
+                            "Example: 'Collaborated with UX team to implement responsive design system'",
+                            "Show mentorship: 'Mentored 2 junior developers'"
+                        ],
+                        "impact": "Shows culture fit and teamwork ability",
+                        "weight": 0.75
+                    },
+                    {
+                        "ruleId": "HR-SOFT-002",
+                        "rule": "Show leadership and initiative",
+                        "rationale": "Even junior developers should show proactive problem-solving",
+                        "evidenceSources": 10,
+                        "implementation": [
+                            "Highlight projects you initiated or led",
+                            "Show proactive improvements: 'Identified and resolved...'",
+                            "Demonstrate ownership: 'Took ownership of...', 'Drove implementation of...'"
+                        ],
+                        "impact": "Differentiates candidates with growth potential",
+                        "weight": 0.70
+                    },
+                    {
+                        "ruleId": "HR-SOFT-003",
+                        "rule": "Communication skills demonstration",
+                        "rationale": "Developers must communicate with non-technical stakeholders",
+                        "evidenceSources": 8,
+                        "implementation": [
+                            "Mention presentations, documentation, or stakeholder communication",
+                            "Example: 'Presented technical solutions to product stakeholders'",
+                            "Highlight documentation: 'Created comprehensive API documentation'"
+                        ],
+                        "impact": "Shows ability to work in real-world business environment",
+                        "weight": 0.65
+                    }
+                ]
+            }
+        },
+        "redFlagsToAvoid": {
+            "category": "Immediate Rejection Triggers",
+            "priority": "critical",
+            "flags": [
+                {
+                    "flagId": "HR-RED-001",
+                    "flag": "Objective statements instead of professional summary",
+                    "severity": "high",
+                    "reason": "Objective statements are outdated and self-focused rather than value-focused",
+                    "solution": "Replace with professional summary highlighting skills and value proposition",
+                    "weight": -0.80
+                },
+                {
+                    "flagId": "HR-RED-002",
+                    "flag": "Generic, buzzword-heavy descriptions",
+                    "severity": "high",
+                    "reason": "Terms like 'hard worker', 'team player', 'detail-oriented' without evidence lack credibility",
+                    "solution": "Demonstrate these qualities through specific examples and metrics",
+                    "weight": -0.75
+                },
+                {
+                    "flagId": "HR-RED-003",
+                    "flag": "Irrelevant personal information",
+                    "severity": "medium",
+                    "reason": "Hobbies, age, photo (in US), marital status are not relevant and may introduce bias",
+                    "solution": "Focus solely on professional qualifications and relevant experience",
+                    "weight": -0.60
+                },
+                {
+                    "flagId": "HR-RED-004",
+                    "flag": "Duties-focused rather than achievement-focused",
+                    "severity": "high",
+                    "reason": "Job descriptions should show impact, not just responsibilities",
+                    "solution": "Transform 'Responsible for X' into 'Achieved Y by doing X'",
+                    "weight": -0.85
+                },
+                {
+                    "flagId": "HR-RED-005",
+                    "flag": "Inconsistent formatting or styling",
+                    "severity": "medium",
+                    "reason": "Suggests lack of attention to detail",
+                    "solution": "Ensure consistent fonts, spacing, bullet styles, and alignment throughout",
+                    "weight": -0.70
+                },
+                {
+                    "flagId": "HR-RED-006",
+                    "flag": "Outdated or irrelevant skills prominently featured",
+                    "severity": "medium",
+                    "reason": "Signals candidate is not current with technology trends",
+                    "solution": "Prioritize modern, in-demand skills; archive or remove obsolete technologies",
+                    "weight": -0.65
+                },
+                {
+                    "flagId": "HR-RED-007",
+                    "flag": "Excessive job hopping without explanation",
+                    "severity": "medium",
+                    "reason": "Multiple short-term roles (< 1 year each) raise retention concerns",
+                    "solution": "If contract/freelance, clearly indicate. Otherwise, be prepared to explain in cover letter or interview",
+                    "weight": -0.70
+                },
+                {
+                    "flagId": "HR-RED-008",
+                    "flag": "Lack of progression or growth",
+                    "severity": "medium",
+                    "reason": "Same role/level for many years suggests stagnation",
+                    "solution": "Highlight skill growth, new responsibilities, or project complexity increase",
+                    "weight": -0.65
+                },
+                {
+                    "flagId": "HR-RED-009",
+                    "flag": "Pronouns ('I', 'me', 'my') in bullets",
+                    "severity": "low",
+                    "reason": "Resume convention is implied first-person without pronouns",
+                    "solution": "Start bullets with action verbs, omit pronouns",
+                    "weight": -0.50
+                },
+                {
+                    "flagId": "HR-RED-010",
+                    "flag": "Skills listed without any experience demonstrating them",
+                    "severity": "high",
+                    "reason": "Suggests keyword stuffing or dishonesty",
+                    "solution": "Only list skills you've actually used in projects or work experience",
+                    "weight": -0.80
+                }
+            ]
+        },
+        "senioritySpecificExpectations": {
+            "entryLevel": {
+                "yearsExperience": "0-2 years",
+                "expectations": [
+                    "Focus on learning ability and potential",
+                    "Strong emphasis on portfolio projects and GitHub",
+                    "Education can be prominent (if recent graduate)",
+                    "Internships and academic projects are acceptable",
+                    "Technical skills breadth over depth"
+                ],
+                "acceptableGaps": [
+                    "Limited work experience (projects compensate)",
+                    "Academic focus",
+                    "Recent bootcamp graduation"
+                ]
+            },
+            "midLevel": {
+                "yearsExperience": "3-7 years",
+                "expectations": [
+                    "Demonstrated impact on real products/services",
+                    "Strategic thinking and problem-solving",
+                    "Some mentorship or leadership experience",
+                    "Depth in specific technology areas",
+                    "Business impact awareness",
+                    "Cross-functional collaboration"
+                ],
+                "redFlags": [
+                    "No metrics or quantified achievements",
+                    "Generic task descriptions",
+                    "Lack of soft skills demonstration",
+                    "No evidence of continuous learning"
+                ]
+            },
+            "senior": {
+                "yearsExperience": "7+ years",
+                "expectations": [
+                    "System design and architecture experience",
+                    "Technical leadership and mentorship",
+                    "Significant business impact demonstrated",
+                    "Strategic decision-making",
+                    "Cross-team influence",
+                    "Technology choices and tradeoffs",
+                    "Thought leadership (blogs, talks, open-source)"
+                ],
+                "redFlags": [
+                    "Individual contributor mindset only",
+                    "No leadership or influence examples",
+                    "Lack of architectural thinking",
+                    "Missing strategic impact"
+                ]
+            }
+        },
+        "modernTrends": {
+            "category": "Current Hiring Expectations (2025-2026)",
+            "trends": [
+                {
+                    "trend": "AI-assisted development experience",
+                    "rationale": "AI tools are becoming standard in development workflows",
+                    "implementation": "Mention experience with GitHub Copilot, ChatGPT, Claude, etc. in project context",
+                    "weight": 0.70
+                },
+                {
+                    "trend": "Remote work capability",
+                    "rationale": "Remote/hybrid work is standard. Highlighting remote work experience is advantageous.",
+                    "implementation": "If applicable, mention 'remote' in work experience. Show self-management ability.",
+                    "weight": 0.60
+                },
+                {
+                    "trend": "Continuous learning mindset",
+                    "rationale": "Tech industry values growth mindset and adaptation to new technologies",
+                    "implementation": "Mention certifications, courses, new skills learned. Show technology evolution in roles.",
+                    "weight": 0.65
+                },
+                {
+                    "trend": "Sustainability and green coding",
+                    "rationale": "Emerging skill for 2025-2026 job market",
+                    "implementation": "If applicable, mention resource optimization, energy efficiency, or performance improvements with sustainability angle",
+                    "weight": 0.55
+                },
+                {
+                    "trend": "Full software development lifecycle participation",
+                    "rationale": "Shows end-to-end project capability, especially for senior roles",
+                    "implementation": "Mention involvement in planning, development, testing, deployment, and maintenance",
+                    "weight": 0.70
+                }
+            ]
+        },
+        "evaluationProcess": {
+            "initialScan": {
+                "duration": "6-7 seconds average",
+                "recruitersLookFor": [
+                    "Recognizable company names or impressive projects",
+                    "Relevant job titles",
+                    "Key technical skills",
+                    "Quantified achievements",
+                    "Clean, professional layout"
+                ]
+            },
+            "detailedReview": {
+                "duration": "2-3 minutes if passes initial scan",
+                "recruitersEvaluate": [
+                    "Consistency of experience",
+                    "Progression and growth",
+                    "Depth of technical skills",
+                    "Cultural fit indicators (collaboration, communication)",
+                    "Specific accomplishments and their impact",
+                    "Portfolio quality (if linked)"
+                ]
+            },
+            "decisionFactors": {
+                "automaticAdvance": [
+                    "Strong technical skills match with quantified achievements",
+                    "Impressive company background or portfolio",
+                    "Referral or internal connection"
+                ],
+                "automaticReject": [
+                    "Missing critical skills",
+                    "Multiple typos or formatting issues",
+                    "Significant experience gaps without explanation",
+                    "Mismatched experience level"
+                ]
+            }
+        }
+    }
+}

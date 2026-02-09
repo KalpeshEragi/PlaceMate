@@ -1,0 +1,1245 @@
+{
+    "name": "PRD Generator from Brainstorm",
+    "meta": {
+        "instanceId": "prd-generator-v2"
+    },
+    "nodes": [
+        {
+            "parameters": {
+                "pollTimes": {
+                    "item": [
+                        {
+                            "mode": "everyMinute"
+                        }
+                    ]
+                },
+                "event": "pageAddedToDatabase",
+                "databaseId": {
+                    "__rl": true,
+                    "value": "YOUR_BRAINSTORM_DATABASE_ID",
+                    "mode": "id"
+                },
+                "simple": true
+            },
+            "id": "notion-trigger",
+            "name": "Notion Trigger",
+            "type": "n8n-nodes-base.notionTrigger",
+            "typeVersion": 1,
+            "position": [
+                260,
+                300
+            ],
+            "credentials": {
+                "notionApi": {
+                    "id": "YOUR_NOTION_CREDENTIAL_ID",
+                    "name": "Notion API"
+                }
+            },
+            "notes": "Detects when a new brainstorm page is added to the Notion database"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict"
+                    },
+                    "conditions": [
+                        {
+                            "id": "check-not-processed",
+                            "leftValue": "={{ $json.properties.Status?.select?.name }}",
+                            "rightValue": "Processed",
+                            "operator": {
+                                "type": "string",
+                                "operation": "notEquals"
+                            }
+                        },
+                        {
+                            "id": "check-not-failed",
+                            "leftValue": "={{ $json.properties.Status?.select?.name }}",
+                            "rightValue": "Failed",
+                            "operator": {
+                                "type": "string",
+                                "operation": "notEquals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "id": "filter-unprocessed",
+            "name": "Filter Unprocessed",
+            "type": "n8n-nodes-base.filter",
+            "typeVersion": 2,
+            "position": [
+                460,
+                300
+            ],
+            "notes": "Skips already processed or failed brainstorm pages"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "page_id",
+                            "name": "pageId",
+                            "value": "={{ $json.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "page_title",
+                            "name": "pageTitle",
+                            "value": "={{ $json.properties.Name?.title[0]?.plain_text || 'Untitled' }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "start_time",
+                            "name": "processingStartTime",
+                            "value": "={{ $now.toISO() }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "retry_count",
+                            "name": "retryCount",
+                            "value": 0,
+                            "type": "number"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "set-context",
+            "name": "Set Processing Context",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                660,
+                300
+            ],
+            "notes": "Stores page metadata for error handling and logging"
+        },
+        {
+            "parameters": {
+                "resource": "block",
+                "operation": "getAll",
+                "blockId": {
+                    "__rl": true,
+                    "value": "={{ $json.pageId }}",
+                    "mode": "id"
+                },
+                "returnAll": true
+            },
+            "id": "notion-get-content",
+            "name": "Get Page Content",
+            "type": "n8n-nodes-base.notion",
+            "typeVersion": 2.2,
+            "position": [
+                860,
+                300
+            ],
+            "credentials": {
+                "notionApi": {
+                    "id": "YOUR_NOTION_CREDENTIAL_ID",
+                    "name": "Notion API"
+                }
+            },
+            "onError": "continueErrorOutput",
+            "notes": "Reads the full markdown content of the brainstorm page"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict"
+                    },
+                    "conditions": [
+                        {
+                            "id": "check-has-content",
+                            "leftValue": "={{ $json.results?.length }}",
+                            "rightValue": 0,
+                            "operator": {
+                                "type": "number",
+                                "operation": "gt"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "id": "validate-content",
+            "name": "Validate Content",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2,
+            "position": [
+                1060,
+                300
+            ],
+            "notes": "Checks if page has content to process"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "markdown",
+                            "name": "pageContent",
+                            "value": "={{ $json.results.map(block => {\n  const getText = (richText) => richText?.map(t => t.plain_text).join('') || '';\n  switch(block.type) {\n    case 'paragraph': return getText(block.paragraph?.rich_text);\n    case 'heading_1': return '# ' + getText(block.heading_1?.rich_text);\n    case 'heading_2': return '## ' + getText(block.heading_2?.rich_text);\n    case 'heading_3': return '### ' + getText(block.heading_3?.rich_text);\n    case 'bulleted_list_item': return '- ' + getText(block.bulleted_list_item?.rich_text);\n    case 'numbered_list_item': return '1. ' + getText(block.numbered_list_item?.rich_text);\n    case 'code': return '```\\n' + getText(block.code?.rich_text) + '\\n```';\n    case 'quote': return '> ' + getText(block.quote?.rich_text);\n    case 'toggle': return getText(block.toggle?.rich_text);\n    case 'callout': return '> 💡 ' + getText(block.callout?.rich_text);\n    default: return '';\n  }\n}).filter(text => text.length > 0).join('\\n\\n') }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "preserve_context",
+                            "name": "pageId",
+                            "value": "={{ $('Set Processing Context').item.json.pageId }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "preserve_title",
+                            "name": "pageTitle",
+                            "value": "={{ $('Set Processing Context').item.json.pageTitle }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "parse-markdown",
+            "name": "Parse to Markdown",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1260,
+                200
+            ],
+            "notes": "Converts Notion blocks to proper Markdown format"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict"
+                    },
+                    "conditions": [
+                        {
+                            "id": "check-min-length",
+                            "leftValue": "={{ $json.pageContent?.length }}",
+                            "rightValue": 50,
+                            "operator": {
+                                "type": "number",
+                                "operation": "gte"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "id": "validate-markdown",
+            "name": "Validate Markdown Length",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2,
+            "position": [
+                1460,
+                200
+            ],
+            "notes": "Ensures content is substantial enough for PRD generation"
+        },
+        {
+            "parameters": {
+                "operation": "text",
+                "modelId": {
+                    "__rl": true,
+                    "value": "gemini-1.5-pro",
+                    "mode": "list"
+                },
+                "text": "={{ $json.pageContent }}",
+                "options": {
+                    "systemInstruction": "You are a Context Extractor AI agent. Your role is to analyze raw brainstorm conversations and extract structured product context.\n\nFrom the provided brainstorm text, extract and structure the following:\n\n1. **Product Vision**: What is the core idea or problem being solved?\n2. **Target Users**: Who are the intended users or customers?\n3. **Key Features**: List the main features or capabilities discussed\n4. **Pain Points**: What problems or challenges are being addressed?\n5. **Success Metrics**: Any mentioned KPIs or success criteria\n6. **Technical Considerations**: Any technical requirements or constraints mentioned\n7. **Competitive Context**: Any competitors or alternatives mentioned\n8. **Open Questions**: Unresolved questions or areas needing clarification\n\nIf any section lacks information from the brainstorm, note it as 'Not specified in brainstorm'.\n\nOutput your response in a clean, structured JSON format that can be easily consumed by the next agent.",
+                    "temperature": 0.3,
+                    "maxOutputTokens": 4096
+                }
+            },
+            "id": "gemini-context-extractor",
+            "name": "Gemini Context Extractor",
+            "type": "@google/gemini",
+            "typeVersion": 1,
+            "position": [
+                1660,
+                100
+            ],
+            "credentials": {
+                "googleGeminiApi": {
+                    "id": "YOUR_GEMINI_CREDENTIAL_ID",
+                    "name": "Google Gemini API"
+                }
+            },
+            "onError": "continueErrorOutput",
+            "retryOnFail": true,
+            "maxTries": 3,
+            "waitBetweenTries": 3000,
+            "notes": "Extracts structured product context from raw brainstorm text. Retries up to 3 times on failure."
+        },
+        {
+            "parameters": {
+                "operation": "text",
+                "modelId": {
+                    "__rl": true,
+                    "value": "gemini-1.5-pro",
+                    "mode": "list"
+                },
+                "text": "={{ $json.text }}",
+                "options": {
+                    "systemInstruction": "You are a Product Strategist AI agent. Your role is to expand structured product context into comprehensive product requirements.\n\nBased on the structured context provided, generate:\n\n1. **Executive Summary**: A concise overview of the product (2-3 sentences)\n2. **Problem Statement**: Clearly articulate the problem being solved\n3. **Goals & Objectives**:\n   - Primary goals (must-have)\n   - Secondary goals (nice-to-have)\n   - Non-goals (explicitly out of scope)\n4. **User Stories**: Generate user stories in the format: \"As a [user type], I want [action] so that [benefit]\"\n   - Include at least 5-8 user stories covering core functionality\n5. **Functional Requirements**:\n   - List each feature with priority (P0, P1, P2)\n   - Include acceptance criteria for each\n6. **Non-Functional Requirements**:\n   - Performance, Security, Scalability, Accessibility\n7. **Technical Specifications**:\n   - Recommended tech stack, Integration requirements, Data requirements\n8. **Milestones & Timeline**: MVP scope, Phase 1, Phase 2 features\n9. **Risks & Mitigations**: Identify potential risks with mitigation strategies\n10. **Success Metrics**: Define measurable KPIs\n\nOutput in structured JSON format for the PRD Formatter.",
+                    "temperature": 0.4,
+                    "maxOutputTokens": 8192
+                }
+            },
+            "id": "gemini-product-strategist",
+            "name": "Gemini Product Strategist",
+            "type": "@google/gemini",
+            "typeVersion": 1,
+            "position": [
+                1860,
+                100
+            ],
+            "credentials": {
+                "googleGeminiApi": {
+                    "id": "YOUR_GEMINI_CREDENTIAL_ID",
+                    "name": "Google Gemini API"
+                }
+            },
+            "onError": "continueErrorOutput",
+            "retryOnFail": true,
+            "maxTries": 3,
+            "waitBetweenTries": 3000,
+            "notes": "Expands context into requirements, user stories, and scope. Retries up to 3 times on failure."
+        },
+        {
+            "parameters": {
+                "operation": "text",
+                "modelId": {
+                    "__rl": true,
+                    "value": "gemini-1.5-pro",
+                    "mode": "list"
+                },
+                "text": "={{ $json.text }}",
+                "options": {
+                    "systemInstruction": "You are a PRD Formatter AI agent. Your role is to convert structured product requirements into a polished, professional Product Requirements Document in Markdown format.\n\nCreate a beautifully formatted PRD with proper Markdown structure including:\n- Title with product name\n- Version, Date, Status, Author metadata\n- Sections with emoji headers for visual appeal\n- Tables for user stories, requirements, risks, and metrics\n- Clear section separators\n- Checkbox items for acceptance criteria\n\nEnsure the output is clean, readable, uses proper Markdown syntax, and is ready to be saved directly as a .md file.\n\nOutput ONLY the Markdown content, no additional wrapper or explanation.",
+                    "temperature": 0.2,
+                    "maxOutputTokens": 8192
+                }
+            },
+            "id": "gemini-prd-formatter",
+            "name": "Gemini PRD Formatter",
+            "type": "@google/gemini",
+            "typeVersion": 1,
+            "position": [
+                2060,
+                100
+            ],
+            "credentials": {
+                "googleGeminiApi": {
+                    "id": "YOUR_GEMINI_CREDENTIAL_ID",
+                    "name": "Google Gemini API"
+                }
+            },
+            "onError": "continueErrorOutput",
+            "retryOnFail": true,
+            "maxTries": 3,
+            "waitBetweenTries": 3000,
+            "notes": "Converts structured content into a final PRD in Markdown format. Retries up to 3 times on failure."
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict"
+                    },
+                    "conditions": [
+                        {
+                            "id": "check-prd-generated",
+                            "leftValue": "={{ $json.text?.length }}",
+                            "rightValue": 100,
+                            "operator": {
+                                "type": "number",
+                                "operation": "gte"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "id": "validate-prd",
+            "name": "Validate PRD Output",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2,
+            "position": [
+                2260,
+                100
+            ],
+            "notes": "Verifies PRD was generated successfully before saving"
+        },
+        {
+            "parameters": {
+                "resource": "page",
+                "operation": "create",
+                "databaseId": {
+                    "__rl": true,
+                    "value": "YOUR_PRD_DATABASE_ID",
+                    "mode": "id"
+                },
+                "title": "={{ 'PRD - ' + $('Set Processing Context').item.json.pageTitle + ' - ' + $now.format('yyyy-MM-dd') }}",
+                "propertiesUi": {
+                    "propertyValues": [
+                        {
+                            "key": "Status",
+                            "select": "Draft"
+                        },
+                        {
+                            "key": "Source",
+                            "relation": [
+                                "={{ $('Set Processing Context').item.json.pageId }}"
+                            ]
+                        },
+                        {
+                            "key": "Generated Date",
+                            "date": "={{ $now.toISO() }}"
+                        }
+                    ]
+                },
+                "blockUi": {
+                    "blockValues": [
+                        {
+                            "type": "paragraph",
+                            "richText": false,
+                            "textContent": "={{ $json.text }}"
+                        }
+                    ]
+                }
+            },
+            "id": "notion-create-prd",
+            "name": "Create PRD Page",
+            "type": "n8n-nodes-base.notion",
+            "typeVersion": 2.2,
+            "position": [
+                2460,
+                0
+            ],
+            "credentials": {
+                "notionApi": {
+                    "id": "YOUR_NOTION_CREDENTIAL_ID",
+                    "name": "Notion API"
+                }
+            },
+            "onError": "continueErrorOutput",
+            "retryOnFail": true,
+            "maxTries": 3,
+            "waitBetweenTries": 2000,
+            "notes": "Saves the generated PRD as a new page in a PRD database"
+        },
+        {
+            "parameters": {
+                "resource": "page",
+                "operation": "update",
+                "pageId": {
+                    "__rl": true,
+                    "value": "={{ $('Set Processing Context').item.json.pageId }}",
+                    "mode": "id"
+                },
+                "propertiesUi": {
+                    "propertyValues": [
+                        {
+                            "key": "Status",
+                            "select": "Processed"
+                        },
+                        {
+                            "key": "Processed Date",
+                            "date": "={{ $now.toISO() }}"
+                        },
+                        {
+                            "key": "PRD Generated",
+                            "checkbox": true
+                        }
+                    ]
+                }
+            },
+            "id": "notion-update-success",
+            "name": "Mark Brainstorm Processed",
+            "type": "n8n-nodes-base.notion",
+            "typeVersion": 2.2,
+            "position": [
+                2660,
+                0
+            ],
+            "credentials": {
+                "notionApi": {
+                    "id": "YOUR_NOTION_CREDENTIAL_ID",
+                    "name": "Notion API"
+                }
+            },
+            "retryOnFail": true,
+            "maxTries": 3,
+            "waitBetweenTries": 2000,
+            "notes": "Marks the original brainstorm page as processed"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://graph.facebook.com/v18.0/YOUR_WHATSAPP_PHONE_NUMBER_ID/messages",
+                "authentication": "predefinedCredentialType",
+                "nodeCredentialType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer YOUR_WHATSAPP_ACCESS_TOKEN"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"YOUR_RECIPIENT_PHONE_NUMBER\",\n  \"type\": \"text\",\n  \"text\": {\n    \"body\": \"🎉 *PRD Generated Successfully!*\\n\\n📄 *Title:* {{ $('Set Processing Context').item.json.pageTitle }}\\n📅 *Date:* {{ $now.format('yyyy-MM-dd HH:mm') }}\\n\\n✅ The PRD has been saved to your Notion PRD database.\\n\\nCheck your Notion workspace for the full document.\"\n  }\n}",
+                "options": {
+                    "timeout": 10000
+                }
+            },
+            "id": "whatsapp-success",
+            "name": "WhatsApp Success Notification",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                2860,
+                0
+            ],
+            "onError": "continueRegularOutput",
+            "retryOnFail": true,
+            "maxTries": 2,
+            "waitBetweenTries": 2000,
+            "notes": "Sends success notification via WhatsApp"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "error_stage",
+                            "name": "errorStage",
+                            "value": "Content Retrieval",
+                            "type": "string"
+                        },
+                        {
+                            "id": "error_msg",
+                            "name": "errorMessage",
+                            "value": "={{ $json.error?.message || 'Failed to retrieve page content from Notion' }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "page_context",
+                            "name": "pageId",
+                            "value": "={{ $('Set Processing Context').item.json.pageId }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "title_context",
+                            "name": "pageTitle",
+                            "value": "={{ $('Set Processing Context').item.json.pageTitle }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "error-notion-read",
+            "name": "Error: Notion Read Failed",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1060,
+                500
+            ],
+            "notes": "Captures Notion read errors"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "error_stage",
+                            "name": "errorStage",
+                            "value": "Content Validation",
+                            "type": "string"
+                        },
+                        {
+                            "id": "error_msg",
+                            "name": "errorMessage",
+                            "value": "Page has no content or content is too short to generate a PRD",
+                            "type": "string"
+                        },
+                        {
+                            "id": "page_context",
+                            "name": "pageId",
+                            "value": "={{ $('Set Processing Context').item.json.pageId }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "title_context",
+                            "name": "pageTitle",
+                            "value": "={{ $('Set Processing Context').item.json.pageTitle }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "error-empty-content",
+            "name": "Error: Empty Content",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1260,
+                400
+            ],
+            "notes": "Handles empty page content"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "error_stage",
+                            "name": "errorStage",
+                            "value": "Content Validation",
+                            "type": "string"
+                        },
+                        {
+                            "id": "error_msg",
+                            "name": "errorMessage",
+                            "value": "Content too short (less than 50 characters). Please add more details to the brainstorm.",
+                            "type": "string"
+                        },
+                        {
+                            "id": "page_context",
+                            "name": "pageId",
+                            "value": "={{ $('Set Processing Context').item.json.pageId }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "title_context",
+                            "name": "pageTitle",
+                            "value": "={{ $('Set Processing Context').item.json.pageTitle }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "error-short-content",
+            "name": "Error: Content Too Short",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1660,
+                300
+            ],
+            "notes": "Handles content that is too short"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "error_stage",
+                            "name": "errorStage",
+                            "value": "AI Processing",
+                            "type": "string"
+                        },
+                        {
+                            "id": "error_msg",
+                            "name": "errorMessage",
+                            "value": "={{ 'Gemini API error: ' + ($json.error?.message || 'Unknown error during AI processing') }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "page_context",
+                            "name": "pageId",
+                            "value": "={{ $('Set Processing Context').item.json.pageId }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "title_context",
+                            "name": "pageTitle",
+                            "value": "={{ $('Set Processing Context').item.json.pageTitle }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "error-gemini",
+            "name": "Error: Gemini API Failed",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2060,
+                300
+            ],
+            "notes": "Handles Gemini API failures"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "error_stage",
+                            "name": "errorStage",
+                            "value": "PRD Validation",
+                            "type": "string"
+                        },
+                        {
+                            "id": "error_msg",
+                            "name": "errorMessage",
+                            "value": "PRD generation produced invalid or empty output",
+                            "type": "string"
+                        },
+                        {
+                            "id": "page_context",
+                            "name": "pageId",
+                            "value": "={{ $('Set Processing Context').item.json.pageId }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "title_context",
+                            "name": "pageTitle",
+                            "value": "={{ $('Set Processing Context').item.json.pageTitle }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "error-prd-invalid",
+            "name": "Error: PRD Invalid",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2460,
+                200
+            ],
+            "notes": "Handles invalid PRD output"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "error_stage",
+                            "name": "errorStage",
+                            "value": "Notion Save",
+                            "type": "string"
+                        },
+                        {
+                            "id": "error_msg",
+                            "name": "errorMessage",
+                            "value": "={{ 'Failed to save PRD to Notion: ' + ($json.error?.message || 'Unknown error') }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "page_context",
+                            "name": "pageId",
+                            "value": "={{ $('Set Processing Context').item.json.pageId }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "title_context",
+                            "name": "pageTitle",
+                            "value": "={{ $('Set Processing Context').item.json.pageTitle }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "error-notion-save",
+            "name": "Error: Notion Save Failed",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2660,
+                200
+            ],
+            "notes": "Handles Notion save failures"
+        },
+        {
+            "parameters": {},
+            "id": "merge-errors",
+            "name": "Merge All Errors",
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3,
+            "position": [
+                2060,
+                500
+            ],
+            "parameters": {
+                "mode": "append"
+            },
+            "notes": "Collects all error paths for unified handling"
+        },
+        {
+            "parameters": {
+                "resource": "page",
+                "operation": "update",
+                "pageId": {
+                    "__rl": true,
+                    "value": "={{ $json.pageId }}",
+                    "mode": "id"
+                },
+                "propertiesUi": {
+                    "propertyValues": [
+                        {
+                            "key": "Status",
+                            "select": "Failed"
+                        },
+                        {
+                            "key": "Error Message",
+                            "richText": "={{ $json.errorMessage.substring(0, 2000) }}"
+                        },
+                        {
+                            "key": "Failed At",
+                            "date": "={{ $now.toISO() }}"
+                        }
+                    ]
+                }
+            },
+            "id": "notion-mark-failed",
+            "name": "Mark Brainstorm Failed",
+            "type": "n8n-nodes-base.notion",
+            "typeVersion": 2.2,
+            "position": [
+                2260,
+                500
+            ],
+            "credentials": {
+                "notionApi": {
+                    "id": "YOUR_NOTION_CREDENTIAL_ID",
+                    "name": "Notion API"
+                }
+            },
+            "onError": "continueRegularOutput",
+            "notes": "Marks the brainstorm page as failed with error details"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://graph.facebook.com/v18.0/YOUR_WHATSAPP_PHONE_NUMBER_ID/messages",
+                "authentication": "predefinedCredentialType",
+                "nodeCredentialType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer YOUR_WHATSAPP_ACCESS_TOKEN"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"YOUR_RECIPIENT_PHONE_NUMBER\",\n  \"type\": \"text\",\n  \"text\": {\n    \"body\": \"❌ *PRD Generation Failed*\\n\\n📄 *Page:* {{ $json.pageTitle }}\\n⚠️ *Stage:* {{ $json.errorStage }}\\n\\n*Error:* {{ $json.errorMessage.substring(0, 500) }}\\n\\n🔄 Please check the brainstorm page and try again.\"\n  }\n}",
+                "options": {
+                    "timeout": 10000
+                }
+            },
+            "id": "whatsapp-error",
+            "name": "WhatsApp Error Notification",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                2460,
+                500
+            ],
+            "onError": "continueRegularOutput",
+            "notes": "Sends error notification via WhatsApp"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "log_message",
+                            "name": "logMessage",
+                            "value": "={{ 'PRD workflow completed - Page: ' + $json.pageTitle + ', Status: ' + ($json.errorStage ? 'FAILED at ' + $json.errorStage : 'SUCCESS') }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "timestamp",
+                            "name": "completedAt",
+                            "value": "={{ $now.toISO() }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "log-completion",
+            "name": "Log Completion",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2660,
+                500
+            ],
+            "notes": "Logs workflow completion for debugging"
+        }
+    ],
+    "connections": {
+        "Notion Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Filter Unprocessed",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Filter Unprocessed": {
+            "main": [
+                [
+                    {
+                        "node": "Set Processing Context",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set Processing Context": {
+            "main": [
+                [
+                    {
+                        "node": "Get Page Content",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get Page Content": {
+            "main": [
+                [
+                    {
+                        "node": "Validate Content",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Error: Notion Read Failed",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Validate Content": {
+            "main": [
+                [
+                    {
+                        "node": "Parse to Markdown",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Error: Empty Content",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Parse to Markdown": {
+            "main": [
+                [
+                    {
+                        "node": "Validate Markdown Length",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Validate Markdown Length": {
+            "main": [
+                [
+                    {
+                        "node": "Gemini Context Extractor",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Error: Content Too Short",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Gemini Context Extractor": {
+            "main": [
+                [
+                    {
+                        "node": "Gemini Product Strategist",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Error: Gemini API Failed",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Gemini Product Strategist": {
+            "main": [
+                [
+                    {
+                        "node": "Gemini PRD Formatter",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Error: Gemini API Failed",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Gemini PRD Formatter": {
+            "main": [
+                [
+                    {
+                        "node": "Validate PRD Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Error: Gemini API Failed",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Validate PRD Output": {
+            "main": [
+                [
+                    {
+                        "node": "Create PRD Page",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Error: PRD Invalid",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create PRD Page": {
+            "main": [
+                [
+                    {
+                        "node": "Mark Brainstorm Processed",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Error: Notion Save Failed",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Mark Brainstorm Processed": {
+            "main": [
+                [
+                    {
+                        "node": "WhatsApp Success Notification",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Error: Notion Read Failed": {
+            "main": [
+                [
+                    {
+                        "node": "Merge All Errors",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Error: Empty Content": {
+            "main": [
+                [
+                    {
+                        "node": "Merge All Errors",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Error: Content Too Short": {
+            "main": [
+                [
+                    {
+                        "node": "Merge All Errors",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Error: Gemini API Failed": {
+            "main": [
+                [
+                    {
+                        "node": "Merge All Errors",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Error: PRD Invalid": {
+            "main": [
+                [
+                    {
+                        "node": "Merge All Errors",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Error: Notion Save Failed": {
+            "main": [
+                [
+                    {
+                        "node": "Merge All Errors",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Merge All Errors": {
+            "main": [
+                [
+                    {
+                        "node": "Mark Brainstorm Failed",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Mark Brainstorm Failed": {
+            "main": [
+                [
+                    {
+                        "node": "WhatsApp Error Notification",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "WhatsApp Error Notification": {
+            "main": [
+                [
+                    {
+                        "node": "Log Completion",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1",
+        "saveManualExecutions": true,
+        "saveExecutionProgress": true,
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": ""
+    },
+    "staticData": null,
+    "tags": [
+        {
+            "name": "PRD",
+            "id": "prd-tag"
+        },
+        {
+            "name": "Automation",
+            "id": "automation-tag"
+        },
+        {
+            "name": "Notion",
+            "id": "notion-tag"
+        },
+        {
+            "name": "Gemini",
+            "id": "gemini-tag"
+        },
+        {
+            "name": "Error Handling",
+            "id": "error-handling-tag"
+        }
+    ],
+    "triggerCount": 1,
+    "versionId": "2"
+}

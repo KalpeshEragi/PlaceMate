@@ -1,609 +1,1027 @@
 {
-  "ruleEngine": {
+  "webDevRules": {
     "version": "1.0",
-    "lastUpdated": "2025-02-04",
-    "domains": {
-      "webDeveloper": {
-        "domain": "Web Developer",
-        "description": "Professional building responsive websites and web applications",
-        "experienceLevels": {
-          "entryLevel": {
-            "level": "Entry-Level",
-            "yearsRequired": "0-1",
-            "rules": {
-              "requiredSkills": {
-                "category": "Must-Have Technical Skills",
-                "importance": 0.35,
-                "skills": [
-                  {
-                    "skill": "HTML",
-                    "context": "Fundamental markup language for web",
-                    "priority": "critical",
-                    "weight": 0.95
-                  },
-                  {
-                    "skill": "CSS",
-                    "context": "Styling and responsive design",
-                    "priority": "critical",
-                    "weight": 0.95
-                  },
-                  {
-                    "skill": "JavaScript",
-                    "context": "Core language for interactivity",
-                    "priority": "critical",
-                    "weight": 0.90
-                  },
-                  {
-                    "skill": "Responsive Design",
-                    "context": "Mobile-first and cross-device compatibility",
-                    "priority": "critical",
-                    "weight": 0.85
-                  },
-                  {
-                    "skill": "Git/Version Control",
-                    "context": "Code management and collaboration",
-                    "priority": "high",
-                    "weight": 0.80
-                  }
-                ]
-              },
-              "niceToHaveSkills": {
-                "category": "Nice-to-Have Skills",
-                "importance": 0.15,
-                "skills": [
-                  {
-                    "skill": "React or Vue.js",
-                    "context": "Frontend framework experience",
-                    "priority": "medium",
-                    "weight": 0.70
-                  },
-                  {
-                    "skill": "Bootstrap",
-                    "context": "CSS framework for rapid development",
-                    "priority": "medium",
-                    "weight": 0.60
-                  },
-                  {
-                    "skill": "Node.js",
-                    "context": "Basic backend knowledge",
-                    "priority": "medium",
-                    "weight": 0.55
-                  },
-                  {
-                    "skill": "Chrome DevTools",
-                    "context": "Debugging and performance testing",
-                    "priority": "low",
-                    "weight": 0.50
-                  }
-                ]
-              },
-              "powerWords": {
-                "category": "Recommended Action Verbs",
-                "importance": 0.15,
-                "verbs": [
-                  {
-                    "verb": "Assisted",
-                    "context": "For junior work under supervision",
-                    "strength": "medium",
-                    "example": "Assisted in developing responsive websites"
-                  },
-                  {
-                    "verb": "Developed",
-                    "context": "Built or created something new",
-                    "strength": "high",
-                    "example": "Developed responsive websites for small business clients"
-                  },
-                  {
-                    "verb": "Debugged",
-                    "context": "Fixed issues and solved problems",
-                    "strength": "high",
-                    "example": "Debugged website issues using Chrome DevTools"
-                  },
-                  {
-                    "verb": "Collaborated",
-                    "context": "Worked with others",
-                    "strength": "high",
-                    "example": "Collaborated with senior developers to implement design updates"
-                  },
-                  {
-                    "verb": "Implemented",
-                    "context": "Put into action or practice",
-                    "strength": "high",
-                    "example": "Implemented responsive design across all pages"
-                  },
-                  {
-                    "verb": "Optimized",
-                    "context": "Made better or more efficient",
-                    "strength": "high",
-                    "example": "Optimized images to improve page load time"
-                  }
-                ]
-              },
-              "metricsFramework": {
-                "category": "How to Quantify Impact",
-                "importance": 0.20,
-                "metricTypes": [
-                  {
-                    "type": "User Engagement",
-                    "examples": [
-                      "Improved user experience, increasing mobile traffic by 10%",
-                      "Increased user engagement by 15%",
-                      "Reduced bounce rate by 8%"
-                    ],
-                    "priority": "high",
-                    "applicable": true
-                  },
-                  {
-                    "type": "Performance",
-                    "examples": [
-                      "Ensured compatibility across multiple browsers",
-                      "Improved website speed and responsiveness",
-                      "Enhanced site navigation"
-                    ],
-                    "priority": "high",
-                    "applicable": true
-                  },
-                  {
-                    "type": "Code Quality",
-                    "examples": [
-                      "Wrote clean, maintainable code following best practices",
-                      "Reduced bugs by implementing testing"
-                    ],
-                    "priority": "medium",
-                    "applicable": true
-                  }
-                ]
-              },
-              "resumeStructure": {
-                "category": "Recommended Resume Layout",
-                "importance": 0.10,
-                "sections": [
-                  {
-                    "section": "Contact Information",
-                    "required": true,
-                    "guidelines": "Name, email, phone, GitHub, LinkedIn",
-                    "order": 1
-                  },
-                  {
-                    "section": "Professional Summary",
-                    "required": true,
-                    "guidelines": "2-3 sentences highlighting HTML, CSS, JavaScript, eagerness to learn",
-                    "order": 2,
-                    "minLength": 2,
-                    "maxLength": 3
-                  },
-                  {
-                    "section": "Experience",
-                    "required": true,
-                    "guidelines": "Internships, freelance projects, or part-time roles with 3-4 bullets each",
-                    "order": 3,
-                    "recommendedItems": "1-2"
-                  },
-                  {
-                    "section": "Skills",
-                    "required": true,
-                    "guidelines": "Organized by category: Web Technologies, Responsive Design, Version Control, etc.",
-                    "order": 4
-                  },
-                  {
-                    "section": "Education",
-                    "required": true,
-                    "guidelines": "Degree, university, graduation date",
-                    "order": 5
-                  },
-                  {
-                    "section": "Projects",
-                    "required": false,
-                    "guidelines": "2-3 personal projects with GitHub links and descriptions",
-                    "order": 6,
-                    "recommendedItems": "2-3"
-                  }
-                ]
-              },
-              "redFlags": {
-                "category": "Warning Signs to Avoid",
-                "importance": 0.10,
-                "flags": [
-                  {
-                    "flag": "No projects showcased",
-                    "severity": "critical",
-                    "reason": "Entry-level candidates MUST show practical work",
-                    "suggestion": "Include GitHub projects or portfolio link"
-                  },
-                  {
-                    "flag": "Generic technical skills listing",
-                    "severity": "high",
-                    "reason": "Skills without context don't demonstrate competency",
-                    "suggestion": "Show skills through projects and achievements"
-                  },
-                  {
-                    "flag": "No metrics or impact statements",
-                    "severity": "high",
-                    "reason": "Can't assess real contribution",
-                    "suggestion": "Quantify improvements: 'increased traffic by X%'"
-                  },
-                  {
-                    "flag": "Missing GitHub or portfolio link",
-                    "severity": "critical",
-                    "reason": "Employers need to see actual code",
-                    "suggestion": "Add GitHub profile and personal portfolio website"
-                  },
-                  {
-                    "flag": "Vague achievement descriptions",
-                    "severity": "high",
-                    "reason": "Unclear impact reduces competitiveness",
-                    "suggestion": "Use specific verbs and measurable outcomes"
-                  }
-                ]
-              },
-              "atsOptimization": {
-                "category": "ATS-Friendly Formatting",
-                "importance": 0.05,
-                "rules": [
-                  {
-                    "rule": "Use simple, standard fonts",
-                    "details": "Arial, Calibri, Times New Roman only",
-                    "importance": "critical",
-                    "impact": "ATS readability"
-                  },
-                  {
-                    "rule": "Single column layout",
-                    "details": "No multi-column designs or tables",
-                    "importance": "critical",
-                    "impact": "ATS parsing"
-                  },
-                  {
-                    "rule": "No graphics, icons, or colors",
-                    "details": "Black text on white background only",
-                    "importance": "critical",
-                    "impact": "ATS compatibility"
-                  },
-                  {
-                    "rule": "Clear section headings",
-                    "details": "Standard headers: Experience, Skills, Education",
-                    "importance": "high",
-                    "impact": "ATS recognition"
-                  },
-                  {
-                    "rule": "Avoid special characters",
-                    "details": "Use bullets (-) not symbols",
-                    "importance": "high",
-                    "impact": "Character encoding"
-                  },
-                  {
-                    "rule": "Spell out acronyms",
-                    "details": "React (JavaScript library), not just React",
-                    "importance": "medium",
-                    "impact": "Keyword matching"
-                  }
-                ]
-              }
-            },
-            "scoringWeights": {
-              "requiredSkills": 0.30,
-              "powerWords": 0.15,
-              "metricsPresent": 0.20,
-              "resumeStructure": 0.15,
-              "atsCompliance": 0.15,
-              "redFlagsAbsent": 0.05
+    "lastUpdated": "2026-02-05",
+    "domain": "Web Development",
+    "description": "Domain-specific rules for web development roles including Frontend, Backend, and Full-Stack positions",
+    "coreSkillsMatrix": {
+      "universal": {
+        "category": "Universal Web Development Skills",
+        "priority": "critical",
+        "importance": 0.40,
+        "skills": [
+          {
+            "ruleId": "WEB-CORE-001",
+            "skill": "HTML",
+            "context": "Fundamental markup language for web content structure",
+            "rationale": "HTML is universally required for all web developer positions. Missing this keyword leads to immediate rejection.",
+            "evidenceSources": 14,
+            "priority": "critical",
+            "weight": 0.95,
+            "implementation": [
+              "List in skills section as 'HTML5' or 'HTML'",
+              "Mention in project context: 'Built semantic HTML structure'",
+              "Include related: 'Semantic HTML', 'HTML5 APIs'"
+            ],
+            "variations": [
+              "HTML",
+              "HTML5",
+              "HyperText Markup Language"
+            ]
+          },
+          {
+            "ruleId": "WEB-CORE-002",
+            "skill": "CSS",
+            "context": "Styling and responsive design foundation",
+            "rationale": "CSS is universally required. Core skill for visual implementation and responsive design.",
+            "evidenceSources": 14,
+            "priority": "critical",
+            "weight": 0.95,
+            "implementation": [
+              "List in skills section as 'CSS3' or 'CSS'",
+              "Mention frameworks/methodologies: 'CSS Grid', 'Flexbox', 'CSS-in-JS'",
+              "Include modern approaches: 'Tailwind CSS', 'SASS/SCSS'"
+            ],
+            "variations": [
+              "CSS",
+              "CSS3",
+              "Cascading Style Sheets",
+              "Responsive CSS"
+            ]
+          },
+          {
+            "ruleId": "WEB-CORE-003",
+            "skill": "JavaScript",
+            "context": "Core language for interactivity and functionality",
+            "rationale": "JavaScript is the fundamental programming language for web development. Expected in 100% of web developer job descriptions.",
+            "evidenceSources": 14,
+            "priority": "critical",
+            "weight": 0.95,
+            "implementation": [
+              "List as 'JavaScript (ES6+)' or 'JavaScript'",
+              "Mention modern features: 'ES6+', 'Async/Await', 'Promises'",
+              "Include in project descriptions with specific use cases"
+            ],
+            "variations": [
+              "JavaScript",
+              "JS",
+              "ECMAScript",
+              "ES6+",
+              "Vanilla JavaScript"
+            ]
+          },
+          {
+            "ruleId": "WEB-CORE-004",
+            "skill": "TypeScript",
+            "context": "Emerging as universal standard for type-safe JavaScript",
+            "rationale": "TypeScript is consistently listed as required skill in 2025-2026 job market, especially for frontend/full-stack roles.",
+            "evidenceSources": 8,
+            "priority": "high",
+            "weight": 0.85,
+            "implementation": [
+              "List prominently in skills section",
+              "Mention type safety implementations",
+              "Show in project context: 'Implemented type-safe API with TypeScript'"
+            ],
+            "variations": [
+              "TypeScript",
+              "TS"
+            ]
+          },
+          {
+            "ruleId": "WEB-CORE-005",
+            "skill": "Responsive Design",
+            "context": "Mobile-first and cross-device compatibility",
+            "rationale": "Responsive design is a key web development requirement. Shows understanding of modern web standards.",
+            "evidenceSources": 10,
+            "priority": "critical",
+            "weight": 0.85,
+            "implementation": [
+              "List as 'Responsive Design' or 'Responsive Web Design'",
+              "Mention specific approaches: 'Mobile-First Design', 'Adaptive Design'",
+              "Include related: 'Media Queries', 'Viewport Optimization'",
+              "Quantify: 'Ensured compatibility across 10+ device types'"
+            ],
+            "variations": [
+              "Responsive Design",
+              "Responsive Web Design",
+              "Mobile-First Design",
+              "Cross-Device Compatibility"
+            ]
+          },
+          {
+            "ruleId": "WEB-CORE-006",
+            "skill": "Git/Version Control",
+            "context": "Code management and collaboration essential",
+            "rationale": "Version control is fundamental for professional development. GitHub experience is explicitly preferred.",
+            "evidenceSources": 12,
+            "priority": "critical",
+            "weight": 0.85,
+            "implementation": [
+              "List as 'Git' and/or 'GitHub'",
+              "Mention workflow: 'Git Flow', 'Feature Branching'",
+              "Include related: 'Version Control', 'Code Review', 'Pull Requests'",
+              "Link to GitHub profile in contact section"
+            ],
+            "variations": [
+              "Git",
+              "GitHub",
+              "Version Control",
+              "GitLab",
+              "Bitbucket"
+            ]
+          }
+        ]
+      },
+      "frontendSpecialization": {
+        "category": "Frontend Development Specialization",
+        "priority": "high",
+        "importance": 0.30,
+        "frameworks": [
+          {
+            "ruleId": "WEB-FE-001",
+            "skill": "React.js",
+            "context": "Most in-demand frontend framework (2025-2026)",
+            "rationale": "React is the dominant frontend framework. Highly prioritized in job descriptions.",
+            "evidenceSources": 20,
+            "priority": "very high",
+            "weight": 0.90,
+            "implementation": [
+              "List as 'React.js' or 'React'",
+              "Mention related: 'React Hooks', 'Context API', 'Redux'",
+              "Show ecosystem: 'Next.js', 'React Router'",
+              "Quantify project scale: 'Built React app serving 50k+ users'"
+            ],
+            "relatedSkills": [
+              "React Hooks",
+              "Redux",
+              "React Router",
+              "Context API",
+              "React Testing Library"
+            ]
+          },
+          {
+            "ruleId": "WEB-FE-002",
+            "skill": "Next.js",
+            "context": "React framework for production applications",
+            "rationale": "Next.js is emerging as standard for React applications in 2025-2026 market.",
+            "evidenceSources": 12,
+            "priority": "high",
+            "weight": 0.85,
+            "implementation": [
+              "List as 'Next.js'",
+              "Mention features: 'Server-Side Rendering (SSR)', 'Static Site Generation (SSG)'",
+              "Show understanding: 'App Router', 'API Routes'"
+            ],
+            "relatedSkills": [
+              "Server-Side Rendering",
+              "Static Site Generation",
+              "App Router",
+              "Edge Functions"
+            ]
+          },
+          {
+            "ruleId": "WEB-FE-003",
+            "skill": "Vue.js",
+            "context": "Progressive JavaScript framework",
+            "rationale": "Vue.js is second most popular frontend framework, especially in specific markets.",
+            "evidenceSources": 8,
+            "priority": "high",
+            "weight": 0.80,
+            "implementation": [
+              "List as 'Vue.js' or 'Vue'",
+              "Mention related: 'Vuex', 'Vue Router', 'Composition API'",
+              "Show ecosystem: 'Nuxt.js' for SSR"
+            ],
+            "relatedSkills": [
+              "Vuex",
+              "Vue Router",
+              "Composition API",
+              "Nuxt.js"
+            ]
+          },
+          {
+            "ruleId": "WEB-FE-004",
+            "skill": "Angular",
+            "context": "Enterprise-grade TypeScript framework",
+            "rationale": "Angular remains relevant for enterprise applications, particularly in large organizations.",
+            "evidenceSources": 6,
+            "priority": "medium",
+            "weight": 0.75,
+            "implementation": [
+              "List as 'Angular' (not AngularJS)",
+              "Mention related: 'RxJS', 'NgRx', 'Angular Material'",
+              "Show TypeScript integration"
+            ],
+            "relatedSkills": [
+              "RxJS",
+              "NgRx",
+              "Angular Material",
+              "TypeScript"
+            ]
+          },
+          {
+            "ruleId": "WEB-FE-005",
+            "skill": "Tailwind CSS",
+            "context": "Utility-first CSS framework (2025-2026 standard)",
+            "rationale": "Tailwind CSS is rapidly becoming the preferred styling approach in modern web development.",
+            "evidenceSources": 10,
+            "priority": "high",
+            "weight": 0.80,
+            "implementation": [
+              "List as 'Tailwind CSS'",
+              "Mention custom configurations if applicable",
+              "Show responsive design implementation with Tailwind"
+            ],
+            "relatedSkills": [
+              "PostCSS",
+              "Utility-First CSS"
+            ]
+          },
+          {
+            "ruleId": "WEB-FE-006",
+            "skill": "Build Tools",
+            "context": "Modern JavaScript tooling",
+            "rationale": "Build tool knowledge is expected baseline for modern frontend development.",
+            "evidenceSources": 8,
+            "priority": "medium",
+            "weight": 0.70,
+            "implementation": [
+              "List specific tools: 'Vite', 'Webpack', 'npm', 'Turbopack'",
+              "Mention optimization experience",
+              "Show understanding of build processes"
+            ],
+            "tools": [
+              "Vite",
+              "Webpack",
+              "npm",
+              "yarn",
+              "pnpm",
+              "Turbopack"
+            ]
+          }
+        ]
+      },
+      "backendSpecialization": {
+        "category": "Backend Development Specialization",
+        "priority": "high",
+        "importance": 0.30,
+        "technologies": [
+          {
+            "ruleId": "WEB-BE-001",
+            "skill": "Node.js",
+            "context": "JavaScript runtime for server-side development",
+            "rationale": "Node.js is the most in-demand backend technology for web developers, especially for full-stack roles.",
+            "evidenceSources": 15,
+            "priority": "very high",
+            "weight": 0.90,
+            "implementation": [
+              "List as 'Node.js'",
+              "Mention frameworks: 'Express.js', 'Nest.js', 'Fastify'",
+              "Show async programming: 'Async/Await', 'Event Loop understanding'",
+              "Quantify: 'Built Node.js API handling 100k+ requests/day'"
+            ],
+            "relatedSkills": [
+              "Express.js",
+              "Nest.js",
+              "Fastify",
+              "Koa"
+            ]
+          },
+          {
+            "ruleId": "WEB-BE-002",
+            "skill": "Python (Django/FastAPI)",
+            "context": "Backend language with robust frameworks",
+            "rationale": "Python is second most popular backend language for web development.",
+            "evidenceSources": 10,
+            "priority": "high",
+            "weight": 0.85,
+            "implementation": [
+              "List as 'Python' with frameworks",
+              "Specify: 'Django', 'FastAPI', 'Flask'",
+              "Show async capabilities: 'FastAPI async endpoints'",
+              "Mention ORM: 'Django ORM', 'SQLAlchemy'"
+            ],
+            "relatedSkills": [
+              "Django",
+              "FastAPI",
+              "Flask",
+              "SQLAlchemy"
+            ]
+          },
+          {
+            "ruleId": "WEB-BE-003",
+            "skill": "Databases",
+            "context": "Data persistence and management",
+            "rationale": "Database knowledge is fundamental for backend and full-stack roles.",
+            "evidenceSources": 18,
+            "priority": "critical",
+            "weight": 0.90,
+            "implementation": [
+              "List specific databases used",
+              "Include both SQL and NoSQL if applicable",
+              "Mention query optimization experience",
+              "Show scaling knowledge if relevant"
+            ],
+            "databases": {
+              "sql": [
+                "PostgreSQL",
+                "MySQL",
+                "SQLite"
+              ],
+              "nosql": [
+                "MongoDB",
+                "Redis",
+                "DynamoDB"
+              ]
             }
           },
-          "midLevel": {
-            "level": "Mid-Level",
-            "yearsRequired": "3-6",
-            "rules": {
-              "requiredSkills": {
-                "category": "Must-Have Technical Skills",
-                "importance": 0.35,
-                "skills": [
-                  {
-                    "skill": "HTML5 & CSS3",
-                    "context": "Modern markup and styling standards",
-                    "priority": "critical",
-                    "weight": 0.95
-                  },
-                  {
-                    "skill": "JavaScript (ES6+)",
-                    "context": "Modern JavaScript with advanced concepts",
-                    "priority": "critical",
-                    "weight": 0.95
-                  },
-                  {
-                    "skill": "React or Vue.js",
-                    "context": "Primary frontend framework expertise",
-                    "priority": "critical",
-                    "weight": 0.90
-                  },
-                  {
-                    "skill": "Responsive/Adaptive Design",
-                    "context": "Mobile-first, cross-device optimization",
-                    "priority": "critical",
-                    "weight": 0.85
-                  },
-                  {
-                    "skill": "API Integration",
-                    "context": "REST API consumption and integration",
-                    "priority": "high",
-                    "weight": 0.85
-                  },
-                  {
-                    "skill": "Git/GitHub",
-                    "context": "Advanced version control and collaboration",
-                    "priority": "high",
-                    "weight": 0.80
-                  }
-                ]
-              },
-              "niceToHaveSkills": {
-                "category": "Nice-to-Have Skills",
-                "importance": 0.15,
-                "skills": [
-                  {
-                    "skill": "Node.js/Express",
-                    "context": "Backend development capabilities",
-                    "priority": "medium",
-                    "weight": 0.75
-                  },
-                  {
-                    "skill": "Database Knowledge",
-                    "context": "MySQL, MongoDB, or similar",
-                    "priority": "medium",
-                    "weight": 0.70
-                  },
-                  {
-                    "skill": "Testing Frameworks",
-                    "context": "Jest, Mocha, or similar testing tools",
-                    "priority": "medium",
-                    "weight": 0.70
-                  },
-                  {
-                    "skill": "DevOps/Deployment",
-                    "context": "Docker, CI/CD pipelines, cloud platforms",
-                    "priority": "medium",
-                    "weight": 0.65
-                  },
-                  {
-                    "skill": "UI/UX Principles",
-                    "context": "Understanding design and user-centered development",
-                    "priority": "medium",
-                    "weight": 0.60
-                  }
-                ]
-              },
-              "powerWords": {
-                "category": "Recommended Action Verbs",
-                "importance": 0.15,
-                "verbs": [
-                  {
-                    "verb": "Architected",
-                    "context": "Designed system structure",
-                    "strength": "very high",
-                    "example": "Architected scalable React component library"
-                  },
-                  {
-                    "verb": "Optimized",
-                    "context": "Improved performance or efficiency",
-                    "strength": "very high",
-                    "example": "Optimized bundle size by 40% using code splitting"
-                  },
-                  {
-                    "verb": "Scaled",
-                    "context": "Made something work at larger scale",
-                    "strength": "very high",
-                    "example": "Scaled API to handle 100k concurrent users"
-                  },
-                  {
-                    "verb": "Improved",
-                    "context": "Made measurable enhancements",
-                    "strength": "high",
-                    "example": "Improved Core Web Vitals by 35%"
-                  },
-                  {
-                    "verb": "Deployed",
-                    "context": "Released to production",
-                    "strength": "high",
-                    "example": "Deployed 50+ features to production"
-                  },
-                  {
-                    "verb": "Reduced",
-                    "context": "Decreased time, cost, or errors",
-                    "strength": "high",
-                    "example": "Reduced bundle size by 30%"
-                  },
-                  {
-                    "verb": "Mentored",
-                    "context": "Guided and developed junior team members",
-                    "strength": "high",
-                    "example": "Mentored 2 junior developers on React best practices"
-                  }
-                ]
-              },
-              "metricsFramework": {
-                "category": "How to Quantify Impact",
-                "importance": 0.20,
-                "metricTypes": [
-                  {
-                    "type": "Performance Metrics",
-                    "examples": [
-                      "Reduced page load time by 45%",
-                      "Improved Lighthouse score from 62 to 92",
-                      "Decreased First Contentful Paint by 2.3 seconds",
-                      "Optimized bundle size by 35%"
-                    ],
-                    "priority": "very high",
-                    "applicable": true
-                  },
-                  {
-                    "type": "User Impact",
-                    "examples": [
-                      "Increased user retention by 25%",
-                      "Reduced bounce rate by 30%",
-                      "Boosted conversion rate by 15%",
-                      "Improved user satisfaction NPS score by 20 points"
-                    ],
-                    "priority": "high",
-                    "applicable": true
-                  },
-                  {
-                    "type": "Business Impact",
-                    "examples": [
-                      "Generated 40% increase in mobile revenue",
-                      "Reduced customer support tickets by 50%",
-                      "Saved engineering team 20 hours/week through automation"
-                    ],
-                    "priority": "high",
-                    "applicable": true
-                  },
-                  {
-                    "type": "Scale/Scope",
-                    "examples": [
-                      "Built features serving 500k+ users",
-                      "Handled 50M+ API requests per day",
-                      "Managed codebase with 10k+ commits"
-                    ],
-                    "priority": "medium",
-                    "applicable": true
-                  }
-                ]
-              },
-              "resumeStructure": {
-                "category": "Recommended Resume Layout",
-                "importance": 0.10,
-                "sections": [
-                  {
-                    "section": "Professional Summary",
-                    "required": true,
-                    "guidelines": "3-4 sentences highlighting years of experience, key frameworks, and quantified achievements",
-                    "order": 1,
-                    "minLength": 3,
-                    "maxLength": 4
-                  },
-                  {
-                    "section": "Work Experience",
-                    "required": true,
-                    "guidelines": "5-7 bullet points per role, focus on impact and metrics",
-                    "order": 2,
-                    "recommendedItems": "3-4 roles",
-                    "bulletsPerRole": "5-7"
-                  },
-                  {
-                    "section": "Core Competencies",
-                    "required": true,
-                    "guidelines": "Organized by category: Frontend, Backend, Tools, etc.",
-                    "order": 3
-                  },
-                  {
-                    "section": "Technical Skills",
-                    "required": false,
-                    "guidelines": "More detailed than competencies if needed",
-                    "order": 4
-                  },
-                  {
-                    "section": "Education",
-                    "required": true,
-                    "guidelines": "Brief: Degree, university, graduation year",
-                    "order": 5
-                  },
-                  {
-                    "section": "Projects/Portfolio",
-                    "required": false,
-                    "guidelines": "2-3 standout projects with links and brief description",
-                    "order": 6
-                  },
-                  {
-                    "section": "Certifications",
-                    "required": false,
-                    "guidelines": "Industry-recognized certs only",
-                    "order": 7
-                  }
-                ]
-              },
-              "redFlags": {
-                "category": "Warning Signs to Avoid",
-                "importance": 0.10,
-                "flags": [
-                  {
-                    "flag": "Generic or repetitive achievement descriptions",
-                    "severity": "high",
-                    "reason": "Mid-level should show strategic thinking, not just task completion",
-                    "suggestion": "Emphasize impact, decisions made, and lessons learned"
-                  },
-                  {
-                    "flag": "No metrics on major projects",
-                    "severity": "critical",
-                    "reason": "Expected to measure and communicate impact",
-                    "suggestion": "Quantify performance improvements, user growth, etc."
-                  },
-                  {
-                    "flag": "Lack of soft skills demonstration",
-                    "severity": "high",
-                    "reason": "Mid-level often leads or mentors others",
-                    "suggestion": "Show collaboration, mentorship, cross-team work"
-                  },
-                  {
-                    "flag": "Outdated technology stack",
-                    "severity": "medium",
-                    "reason": "Should show current technologies",
-                    "suggestion": "Include modern frameworks and tools"
-                  },
-                  {
-                    "flag": "No evidence of continuous learning",
-                    "severity": "medium",
-                    "reason": "Tech industry values growth mindset",
-                    "suggestion": "Mention new skills, certifications, or side projects"
-                  }
-                ]
-              },
-              "atsOptimization": {
-                "category": "ATS-Friendly Formatting",
-                "importance": 0.05,
-                "rules": [
-                  {
-                    "rule": "Standard fonts and single column",
-                    "details": "Arial, Calibri, Times New Roman, single column only",
-                    "importance": "critical",
-                    "impact": "ATS parsing accuracy"
-                  },
-                  {
-                    "rule": "Clear section headers",
-                    "details": "Standard headers help ATS categorize content",
-                    "importance": "high",
-                    "impact": "Content organization"
-                  },
-                  {
-                    "rule": "Keywords from job description",
-                    "details": "Include exact technologies and frameworks mentioned",
-                    "importance": "critical",
-                    "impact": "Keyword matching score"
-                  },
-                  {
-                    "rule": "Dates in consistent format",
-                    "details": "MM/YYYY or Jan 2024 format",
-                    "importance": "high",
-                    "impact": "Timeline clarity"
-                  }
-                ]
-              }
-            },
-            "scoringWeights": {
-              "requiredSkills": 0.30,
-              "powerWords": 0.15,
-              "metricsPresent": 0.25,
-              "impactDemonstration": 0.10,
-              "atsCompliance": 0.15,
-              "redFlagsAbsent": 0.05
-            }
+          {
+            "ruleId": "WEB-BE-004",
+            "skill": "API Development (REST, GraphQL)",
+            "context": "Service integration and communication",
+            "rationale": "API development is a core backend requirement. Shows ability to build and consume services.",
+            "evidenceSources": 12,
+            "priority": "very high",
+            "weight": 0.85,
+            "implementation": [
+              "List as 'REST API', 'RESTful APIs', 'GraphQL'",
+              "Mention standards: 'OpenAPI/Swagger documentation'",
+              "Show versioning and authentication: 'JWT', 'OAuth'",
+              "Quantify: 'Designed RESTful API with 50+ endpoints'"
+            ],
+            "relatedSkills": [
+              "REST",
+              "RESTful APIs",
+              "GraphQL",
+              "API Design",
+              "Swagger/OpenAPI",
+              "JWT",
+              "OAuth"
+            ]
+          },
+          {
+            "ruleId": "WEB-BE-005",
+            "skill": "Cloud Platforms",
+            "context": "Deployment and infrastructure",
+            "rationale": "Cloud platform experience is increasingly valued for backend and DevOps-oriented roles.",
+            "evidenceSources": 10,
+            "priority": "high",
+            "weight": 0.80,
+            "implementation": [
+              "List specific platforms: 'AWS', 'Azure', 'Google Cloud Platform (GCP)'",
+              "Mention specific services used: 'AWS Lambda', 'S3', 'EC2'",
+              "Show deployment experience: 'CI/CD pipelines'"
+            ],
+            "platforms": [
+              "AWS",
+              "Azure",
+              "Google Cloud Platform (GCP)",
+              "Vercel",
+              "Netlify",
+              "Heroku"
+            ]
+          },
+          {
+            "ruleId": "WEB-BE-006",
+            "skill": "Containerization",
+            "context": "Application packaging and deployment",
+            "rationale": "Docker and container knowledge is standard for modern backend development.",
+            "evidenceSources": 8,
+            "priority": "medium",
+            "weight": 0.75,
+            "implementation": [
+              "List as 'Docker', 'Kubernetes'",
+              "Mention container orchestration if applicable",
+              "Show deployment workflow understanding"
+            ],
+            "tools": [
+              "Docker",
+              "Docker Compose",
+              "Kubernetes",
+              "Container Orchestration"
+            ]
           }
-        },
-        "overallScoringWeights": {
-          "keywordMatch": 0.30,
-          "formatCompliance": 0.15,
-          "metricsPresent": 0.20,
-          "powerWordsUsage": 0.15,
-          "skillRelevance": 0.15,
-          "redFlagsAbsent": 0.05
-        }
+        ]
+      },
+      "modernWebDevelopmentSkills": {
+        "category": "2025-2026 Modern Skills",
+        "priority": "medium",
+        "importance": 0.15,
+        "skills": [
+          {
+            "ruleId": "WEB-MOD-001",
+            "skill": "Testing",
+            "context": "Quality assurance and test-driven development",
+            "rationale": "Testing skills are a significant differentiator and show code quality awareness.",
+            "evidenceSources": 10,
+            "priority": "high",
+            "weight": 0.75,
+            "implementation": [
+              "List testing frameworks: 'Jest', 'Cypress', 'Playwright', 'Vitest'",
+              "Mention test types: 'Unit Testing', 'Integration Testing', 'E2E Testing'",
+              "Quantify: 'Achieved 85%+ test coverage'",
+              "Show TDD if applicable"
+            ],
+            "frameworks": [
+              "Jest",
+              "Cypress",
+              "Playwright",
+              "Vitest",
+              "React Testing Library",
+              "Mocha",
+              "Chai"
+            ]
+          },
+          {
+            "ruleId": "WEB-MOD-002",
+            "skill": "Performance Optimization",
+            "context": "Core Web Vitals and speed optimization",
+            "rationale": "Performance optimization is a key web development skill. Shows understanding of user experience.",
+            "evidenceSources": 12,
+            "priority": "high",
+            "weight": 0.80,
+            "implementation": [
+              "Mention specific metrics: 'Core Web Vitals', 'Lighthouse Score'",
+              "Quantify improvements: 'Reduced page load time by 45%'",
+              "List techniques: 'Lazy Loading', 'Code Splitting', 'Image Optimization'",
+              "Show tools: 'Chrome DevTools', 'WebPageTest'"
+            ],
+            "relatedConcepts": [
+              "Core Web Vitals",
+              "Lighthouse",
+              "Lazy Loading",
+              "Code Splitting",
+              "Asset Optimization",
+              "Caching Strategies"
+            ]
+          },
+          {
+            "ruleId": "WEB-MOD-003",
+            "skill": "Accessibility (A11y)",
+            "context": "WCAG compliance and inclusive design",
+            "rationale": "Accessibility standards are emerging as differentiator for quality-focused roles, especially at major companies.",
+            "evidenceSources": 4,
+            "priority": "medium",
+            "weight": 0.70,
+            "implementation": [
+              "List as 'Accessibility (A11y)' or 'WCAG Compliance'",
+              "Mention standards: 'WCAG 2.1 AA'",
+              "Show implementation: 'Semantic HTML', 'ARIA attributes'",
+              "Tools: 'axe DevTools', 'Lighthouse Accessibility Audit'"
+            ],
+            "relatedSkills": [
+              "WCAG",
+              "ARIA",
+              "Semantic HTML",
+              "Keyboard Navigation",
+              "Screen Reader Compatibility"
+            ]
+          },
+          {
+            "ruleId": "WEB-MOD-004",
+            "skill": "AI-Assisted Development",
+            "context": "Modern development workflow with AI tools",
+            "rationale": "AI-assisted development experience is an important emerging skill as AI tools become standard in workflows.",
+            "evidenceSources": 3,
+            "priority": "medium",
+            "weight": 0.65,
+            "implementation": [
+              "Mention tools used: 'GitHub Copilot', 'ChatGPT', 'Claude'",
+              "Show critical evaluation: 'AI-assisted development with manual review'",
+              "Context: 'Accelerated development using AI tools while maintaining code quality'"
+            ],
+            "tools": [
+              "GitHub Copilot",
+              "ChatGPT",
+              "Claude",
+              "Tabnine"
+            ]
+          },
+          {
+            "ruleId": "WEB-MOD-005",
+            "skill": "Serverless Architecture",
+            "context": "Edge computing and serverless functions",
+            "rationale": "Serverless architecture and edge computing are emerging trends for backend development.",
+            "evidenceSources": 5,
+            "priority": "medium",
+            "weight": 0.70,
+            "implementation": [
+              "Mention platforms: 'AWS Lambda', 'Vercel Edge Functions', 'Cloudflare Workers'",
+              "Show understanding: 'Serverless Architecture', 'Edge Computing'",
+              "Context: 'Deployed serverless functions reducing infrastructure costs by X%'"
+            ],
+            "relatedConcepts": [
+              "Serverless Functions",
+              "Edge Computing",
+              "Function-as-a-Service (FaaS)",
+              "AWS Lambda",
+              "Vercel Edge",
+              "Cloudflare Workers"
+            ]
+          },
+          {
+            "ruleId": "WEB-MOD-006",
+            "skill": "Green Coding / Sustainable Development",
+            "context": "Resource optimization and energy efficiency",
+            "rationale": "Sustainable software engineering is emerging as must-have skill for 2025-2026 market.",
+            "evidenceSources": 4,
+            "priority": "low",
+            "weight": 0.60,
+            "implementation": [
+              "If applicable, mention: 'Green Coding', 'Sustainable Software Development'",
+              "Quantify: 'Optimized resource usage reducing server costs by X%'",
+              "Show efficiency: 'Database query optimization', 'Asset compression'",
+              "Context: 'Carbon-aware deployment strategies'"
+            ],
+            "relatedConcepts": [
+              "Resource Optimization",
+              "Energy Efficiency",
+              "Performance Optimization",
+              "Cost Optimization"
+            ]
+          }
+        ]
+      },
+      "specializedDomains": {
+        "category": "Specialized Web Development Paths",
+        "priority": "medium",
+        "domains": [
+          {
+            "ruleId": "WEB-SPEC-001",
+            "domain": "CMS Development",
+            "context": "Content management systems",
+            "rationale": "CMS experience is valuable, especially for agency work and content-heavy sites.",
+            "evidenceSources": 5,
+            "priority": "medium",
+            "weight": 0.70,
+            "platforms": [
+              "WordPress",
+              "Drupal",
+              "Contentful",
+              "Strapi",
+              "Sanity"
+            ],
+            "implementation": [
+              "List specific CMS: 'WordPress', 'Drupal'",
+              "Mention customization: 'Custom Theme Development', 'Plugin Development'",
+              "Show headless approach if applicable: 'Headless WordPress with React'"
+            ]
+          },
+          {
+            "ruleId": "WEB-SPEC-002",
+            "domain": "E-Commerce Development",
+            "context": "Online store and payment systems",
+            "rationale": "E-commerce specialization is valuable for retail and direct-to-consumer roles.",
+            "evidenceSources": 3,
+            "priority": "medium",
+            "weight": 0.70,
+            "platforms": [
+              "Shopify",
+              "WooCommerce",
+              "Magento",
+              "Medusa",
+              "Saleor"
+            ],
+            "implementation": [
+              "List platform: 'Shopify (Liquid templating)'",
+              "Mention: 'Payment Gateway Integration', 'Headless Commerce'",
+              "Quantify: 'Optimized checkout flow increasing conversions by X%'"
+            ]
+          },
+          {
+            "ruleId": "WEB-SPEC-003",
+            "domain": "Progressive Web Apps (PWAs)",
+            "context": "Mobile-first web applications",
+            "rationale": "PWA development shows modern web capabilities understanding.",
+            "evidenceSources": 3,
+            "priority": "medium",
+            "weight": 0.65,
+            "implementation": [
+              "List as 'Progressive Web Apps (PWAs)'",
+              "Mention: 'Service Workers', 'Offline Functionality', 'App Manifest'",
+              "Show mobile focus: 'Mobile-First Development'"
+            ]
+          },
+          {
+            "ruleId": "WEB-SPEC-004",
+            "domain": "DevOps / Platform Engineering",
+            "context": "Infrastructure and deployment automation",
+            "rationale": "DevOps skills are increasingly valued, especially for full-stack and senior roles.",
+            "evidenceSources": 6,
+            "priority": "medium",
+            "weight": 0.75,
+            "skills": [
+              "CI/CD",
+              "Infrastructure as Code (IaC)",
+              "Terraform",
+              "Jenkins",
+              "GitHub Actions",
+              "Site Reliability Engineering (SRE)"
+            ],
+            "implementation": [
+              "List specific tools: 'CI/CD', 'Jenkins', 'GitHub Actions'",
+              "Mention: 'Infrastructure as Code (Terraform)', 'Deployment Automation'",
+              "Quantify: 'Reduced deployment time from X hours to Y minutes'"
+            ]
+          }
+        ]
       }
+    },
+    "experienceLevelSpecifics": {
+      "entryLevel": {
+        "level": "Entry-Level / Junior",
+        "yearsRequired": "0-2 years",
+        "criticalSkills": [
+          "HTML",
+          "CSS",
+          "JavaScript",
+          "Responsive Design",
+          "Git/Version Control"
+        ],
+        "niceToHave": [
+          "React or Vue.js",
+          "Node.js basics",
+          "Bootstrap or Tailwind CSS"
+        ],
+        "focusAreas": [
+          "Portfolio projects (2-4 substantial projects required)",
+          "GitHub profile with recent activity",
+          "Learning ability and potential",
+          "Internships or bootcamp projects acceptable",
+          "Code quality over quantity"
+        ],
+        "commonMistakes": [
+          "Listing skills never actually used",
+          "Tutorial projects without customization",
+          "No live demos or GitHub links"
+        ]
+      },
+      "midLevel": {
+        "level": "Mid-Level",
+        "yearsRequired": "3-7 years",
+        "criticalSkills": [
+          "HTML, CSS, JavaScript (advanced)",
+          "Modern framework (React, Vue, Angular)",
+          "Backend basics (Node.js, Python, or equivalent)",
+          "Database experience (SQL and/or NoSQL)",
+          "API development/integration",
+          "Testing frameworks",
+          "Git workflow (branching, PRs, code review)"
+        ],
+        "niceToHave": [
+          "TypeScript",
+          "Cloud platforms (AWS, Azure, GCP)",
+          "CI/CD pipelines",
+          "Performance optimization",
+          "Mentorship experience"
+        ],
+        "focusAreas": [
+          "Quantified business impact (required)",
+          "Strategic thinking and problem-solving",
+          "Cross-functional collaboration",
+          "Some leadership or mentorship",
+          "Technology decisions and tradeoffs",
+          "Performance and scalability considerations"
+        ],
+        "commonMistakes": [
+          "Task-focused rather than impact-focused bullets",
+          "No metrics or quantified achievements",
+          "Lack of soft skills demonstration",
+          "Technology stack hasn't evolved"
+        ]
+      },
+      "senior": {
+        "level": "Senior / Staff / Lead",
+        "yearsRequired": "7+ years",
+        "criticalSkills": [
+          "Full-stack proficiency",
+          "System design and architecture",
+          "Multiple frameworks/languages",
+          "Database design and optimization",
+          "API architecture (REST, GraphQL)",
+          "Cloud infrastructure",
+          "Security best practices",
+          "Testing strategies and test architecture"
+        ],
+        "niceToHave": [
+          "Microservices architecture",
+          "Container orchestration (Kubernetes)",
+          "DevOps/SRE experience",
+          "Technical leadership",
+          "Thought leadership (blogs, talks, open-source)",
+          "Architectural patterns knowledge"
+        ],
+        "focusAreas": [
+          "Technical leadership and mentorship (required)",
+          "System architecture decisions",
+          "Significant business impact with metrics",
+          "Cross-team and cross-org influence",
+          "Strategic technology choices",
+          "Scalability and performance at scale",
+          "Team growth and development",
+          "Technical vision and roadmap contribution"
+        ],
+        "commonMistakes": [
+          "Individual contributor focus only",
+          "No evidence of leadership or influence",
+          "Missing architectural or system design examples",
+          "Lack of business impact context",
+          "Not showing mentorship or team development"
+        ]
+      }
+    },
+    "roleVariants": {
+      "frontend": {
+        "role": "Frontend Developer / Frontend Engineer",
+        "focusSkills": [
+          "HTML, CSS, JavaScript (required)",
+          "React.js or Vue.js or Angular (at least one required)",
+          "TypeScript (highly recommended)",
+          "Responsive Design (required)",
+          "CSS frameworks (Tailwind, SASS)",
+          "Frontend build tools (Webpack, Vite)",
+          "Testing (Jest, Cypress, Playwright)",
+          "Performance optimization"
+        ],
+        "secondarySkills": [
+          "Basic backend knowledge (Node.js)",
+          "API consumption",
+          "State management (Redux, Vuex)",
+          "Accessibility (A11y)"
+        ],
+        "keyMetrics": [
+          "Page load time improvements",
+          "Core Web Vitals scores",
+          "User engagement increases",
+          "Conversion rate improvements",
+          "Lighthouse scores"
+        ]
+      },
+      "backend": {
+        "role": "Backend Developer / Backend Engineer",
+        "focusSkills": [
+          "Node.js or Python or Go or Java (at least one required)",
+          "Databases (SQL and NoSQL required)",
+          "API development (REST required, GraphQL recommended)",
+          "Authentication/Authorization (JWT, OAuth)",
+          "Cloud platforms (AWS, Azure, or GCP)",
+          "Docker (highly recommended)",
+          "Testing (unit, integration)",
+          "Security best practices"
+        ],
+        "secondarySkills": [
+          "Microservices architecture",
+          "Message queues (RabbitMQ, Kafka)",
+          "Caching strategies (Redis)",
+          "CI/CD pipelines",
+          "Kubernetes"
+        ],
+        "keyMetrics": [
+          "API response time improvements",
+          "System uptime/reliability",
+          "Request handling capacity",
+          "Database query optimizations",
+          "Cost reductions"
+        ]
+      },
+      "fullStack": {
+        "role": "Full-Stack Developer / Full-Stack Engineer",
+        "focusSkills": [
+          "HTML, CSS, JavaScript (required)",
+          "React.js or Vue.js (at least one required)",
+          "Node.js or Python (at least one required)",
+          "Databases (SQL required, NoSQL recommended)",
+          "API development (REST required)",
+          "Git/Version Control (required)",
+          "Responsive Design (required)",
+          "Cloud deployment experience"
+        ],
+        "secondarySkills": [
+          "TypeScript",
+          "Docker",
+          "Testing (frontend and backend)",
+          "CI/CD pipelines",
+          "DevOps basics"
+        ],
+        "keyMetrics": [
+          "End-to-end feature delivery",
+          "Full-stack performance improvements",
+          "User experience and backend performance balance",
+          "Deployment frequency and reliability"
+        ],
+        "uniqueExpectations": [
+          "Demonstrate both frontend and backend proficiency",
+          "Show ability to make full-stack technology decisions",
+          "End-to-end feature ownership",
+          "Understanding of entire application lifecycle"
+        ]
+      }
+    },
+    "keywordOptimization": {
+      "highValueKeywords": {
+        "category": "Keywords with High ATS Weight",
+        "keywords": [
+          {
+            "keyword": "JavaScript",
+            "priority": "critical",
+            "variations": [
+              "JavaScript",
+              "JS",
+              "ECMAScript",
+              "ES6+"
+            ],
+            "context": "Must appear in skills and experience sections"
+          },
+          {
+            "keyword": "React",
+            "priority": "very high",
+            "variations": [
+              "React",
+              "React.js",
+              "ReactJS"
+            ],
+            "context": "Most in-demand frontend framework"
+          },
+          {
+            "keyword": "Node.js",
+            "priority": "very high",
+            "variations": [
+              "Node.js",
+              "Node",
+              "NodeJS"
+            ],
+            "context": "Most in-demand backend technology"
+          },
+          {
+            "keyword": "TypeScript",
+            "priority": "high",
+            "variations": [
+              "TypeScript",
+              "TS"
+            ],
+            "context": "Emerging standard for type safety"
+          },
+          {
+            "keyword": "API",
+            "priority": "high",
+            "variations": [
+              "API",
+              "REST API",
+              "RESTful API",
+              "GraphQL"
+            ],
+            "context": "Core backend and integration skill"
+          },
+          {
+            "keyword": "Git",
+            "priority": "high",
+            "variations": [
+              "Git",
+              "GitHub",
+              "Version Control"
+            ],
+            "context": "Universal requirement for collaboration"
+          },
+          {
+            "keyword": "Responsive",
+            "priority": "high",
+            "variations": [
+              "Responsive Design",
+              "Responsive Web Design",
+              "Mobile-First"
+            ],
+            "context": "Frontend standard requirement"
+          },
+          {
+            "keyword": "AWS",
+            "priority": "medium",
+            "variations": [
+              "AWS",
+              "Amazon Web Services",
+              "Cloud"
+            ],
+            "context": "Most common cloud platform"
+          }
+        ]
+      }
+    },
+    "redFlagsSpecific": {
+      "webDevelopmentRedFlags": [
+        {
+          "flag": "Listing outdated technologies prominently",
+          "severity": "high",
+          "examples": [
+            "jQuery as primary skill",
+            "AngularJS (not Angular)",
+            "PHP 5.x"
+          ],
+          "reason": "Signals candidate is not current with modern web development",
+          "solution": "Prioritize modern frameworks and current versions. Archive obsolete skills."
+        },
+        {
+          "flag": "No framework experience for mid-level+",
+          "severity": "critical",
+          "reason": "Modern web development requires framework knowledge. Lack suggests outdated skills.",
+          "solution": "Learn and demonstrate proficiency in at least one modern framework (React, Vue, Angular)"
+        },
+        {
+          "flag": "Frontend role without responsive design mention",
+          "severity": "high",
+          "reason": "Responsive design is universal expectation for frontend roles",
+          "solution": "Explicitly list 'Responsive Design' and show mobile-first implementations"
+        },
+        {
+          "flag": "Backend role without database experience",
+          "severity": "critical",
+          "reason": "Database knowledge is fundamental for backend development",
+          "solution": "List specific databases (PostgreSQL, MongoDB, etc.) with context of use"
+        },
+        {
+          "flag": "No version control listed",
+          "severity": "critical",
+          "reason": "Git is universal requirement. Omission suggests lack of collaborative experience.",
+          "solution": "Add 'Git/GitHub' to skills and link GitHub profile"
+        },
+        {
+          "flag": "Web developer with no portfolio/GitHub",
+          "severity": "high",
+          "reason": "Portfolio and GitHub are expected for demonstrating work",
+          "solution": "Create GitHub profile, upload projects, and link in resume"
+        },
+        {
+          "flag": "Using 'webmaster' or outdated job titles",
+          "severity": "medium",
+          "reason": "Outdated terminology signals candidate may not be current",
+          "solution": "Use modern titles: Frontend Developer, Backend Developer, Full-Stack Developer"
+        }
+      ]
+    },
+    "trendingSkills2025_2026": {
+      "emergingHighValue": [
+        {
+          "skill": "AI-assisted development",
+          "trend": "Growing rapidly",
+          "rationale": "AI tools becoming standard in development workflows",
+          "implementation": "Mention GitHub Copilot, ChatGPT usage in project context"
+        },
+        {
+          "skill": "Edge computing / Serverless",
+          "trend": "Increasing adoption",
+          "rationale": "Serverless architecture and edge functions becoming mainstream",
+          "implementation": "Show Vercel Edge Functions, AWS Lambda, Cloudflare Workers experience"
+        },
+        {
+          "skill": "TypeScript",
+          "trend": "Near-universal adoption",
+          "rationale": "TypeScript is emerging as standard over plain JavaScript",
+          "implementation": "List TypeScript prominently, show type-safe implementations"
+        },
+        {
+          "skill": "Next.js",
+          "trend": "Rapidly growing",
+          "rationale": "Next.js is becoming standard for React applications",
+          "implementation": "Show Next.js projects with SSR/SSG understanding"
+        },
+        {
+          "skill": "Green coding / Sustainable development",
+          "trend": "Emerging must-have",
+          "rationale": "Sustainability and resource optimization gaining importance",
+          "implementation": "Quantify resource/cost optimizations with sustainability angle"
+        },
+        {
+          "skill": "Accessibility (WCAG)",
+          "trend": "Increasing importance",
+          "rationale": "Accessibility becoming standard requirement, especially at major companies",
+          "implementation": "Show WCAG compliance, semantic HTML, ARIA implementation"
+        }
+      ],
+      "decliningSkills": [
+        {
+          "skill": "jQuery",
+          "status": "Legacy maintenance only",
+          "rationale": "Modern frameworks have replaced jQuery for new development",
+          "recommendation": "List only if maintaining legacy codebases; don't emphasize"
+        },
+        {
+          "skill": "AngularJS (1.x)",
+          "status": "Obsolete",
+          "rationale": "Replaced by Angular (2+)",
+          "recommendation": "Replace with modern Angular if applicable, or learn React/Vue"
+        },
+        {
+          "skill": "Bower",
+          "status": "Obsolete",
+          "rationale": "Replaced by npm/yarn",
+          "recommendation": "Remove from resume; not relevant for modern development"
+        },
+        {
+          "skill": "Flash / Silverlight",
+          "status": "Obsolete",
+          "rationale": "No longer supported by browsers",
+          "recommendation": "Remove entirely unless historical context needed"
+        }
+      ]
     }
   }
 }

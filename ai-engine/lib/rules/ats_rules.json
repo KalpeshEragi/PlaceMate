@@ -1,0 +1,441 @@
+{
+    "atsRules": {
+        "version": "1.0",
+        "lastUpdated": "2026-02-05",
+        "description": "Universal ATS optimization rules applicable across all domains",
+        "criticalRules": {
+            "keywordMatching": {
+                "category": "Keyword Optimization",
+                "priority": "critical",
+                "importance": 0.30,
+                "rules": [
+                    {
+                        "ruleId": "ATS-KW-001",
+                        "rule": "Exact keyword matching from job description",
+                        "rationale": "ATS relies on exact or near-exact keyword matching. Resumes without job description keywords are filtered out before human review.",
+                        "evidenceSources": 35,
+                        "implementation": [
+                            "Mirror technical skills exactly as listed in job description",
+                            "Include full technology names (not just abbreviations)",
+                            "Use both full terms and acronyms where applicable (e.g., 'Application Programming Interface (API)')"
+                        ],
+                        "failureIndicators": [
+                            "ATS score <30% on simulators",
+                            "Automatic rejection emails within minutes",
+                            "Application status stuck at 'Received' indefinitely"
+                        ],
+                        "impact": "Determines if resume reaches recruiter (critical gate)",
+                        "weight": 0.95
+                    },
+                    {
+                        "ruleId": "ATS-KW-002",
+                        "rule": "Include exact job titles",
+                        "rationale": "Exact job title inclusion significantly increases interview likelihood",
+                        "evidenceSources": 12,
+                        "implementation": [
+                            "Use target job title in professional summary",
+                            "Match job title terminology in headline (e.g., 'Full-Stack Developer' vs 'Full Stack Engineer')",
+                            "Include variations if applicable (Frontend Developer, Front-End Developer)"
+                        ],
+                        "failureIndicators": [
+                            "Resume categorized incorrectly by ATS",
+                            "Filtered out for role-specific searches"
+                        ],
+                        "impact": "Increases ATS ranking and match score",
+                        "weight": 0.90
+                    },
+                    {
+                        "ruleId": "ATS-KW-003",
+                        "rule": "Spell out technical terms fully",
+                        "rationale": "Abbreviated web development terms reduce ATS scores. ATS may not recognize abbreviations.",
+                        "evidenceSources": 8,
+                        "implementation": [
+                            "First mention: 'HyperText Markup Language (HTML)'",
+                            "Spell out frameworks: 'React.js' not just 'React'",
+                            "Include full names: 'Cascading Style Sheets (CSS)', 'JavaScript (JS)'"
+                        ],
+                        "failureIndicators": [
+                            "Skills marked as 'not found' in ATS parsers",
+                            "Lower keyword match percentage"
+                        ],
+                        "impact": "Improves parsing accuracy and keyword recognition",
+                        "weight": 0.85
+                    },
+                    {
+                        "ruleId": "ATS-KW-004",
+                        "rule": "Tailor resume for each job application",
+                        "rationale": "Customizing resumes for each role is mandatory for ATS success. Generic resumes are rejected.",
+                        "evidenceSources": 28,
+                        "implementation": [
+                            "Extract keywords from job description",
+                            "Adjust skills section to match job requirements",
+                            "Modify professional summary to align with role",
+                            "Reorder experience bullets to highlight relevant projects"
+                        ],
+                        "failureIndicators": [
+                            "Multiple rejections using same resume",
+                            "Low ATS match scores across different applications"
+                        ],
+                        "impact": "Determines resume visibility per application",
+                        "weight": 0.95
+                    }
+                ]
+            },
+            "formatCompliance": {
+                "category": "Format and Structure",
+                "priority": "critical",
+                "importance": 0.25,
+                "rules": [
+                    {
+                        "ruleId": "ATS-FMT-001",
+                        "rule": "Simple, chronological or hybrid format only",
+                        "rationale": "Complex elements like graphics, tables, and multi-column layouts confuse ATS parsers",
+                        "evidenceSources": 15,
+                        "implementation": [
+                            "Use single-column layout",
+                            "Chronological or hybrid resume format",
+                            "Avoid creative designs, graphics, images, logos",
+                            "No text boxes, tables for content",
+                            "Avoid headers/footers for important information"
+                        ],
+                        "failureIndicators": [
+                            "ATS shows garbled or missing content",
+                            "Plain text conversion reveals parsing issues",
+                            "Content appears out of order in ATS view"
+                        ],
+                        "impact": "Determines if resume content is parseable",
+                        "weight": 0.95
+                    },
+                    {
+                        "ruleId": "ATS-FMT-002",
+                        "rule": "Standard section headers",
+                        "rationale": "Clear section headings (e.g., 'Skills', 'Experience') are critical for ATS parsing and content categorization",
+                        "evidenceSources": 18,
+                        "implementation": [
+                            "Use standard headers: 'Professional Summary', 'Work Experience', 'Skills', 'Education', 'Projects'",
+                            "Avoid creative headers like 'My Journey' or 'What I Bring'",
+                            "Keep headers left-aligned",
+                            "Use consistent header formatting"
+                        ],
+                        "failureIndicators": [
+                            "ATS categorizes skills under wrong section",
+                            "Content not recognized by ATS algorithms"
+                        ],
+                        "impact": "Enables proper content categorization",
+                        "weight": 0.90
+                    },
+                    {
+                        "ruleId": "ATS-FMT-003",
+                        "rule": "Common, legible fonts",
+                        "rationale": "Standard fonts are essential for ATS parsing. Uncommon fonts cause text extraction failures.",
+                        "evidenceSources": 12,
+                        "implementation": [
+                            "Use: Arial, Calibri, Times New Roman, Helvetica, Georgia",
+                            "Font size: 10-12pt for body, 14-16pt for headers",
+                            "Avoid: Script fonts, decorative fonts, custom fonts"
+                        ],
+                        "failureIndicators": [
+                            "Text appears as symbols in ATS",
+                            "Content extraction errors"
+                        ],
+                        "impact": "Ensures text readability by ATS",
+                        "weight": 0.85
+                    },
+                    {
+                        "ruleId": "ATS-FMT-004",
+                        "rule": "File format: PDF or DOCX only",
+                        "rationale": "ATS rejects resumes from unsupported file formats. PDF and DOCX are universally compatible.",
+                        "evidenceSources": 10,
+                        "implementation": [
+                            "Submit as .pdf or .docx",
+                            "Ensure PDF is text-based (not scanned image)",
+                            "Test by copying text from PDF - if it works, it's parseable",
+                            "Avoid: .jpg, .png, .txt, .rtf, .pages"
+                        ],
+                        "failureIndicators": [
+                            "Upload errors or rejection messages",
+                            "File not processing in system"
+                        ],
+                        "impact": "Determines if file can be processed",
+                        "weight": 0.90
+                    },
+                    {
+                        "ruleId": "ATS-FMT-005",
+                        "rule": "Basic bullet point styles",
+                        "rationale": "Complex bullet styles confuse ATS parsers",
+                        "evidenceSources": 8,
+                        "implementation": [
+                            "Use simple round bullets (•) or hyphens (-)",
+                            "Avoid: arrows, checkmarks, custom symbols",
+                            "Keep bullets consistent throughout"
+                        ],
+                        "failureIndicators": [
+                            "Bullets appear as random characters",
+                            "Text alignment issues in ATS view"
+                        ],
+                        "impact": "Ensures proper list formatting",
+                        "weight": 0.70
+                    },
+                    {
+                        "ruleId": "ATS-FMT-006",
+                        "rule": "Consistent date formatting",
+                        "rationale": "Inconsistent dates cause ATS parsing errors and timeline confusion",
+                        "evidenceSources": 6,
+                        "implementation": [
+                            "Use MM/YYYY or 'Month YYYY' format",
+                            "Examples: '01/2024' or 'Jan 2024'",
+                            "Be consistent across all dates",
+                            "Avoid: '2024', 'January 2024 - Present'"
+                        ],
+                        "failureIndicators": [
+                            "Employment gaps calculated incorrectly",
+                            "Timeline appears jumbled in ATS"
+                        ],
+                        "impact": "Ensures accurate timeline parsing",
+                        "weight": 0.75
+                    }
+                ]
+            },
+            "contentStructure": {
+                "category": "Content Organization",
+                "priority": "high",
+                "importance": 0.20,
+                "rules": [
+                    {
+                        "ruleId": "ATS-CNT-001",
+                        "rule": "Dedicated skills section required",
+                        "rationale": "ATS algorithms specifically look for skills sections. Skills buried in narrative are often missed.",
+                        "evidenceSources": 22,
+                        "implementation": [
+                            "Create clear 'Skills' or 'Technical Skills' section",
+                            "List skills explicitly, not just in context",
+                            "Organize by category (Frontend, Backend, Tools, etc.)",
+                            "Include both in skills section AND in experience context"
+                        ],
+                        "failureIndicators": [
+                            "ATS shows 0 or few skills matched",
+                            "Rejection for 'missing required skills' despite having them"
+                        ],
+                        "impact": "Determines skill recognition rate",
+                        "weight": 0.90
+                    },
+                    {
+                        "ruleId": "ATS-CNT-002",
+                        "rule": "Contact information in main body",
+                        "rationale": "Contact info in headers/footers may not be parsed by ATS",
+                        "evidenceSources": 8,
+                        "implementation": [
+                            "Place name, email, phone, LinkedIn at top of main document",
+                            "Avoid placing only in header/footer",
+                            "Include clickable LinkedIn URL and GitHub profile"
+                        ],
+                        "failureIndicators": [
+                            "Recruiter unable to contact candidate",
+                            "ATS shows 'contact information missing'"
+                        ],
+                        "impact": "Ensures recruiter can reach candidate",
+                        "weight": 0.85
+                    },
+                    {
+                        "ruleId": "ATS-CNT-003",
+                        "rule": "Resume length optimization",
+                        "rationale": "ATS performs better with focused, concise resumes",
+                        "evidenceSources": 5,
+                        "implementation": [
+                            "Entry-level: 1 page",
+                            "Mid-level (3-7 years): 1-2 pages",
+                            "Senior (7+ years): 2 pages maximum",
+                            "Prioritize relevance over completeness"
+                        ],
+                        "failureIndicators": [
+                            "Important content truncated by ATS",
+                            "Key information buried on later pages"
+                        ],
+                        "impact": "Ensures critical content is seen",
+                        "weight": 0.65
+                    },
+                    {
+                        "ruleId": "ATS-CNT-004",
+                        "rule": "Professional summary with keywords",
+                        "rationale": "ATS heavily weighs summary section for keyword matching",
+                        "evidenceSources": 14,
+                        "implementation": [
+                            "Include 2-4 sentences with top keywords",
+                            "Mention exact job title",
+                            "Reference key technologies",
+                            "Include years of experience if applicable"
+                        ],
+                        "failureIndicators": [
+                            "Low initial ATS score",
+                            "Resume not appearing in keyword searches"
+                        ],
+                        "impact": "Boosts initial ATS ranking",
+                        "weight": 0.80
+                    }
+                ]
+            }
+        },
+        "mediumPriorityRules": {
+            "optimization": {
+                "category": "ATS Score Optimization",
+                "priority": "medium",
+                "importance": 0.15,
+                "rules": [
+                    {
+                        "ruleId": "ATS-OPT-001",
+                        "rule": "Avoid acronyms-only approach",
+                        "rationale": "ATS may not connect abbreviations to full terms",
+                        "implementation": [
+                            "First mention: 'Software Development Lifecycle (SDLC)'",
+                            "Subsequent mentions: 'SDLC' is acceptable"
+                        ],
+                        "weight": 0.70
+                    },
+                    {
+                        "ruleId": "ATS-OPT-002",
+                        "rule": "Include synonyms and variations",
+                        "rationale": "Different companies use different terminology for same role/skill",
+                        "implementation": [
+                            "JavaScript / JS / ECMAScript",
+                            "Frontend / Front-end / Front End",
+                            "UI/UX / User Interface / User Experience"
+                        ],
+                        "weight": 0.65
+                    },
+                    {
+                        "ruleId": "ATS-OPT-003",
+                        "rule": "Natural keyword integration",
+                        "rationale": "Keyword stuffing is detected and penalized",
+                        "implementation": [
+                            "Use keywords in context within experience bullets",
+                            "Avoid lists of keywords without context",
+                            "Demonstrate application of skills, not just listing"
+                        ],
+                        "weight": 0.75
+                    },
+                    {
+                        "ruleId": "ATS-OPT-004",
+                        "rule": "Test resume in plain text",
+                        "rationale": "Plain text conversion reveals parsing issues before submission",
+                        "implementation": [
+                            "Copy resume content to plain text editor",
+                            "Check if all content is readable and in correct order",
+                            "Fix any formatting that doesn't convert properly"
+                        ],
+                        "weight": 0.70
+                    }
+                ]
+            }
+        },
+        "commonPitfalls": {
+            "category": "Things to Avoid",
+            "rules": [
+                {
+                    "pitfall": "Using tables for layout",
+                    "severity": "critical",
+                    "reason": "ATS cannot properly parse table content",
+                    "solution": "Use simple line breaks and spacing"
+                },
+                {
+                    "pitfall": "Text in images or graphics",
+                    "severity": "critical",
+                    "reason": "ATS cannot read text within images",
+                    "solution": "All text must be actual text, not image-based"
+                },
+                {
+                    "pitfall": "Special characters for bullets",
+                    "severity": "medium",
+                    "reason": "May appear as garbled text in ATS",
+                    "solution": "Use standard bullets (•) or hyphens (-)"
+                },
+                {
+                    "pitfall": "Colored text or backgrounds",
+                    "severity": "low",
+                    "reason": "May reduce readability in ATS view",
+                    "solution": "Stick to black text on white background"
+                },
+                {
+                    "pitfall": "Hyperlinked text without visible URL",
+                    "severity": "medium",
+                    "reason": "Links may not carry over in ATS",
+                    "solution": "Show full URL or ensure link text is descriptive"
+                },
+                {
+                    "pitfall": "Non-standard section names",
+                    "severity": "high",
+                    "reason": "ATS may not categorize content correctly",
+                    "solution": "Use standard headers (Experience, Skills, Education)"
+                },
+                {
+                    "pitfall": "Multiple columns",
+                    "severity": "critical",
+                    "reason": "ATS reads left-to-right and may jumble content",
+                    "solution": "Single column layout only"
+                },
+                {
+                    "pitfall": "Skills only in narrative form",
+                    "severity": "high",
+                    "reason": "ATS skills extraction may fail",
+                    "solution": "Dedicated skills section with explicit list"
+                }
+            ]
+        },
+        "testingGuidelines": {
+            "priorToSubmission": [
+                {
+                    "test": "ATS simulator check",
+                    "tools": [
+                        "Jobscan",
+                        "Resume Worded",
+                        "TopResume"
+                    ],
+                    "target": "Score >70% for job-specific match"
+                },
+                {
+                    "test": "Plain text conversion",
+                    "process": "Copy all text to plain text editor and verify readability",
+                    "target": "All content readable and in correct order"
+                },
+                {
+                    "test": "Keyword density check",
+                    "process": "Compare resume keywords to job description",
+                    "target": "80%+ of job description keywords present"
+                },
+                {
+                    "test": "File format validation",
+                    "process": "Ensure PDF is text-based, not scanned image",
+                    "target": "Text can be selected and copied from PDF"
+                }
+            ]
+        },
+        "atsSystemBehavior": {
+            "understanding": [
+                {
+                    "behavior": "Keyword matching algorithms",
+                    "description": "ATS scores resumes based on presence and frequency of job description keywords",
+                    "implication": "Exact keyword matching is weighted heavily"
+                },
+                {
+                    "behavior": "Section categorization",
+                    "description": "ATS attempts to categorize content into predefined sections",
+                    "implication": "Standard section headers improve accuracy"
+                },
+                {
+                    "behavior": "Skills extraction",
+                    "description": "ATS specifically looks for skills in dedicated sections and throughout experience",
+                    "implication": "Skills should appear multiple times in context"
+                },
+                {
+                    "behavior": "Boolean search by recruiters",
+                    "description": "Recruiters search ATS database using keyword combinations",
+                    "implication": "Multiple relevant keywords increase discoverability"
+                },
+                {
+                    "behavior": "Parsing limitations",
+                    "description": "ATS cannot read images, complex formatting, or unusual layouts",
+                    "implication": "Simplicity is critical for parsing success"
+                }
+            ]
+        }
+    }
+}
